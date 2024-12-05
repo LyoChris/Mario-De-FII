@@ -279,6 +279,8 @@ int main() {
                 exit(0);
             }
         }
+        if (time == 0) cout << 1;
+        cout << 1000;
         
         //NextState(time);
         direction = "alba";
