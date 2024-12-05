@@ -279,7 +279,6 @@ int main() {
                 exit(0);
             }
         }
-        cout << "Proiect la IP";
         
         //NextState(time);
         direction = "alba";
