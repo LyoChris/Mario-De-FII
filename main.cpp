@@ -279,8 +279,7 @@ int main() {
                 exit(0);
             }
         }
-        if (time == 0) cout << 1;
-        if (time == 1) cout << 0;
+        cout << 'Proiect la IP';
         
         //NextState(time);
         direction = "alba";
