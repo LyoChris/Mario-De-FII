@@ -247,19 +247,19 @@ int main() {
         }
         if (harta[imario + 1][jmario] == 0) {
             
-            if ((GetKeyState(0x41) < 0) && jmario > 0) {
+            if (((GetKeyState(0x41) < 0) || (GetKeyState(VK_LEFT) < 0)) && jmario > 0) {
                 direction = "left";
                 NextState("left");
             }
-            if ((GetKeyState(0x44) < 0) && jmario < nc1 - 1) {
+            if ((GetKeyState(0x44) < 0) || (GetKeyState(VK_RIGHT) < 0) && jmario < nc1 - 1) {
                 direction = "right";
                 NextState("right");
             }
-            if ((GetKeyState(0x57) < 0) && (harta[imario - 1][jmario] == 3 || harta[imario - 1][jmario] == 4)) {
+            if ((GetKeyState(0x57) < 0 || (GetKeyState(VK_UP) < 0)) && (harta[imario - 1][jmario] == 3 || harta[imario - 1][jmario] == 4)) {
                 direction = "up";
                 NextState("up");
             }
-            if ((GetKeyState(0x53) < 0) && (harta[imario + 1][jmario] == 3 || harta[imario + 1][jmario] == 4)) {
+            if ((GetKeyState(0x53) < 0 || (GetKeyState(VK_DOWN) < 0)) && (harta[imario + 1][jmario] == 3 || harta[imario + 1][jmario] == 4)) {
                 direction = "down";
                 NextState("down");
             }
