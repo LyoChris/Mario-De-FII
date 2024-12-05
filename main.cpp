@@ -246,28 +246,6 @@ int main() {
             //k = 1;
         }
         if (harta[imario + 1][jmario] == 0) {
-            
-            if (((GetKeyState(0x41) < 0) || (GetKeyState(VK_LEFT) < 0)) && jmario > 0) {
-                direction = "left";
-                NextState("left");
-            }
-            if ((GetKeyState(0x44) < 0) || (GetKeyState(VK_RIGHT) < 0) && jmario < nc1 - 1) {
-                direction = "right";
-                NextState("right");
-            }
-            if ((GetKeyState(0x57) < 0 || (GetKeyState(VK_UP) < 0)) && (harta[imario - 1][jmario] == 3 || harta[imario - 1][jmario] == 4)) {
-                direction = "up";
-                NextState("up");
-            }
-            if ((GetKeyState(0x53) < 0 || (GetKeyState(VK_DOWN) < 0)) && (harta[imario + 1][jmario] == 3 || harta[imario + 1][jmario] == 4)) {
-                direction = "down";
-                NextState("down");
-            }
-            if ((GetKeyState(VK_SPACE) < 0)) {
-                direction = "space";
-                NextState("space");
-                //k = 1;
-            }
             delay(50);
             if (harta[imario + 1][jmario] == 0) {
                 readimagefile("SkyBlock.jpg", jmario * wh, imario * wh, (jmario + 1) * wh, (imario + 1) * wh);
