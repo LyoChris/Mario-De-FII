@@ -281,7 +281,6 @@ int main() {
         }
         if (time == 0) cout << 1;
         if (time == 1) cout << 0;
-        //https://github.com/LyoChris/Mario
         
         //NextState(time);
         direction = "alba";
