@@ -57,6 +57,9 @@
     <ClCompile Include="Map.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Enemies.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="winbgim.h">
@@ -80,14 +83,9 @@
     <ClInclude Include="Mario.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\..\..\Downloads\BrickBlock.jpg">
+    <ClInclude Include="Enemies.h">
       <Filter>Source Files</Filter>
-    </Image>
-    <Image Include="..\..\..\Downloads\Sky.jpg">
-      <Filter>Source Files</Filter>
-    </Image>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="level1.txt">

@@ -1,5 +1,5 @@
 #pragma once
 
 void MapReaderandSetter();
-void MapLoader();
+void MapLoader(int a);
 void MapLoader2();
