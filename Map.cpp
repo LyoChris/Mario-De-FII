@@ -63,12 +63,11 @@ void MapLoader(int a) {
                 harta[i][j] = 0;
             }
             if (harta[i][j] == 5) {
-                bar(j * wh, i * wh, (j + 1) * wh, (i + 1) * wh);
+                readimagefile("goomba_walking_1.gif", gompav[a].jgompa * wh, gompav[a].igompa * wh, (gompav[a].jgompa + 1) * wh, (gompav[a].igompa + 1) * wh);
                 n++;
                 gompav[n].igompa = i;
                 gompav[n].jgompa = j;
                 harta[i][j] = 0;
-                cout << gompav[n].igompa << " " << gompav[n].jgompa << '\n';
             }
         }
     }
