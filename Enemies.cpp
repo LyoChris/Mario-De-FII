@@ -62,6 +62,8 @@ void gompa(int a) {
 
 void EnemiesMoving() {
 	for (int i = 1;i <= n;i++) {
-		if (gompav[n].mapart == (int)(nci - nc1)) gompa(i);
+		if (gompav[i].mapart == (int)(nci - nc1)) {
+			gompa(i);
+		}
 	}
 }

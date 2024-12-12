@@ -17,6 +17,8 @@ string cht = "level2.txt";
 ifstream f(chg);
 
 
+
+
 /*9
     thread map_thread(MapLoader(), a);
     map_thread.join();
@@ -24,7 +26,7 @@ ifstream f(chg);
 extern colectible coins[100];
 pozitii spawn[100];
 float wh, ncf, nci = 0, nc1;
-int x, y, nl, nc, harta[30][1000], mv2, map, imario, jmario, mappart, spawncount = 1;
+int x, y, nl, nc, harta[30][1000], mv2, map, imario, jmario, mappart, spawncount = 1, vizc[100], vize[100];
 extern goompa gompav[100];
 extern int n, coino;
 
@@ -55,9 +57,9 @@ void MapLoader() {
         for (int j = nci;j < ncf; j += 1) {
             if (harta[i][j] == 1)
                 readimagefile("BrickBlock.jpg", j * wh, i * wh, (j + 1) * wh, (i + 1) * wh);
-            if (harta[i][j] == 3 )
+            if (harta[i][j] == 3)
                 readimagefile("mario_vine.gif", j * wh, i * wh, (j + 1) * wh, (i + 1) * wh);
-            if (harta[i][j] == 4 )
+            if (harta[i][j] == 4)
                 readimagefile("mario_vine_top.gif", j * wh, i * wh, (j + 1) * wh, (i + 1) * wh);
             if (harta[i][j] == 9) {
                 readimagefile("mario_idle_right.gif", j * (wh), i * (wh), (j + 1) * (wh), (i + 1) * (wh));
@@ -65,59 +67,41 @@ void MapLoader() {
                 harta[i][j] = 0;
             }
             if (harta[i][j] == 6) {
-                if (spawn[(int)(nci/nc1)].ibegin == 0 && spawn[(int)(nci / nc1)].jbegin == 0) {
+                if (spawn[(int)(nci / nc1)].ibegin == 0 && spawn[(int)(nci / nc1)].jbegin == 0) {
                     spawn[(int)(nci / nc1)].ibegin = i;
                     spawn[(int)(nci / nc1)].jbegin = j;
                 }
                 else {
                     spawn[(int)(nci / nc1)].jfinal = j;
                     spawn[(int)(nci / nc1)].ifinal = i;
-                    
+
                 }
+                harta[i][j] = 0;
             }
             if (harta[i][j] == 7) {
-                //readimagefile("", j * wh, i * wh, (j + 1) * wh, (i + 1) * wh);
-                bar(j * wh, i * wh, (j + 1) * wh, (i + 1) * wh);
-                coino++;
-                coins[coino].icolec = i;
-                coins[coino].jcolec = j;
-                coins[coino].mapart = (int)(nci - nc1);
+                    readimagefile("mario_coin.gif", (j - nci) * wh, i * wh, (j - nci + 1) * wh, (i + 1) * wh);
+                    coino++;
+                    coins[coino].icolec = i;
+                    coins[coino].jcolec = j;
+                    coins[coino].mapart = (int)(nci - nc1);
+                    harta[i][j] = 0;
             }
             if (harta[i][j] == 5) {
-                n++;
-                gompav[n].mapart = (int)(nci-nc1);
-                gompav[n].igompa = i;
-                gompav[n].jgompa = j;
-                harta[i][j] = 0;
-                readimagefile("goomba_walking_1.gif", gompav[n].jgompa * wh, gompav[n].igompa * wh, (gompav[n].jgompa + 1) * wh, (gompav[n].igompa + 1) * wh);
+                    n++;
+                    gompav[n].mapart = (int)(nci - nc1);
+                    gompav[n].igompa = i;
+                    gompav[n].jgompa = j;
+                    harta[i][j] = 0;
+                    cout << "Map Tester:" << n << " " << gompav[n].mapart << " " << gompav[n].igompa << " " << gompav[n].jgompa << '\n';
+                    readimagefile("goomba_walking_1.gif", gompav[n].jgompa * wh, gompav[n].igompa * wh, (gompav[n].jgompa + 1) * wh, (gompav[n].igompa + 1) * wh);
+                    harta[i][j] == 0;
             }
         }
-       
+
         readimagefile("SkyBlock.jpg", 0, 0, wh, wh);
     }
-    cout << spawn[(int)(nci / nc1)].ibegin << " " << spawn[(int)(nci / nc1)].jbegin << '\n' << spawn[(int)(nci / nc1)].ifinal << " " << spawn[(int)(nci / nc1)].jfinal;
     setcurrentwindow(ow);
     closegraph(on);
-}
-
-void MapLoader2() {
-    setbkcolor(RGB(126, 132, 246));
-    cleardevice();
-    for (int i = 0;i < nl;i += 1) {
-        for (int j = nci;j < ncf; j += 1) {
-            if (harta[i][j] == 1)
-                readimagefile("BrickBlock.jpg", (j - mv2) * wh, i * wh, (j + 1 - mv2) * wh, (i + 1) * wh);
-            if (harta[i][j] == 3)
-                readimagefile("mario_vine.gif", (j - mv2) * wh, i * wh, (j + 1 - mv2) * wh, (i + 1) * wh);
-            if (harta[i][j] == 4)
-                readimagefile("mario_vine_top.gif", (j - mv2) * wh, i * wh, (j + 1 - mv2) * wh, (i + 1) * wh);
-            if (harta[i][j] == 9) {
-                readimagefile("mario_idle_right.gif", (j - mv2) * (wh), i * (wh), (j + 1 - mv2) * (wh), (i + 1) * (wh));
-                imario = i, jmario = j;
-                harta[i][j] = 0;
-            }
-        }
-    }
 }
 
 void MapLoaderNextRight() {
@@ -148,14 +132,24 @@ void MapLoaderNextRight() {
                     spawn[(int)(nci / nc1)].ifinal = i;
 
                 }
+                harta[i][j] = 0;
             }
             if (harta[i][j] == 5) {
-                n++;
-                gompav[n].mapart = nci - nc1;
-                gompav[n].igompa = i;
-                gompav[n].jgompa = j;
-                readimagefile("goomba_walking_1.gif", gompav[n].jgompa * wh, gompav[n].igompa * wh, (gompav[n].jgompa + 1) * wh, (gompav[n].igompa + 1) * wh);
-                harta[i][j] = 0;
+                    n++;
+                    gompav[n].mapart = (int)(nci - nc1);
+                    gompav[n].igompa = i;
+                    gompav[n].jgompa = j;
+                    cout << "Map Tester:" << n << " " << gompav[n].mapart << " " << gompav[n].igompa << " " << gompav[n].jgompa << '\n';
+                    readimagefile("goomba_walking_1.gif", (gompav[n].jgompa - nci) * wh, gompav[n].igompa * wh, (gompav[n].jgompa - nci + 1) * wh, (gompav[n].igompa + 1) * wh);
+                    harta[i][j] = 0;
+            }
+            if (harta[i][j] == 7) {
+                    readimagefile("mario_coin.gif", (j - nci) * wh, i * wh, (j - nci + 1) * wh, (i + 1) * wh);
+                    coino++;
+                    coins[coino].icolec = i;
+                    coins[coino].jcolec = j;
+                    coins[coino].mapart = (int)(nci - nc1);
+                    harta[i][j] = 0;
             }
         }
         imario = spawn[(int)(nci / nc1)].ibegin;
@@ -184,7 +178,7 @@ void MapLoaderPrevLeft() {
                 readimagefile("mario_vine.gif", (j - nci) * wh, i * wh, (j - nci + 1) * wh, (i + 1) * wh);
             if (harta[i][j] == 4)
                 readimagefile("mario_vine_top.gif", (j - nci) * wh, i * wh, (j - nci + 1) * wh, (i + 1) * wh);
-            
+
         }
         imario = spawn[(int)(nci / nc1)].ifinal;
         jmario = spawn[(int)(nci / nc1)].jfinal;

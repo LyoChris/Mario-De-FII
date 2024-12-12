@@ -19,7 +19,7 @@ extern float wh, ncf, nci, nc1;
 extern int x, y, nl, nc, harta[30][1000], mv2, map, imario, jmario, stage=-7, mappart, coino;
 extern int time1, ok, n;
 string direct;
-int lifes = 3, safeimario, safejmario, mover = 0, coinono=0;
+int lifes = 3, safeimario, safejmario, mover = 0, coinono=0, invincibilityframes=0;
 
 void MarioStage() {
     switch (stage) {
@@ -146,13 +146,20 @@ void NextState(string direction1) {
         if (harta[imario + 1][jmario] == 1) {
             for (int i = 0;i < 3;i++) {
                 readimagefile("SkyBlock.jpg", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
+                if(harta[imario][jmario] == 3)
+                    readimagefile("mario_vine.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
+                if(harta[imario][jmario] == 4)
+                    readimagefile("mario_vine_top.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
                 imario--;
                 float imariof = (float)imario;
                 float jmariof = (float)jmario;
-                if (CheckBlock(imariof, jmariof, wh, (float)(imario - 1), (float)(jmario)) && (imario > 0 && harta[imario][jmario] != 1))
+                if (CheckBlock(imariof, jmariof, wh, (float)(imario - 1), (float)(jmario)) && (imario > 0 && harta[imario][jmario] != 1)) {
+                    delay(20);
                     MarioStage();
+                }
                 else
                     imario++;
+                
             }
         }
     }
@@ -212,12 +219,19 @@ void MarioMovement() {
             if (CheckBlock(imariof * wh, jmariof * wh, wh, (float)(gompav[i].igompa) * wh, (float)(gompav[i].jgompa) * wh) == 1 && direct == "right") {
                 NextState("left");
                 NextState("left");
-                lifes--;
+                if (invincibilityframes == 0) {
+                        lifes--;
+                        invincibilityframes = 10;
+                }
+                
             }
             if (CheckBlock(imariof * wh, jmariof * wh, wh, (float)(gompav[i].igompa) * wh, (float)(gompav[i].jgompa) * wh) == 1 && direct == "left") {
                 NextState("right");
                 NextState("right");
-                lifes--;
+                if (invincibilityframes == 0) {
+                    lifes--;
+                    invincibilityframes = 10;
+                }
             }
         }
     }
@@ -239,8 +253,6 @@ void MarioMovement() {
             }
         }
     }
-    cout << "lives: " << lifes << '\n';
-    cout << "coino: " << coinono << '\n';
     if (jmario >= (int)ncf) MapLoaderNextRight(); //randam urmatoarea parte din harta
     if (jmario <= (int)nci && jmario > 0) MapLoaderPrevLeft(); //randam o parte anterioara a hartii
     /*if (mover == 0) {
@@ -248,17 +260,21 @@ void MarioMovement() {
         readimagefile("mario_idle_left.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
     }
     mover = 0;*/
+    if(invincibilityframes!=0) invincibilityframes--;
+    settextstyle(SANS_SERIF_FONT, HORIZ_DIR, 3);
+    char text1[20] = "Coins ";
+    char text2[20] = "Lives ";
+    char score[10], lives[10];
+    itoa(coinono, score, 10);
+    itoa(lifes, lives, 10);
+    outtextxy(25, 25, text1);
+    outtextxy(100, 25, score);
+    outtextxy(25, 50, text2);
+    outtextxy(100, 50, lives);
     if (lifes <= 0) {
         delay(500);
         closegraph();
         exit(0);
     }
-    
-    time1++;
-    if (GetKeyState(0x43) < 0) {
-        /*MapLoader2();
-        readimagefile("mario_idle_right.gif", (jmario - mv2) * (wh), imario * (wh), (jmario + 1 - mv2) * (wh), (imario + 1) * (wh));*/
-    }
-
     if (GetKeyState(VK_ESCAPE) & 0x8000) ok = 0;
 }
