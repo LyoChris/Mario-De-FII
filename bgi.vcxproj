@@ -64,6 +64,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="bgiout.cxx" />
+    <ClCompile Include="Colectibles.cpp" />
+    <ClCompile Include="Colissions.cpp" />
     <ClCompile Include="dibutil.cxx" />
     <ClCompile Include="drawing.cxx" />
     <ClCompile Include="Enemies.cpp" />
@@ -80,9 +82,11 @@
     <ClCompile Include="winthread.cxx" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Colectibles.h" />
     <ClInclude Include="dibutil.h" />
     <ClInclude Include="Enemies.h" />
     <ClInclude Include="graphics.h" />
+    <ClInclude Include="Colissions.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Mario.h" />
     <ClInclude Include="winbgi.h" />

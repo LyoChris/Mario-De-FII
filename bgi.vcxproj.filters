@@ -60,6 +60,12 @@
     <ClCompile Include="Enemies.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Colissions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Colectibles.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="winbgim.h">
@@ -84,6 +90,12 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Enemies.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Colissions.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Colectibles.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

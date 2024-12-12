@@ -16,13 +16,13 @@ using namespace std;
 extern float wh, nc1;
 extern int x, y, nl, nc, harta[30][1000], mv2, map, imario, jmario;
 string direction, direction1;
-int time1, ok = 1;
+int time1, ok = 1, ok1=0;
 
 
 int main() {
     MapReaderandSetter();
     //initwindow(x, y, "", -3, -3);
-    MapLoader(0);
+    MapLoader();
     clock_t lastMarioMove = clock(); //facem cate un ceas pentru inamici si Mario
     clock_t lastEnemyMove = clock();
 
@@ -41,6 +41,10 @@ int main() {
             MapLoader();
         }*/
         clock_t now = clock();
+        if (harta[imario + 1][jmario] == 0 && ok1 == 0) {
+            MarioInterval = MarioInterval * 1.35;
+            ok1 = 1;
+        }
         if ((now - lastMarioMove) / (double)CLOCKS_PER_SEC >= MarioInterval) {
             MarioMovement();
             lastMarioMove = now;
@@ -49,7 +53,10 @@ int main() {
             EnemiesMoving();
             lastEnemyMove = now;
         }
-        
+        if (ok1 == 1) {
+            MarioInterval = MarioInterval / 1.35;
+            ok1 = 0;
+        }
         
     } while (ok!=0);
     cleardevice();
