@@ -15,11 +15,13 @@ using namespace std;
 
 extern colectible coins[100];
 extern goompa gompav[100];
-extern float wh, ncf, nci, nc1;
-extern int x, y, nl, nc, harta[30][1000], mv2, map, imario, jmario, stage=-7, mappart, coino;
-extern int time1, ok, n;
+
+extern double MarioInterval;
+extern float wh, ncf, nci, nc1, imario, jmario;
+extern int x, y, nl, nc, harta[30][1000], mv2, map, stage=-7, mappart, coino;
+extern int time1, okesc, n;
 string direct;
-int lifes = 3, safeimario, safejmario, mover = 0, coinono=0, invincibilityframes=0;
+int lifes = 3, safeimario, safejmario, mover = 0, coinono = 0, invincibilityframes = 0, ok = 0;
 
 void MarioStage() {
     switch (stage) {
@@ -59,15 +61,13 @@ void NextState(string direction1) {
         stage--;
         if (stage == -4) stage = -1;
         readimagefile("SkyBlock.jpg", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
-        if (harta[imario][jmario] == 3)
-            readimagefile("mario_vine.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
-        if (harta[imario][jmario] == 4)
-            readimagefile("mario_vine_top.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
-        jmario++;
-        float imariof = (float)imario;
-        float jmariof = (float)jmario;
-        if (CheckBlock(imariof*wh, jmariof*wh, wh, (float)imario*wh, (float)(jmario)*wh) && (harta[imario][jmario] == 1 || jmario > ncf)) {
-            jmario--;
+        if (harta[(int)imario][(int)jmario] == 3)
+            readimagefile("mario_vine.gif", ((int)jmario - nci) * wh, (int)imario * wh, (((int)jmario - nci) + 1) * wh, ((int)imario + 1) * wh);
+        if (harta[(int)imario][(int)jmario] == 4)
+            readimagefile("mario_vine_top.gif", ((int)jmario - nci) * wh, (int)imario * wh, (((int)jmario - nci) + 1) * wh, ((int)imario + 1) * wh);
+        jmario+=0.5;
+        if (CheckBlock(imario*wh, jmario*wh, wh, (float)imario*wh, (float)(jmario)*wh) && (harta[(int)imario][(int)jmario + 1] == 1 && (jmario-(int)jmario!=0)) || jmario > ncf) {
+            jmario-=0.5;
             stage = -7;
             MarioStage();
         }
@@ -82,15 +82,15 @@ void NextState(string direction1) {
             stage++;
             if (stage == 4) stage = 1;
             readimagefile("SkyBlock.jpg", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
-            if (harta[imario][jmario] == 3)
-                readimagefile("mario_vine.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
-            if (harta[imario][jmario] == 4)
-                readimagefile("mario_vine_top.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
-            jmario--;
-            float imariof = (float)imario;
-            float jmariof = (float)jmario;
-            if (CheckBlock(imariof*wh, jmariof*wh, wh, (float)imario*wh, (float)(jmario)*wh) && (harta[imario][jmario] == 1 || jmario < 0)) {
-                jmario++;
+            if (harta[(int)imario][(int)jmario] == 3 && jmario - (int)jmario == 0)
+                readimagefile("mario_vine.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, ((imario + 1) * wh));
+            if (harta[(int)imario][(int)jmario + 1] == 3)
+                readimagefile("mario_vine.gif", ((int)jmario + 1 - nci) * wh, (int)imario * wh, (((int)jmario + 1 - nci) + 1) * wh, ((int)imario + 1) * wh);
+            if (harta[(int)imario][(int)jmario] == 4)
+                readimagefile("mario_vine_top.gif", ((int)jmario + 1 - nci) * wh, (int)imario * wh, (((int)jmario + 1 - nci) + 1) * wh, ((int)imario + 1) * wh);
+            jmario-=0.5;
+            if (CheckBlock(imario*wh, jmario*wh, wh, (float)imario*wh, (float)(jmario)*wh) && (harta[(int)imario][(int)jmario] == 1 || jmario < 0)) {
+                jmario+=0.5;
                 stage = 7;
                 MarioStage();
             }
@@ -98,12 +98,12 @@ void NextState(string direction1) {
                 MarioStage();
             }
         }
-
+    
     if (direction1 == "up")
     {
         if (abs(stage) == 10) stage = -stage;
         else stage = 10;
-        if (harta[imario][jmario] == 3) {
+        if (harta[(int)imario][(int)jmario] == 3) {
             readimagefile("SkyBlock.jpg", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
             readimagefile("mario_vine.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
         }
@@ -111,11 +111,17 @@ void NextState(string direction1) {
             readimagefile("SkyBlock.jpg", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
             readimagefile("mario_vine_top.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
         }
-        imario--;
-        float imariof = (float)imario;
-        float jmariof = (float)jmario;
-        if (CheckBlock(imariof, jmariof, wh, (float)(imario + 1), (float)(jmario)) && !(harta[imario][jmario] == 3 || harta[imario][jmario] == 4)) 
-            imario++;
+        if (harta[(int)imario][(int)jmario - 1] == 3) {
+            readimagefile("SkyBlock.jpg", ((int)jmario - 1 - nci) * wh, (int)imario * wh, (((int)jmario - 1 - nci) + 1) * wh, ((int)imario + 1) * wh);
+            readimagefile("mario_vine.gif", ((int)jmario - 1 - nci) * wh, (int)imario * wh, (((int)jmario - 1 - nci) + 1) * wh, ((int)imario + 1) * wh);
+        }
+		//cout << jmario << " " << (int)jmario << '\n';
+        imario-=0.5;
+        if (CheckBlock(imario, jmario, wh, (float)(imario), (float)(jmario)) && !((harta[(int)imario][(int)jmario] == 3) || harta[(int)imario][(int)jmario] == 4) && (jmario - (int)jmario != 0)) {
+            imario += 0.5;
+            stage = 10;
+            MarioStage();
+        }
         else
             MarioStage();
     }
@@ -124,42 +130,47 @@ void NextState(string direction1) {
     {
         if (abs(stage) == 9) stage = -stage;
         else stage = -9;
-        if (harta[imario][jmario] == 3) {
-            readimagefile("SkyBlock.jpg", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
-            readimagefile("mario_vine.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
+        if (harta[(int)imario][(int)jmario] == 3) {
+            readimagefile("SkyBlock.jpg", ((int)jmario - nci) * wh, (int)imario * wh, (((int)jmario - nci) + 1) * wh, ((int)imario + 1) * wh);
+            readimagefile("mario_vine.gif", ((int)jmario - nci) * wh, (int)imario * wh, (((int)jmario - nci) + 1) * wh, ((int)imario + 1) * wh);
         }
         else {
             readimagefile("SkyBlock.jpg", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
-            readimagefile("mario_vine_top.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
+            readimagefile("mario_vine_top.gif", ((int)jmario - nci) * wh, (int)imario * wh, (((int)jmario - nci) + 1) * wh, ((int)imario + 1) * wh);
         }
-        imario++;
-        float imariof = (float)imario;
-        float jmariof = (float)jmario;
-        if (CheckBlock(imariof, jmariof, wh, (float)(imario - 1), (float)(jmario)) && !(harta[imario][jmario] == 3 || harta[imario][jmario] == 4))
-            imario--;
-        else
-            MarioStage();
+        if(harta[(int)imario][(int)jmario + 1] == 3) {
+            readimagefile("SkyBlock.jpg", ((int)jmario + 1 - nci) * wh, (int)imario * wh, (((int)jmario + 1 - nci) + 1) * wh, ((int)imario + 1) * wh);
+            readimagefile("mario_vine.gif", ((int)jmario + 1 - nci) * wh, (int)imario * wh, (((int)jmario + 1 - nci) + 1) * wh, ((int)imario + 1) * wh);
+        }
+        imario+=0.5;
+        cout << jmario << " " << (int)jmario << '\n';
+        if (jmario - (int)jmario == 0) {
+            if (CheckBlock(imario, jmario, wh, (float)(imario), (float)(jmario)) && !(harta[(int)imario][(int)jmario] == 3 || harta[(int)imario][(int)jmario] == 4)) {
+                imario -= 0.5;
+                stage = 9;
+                MarioStage();
+            }
+            else
+                MarioStage();
+        }
     }
-
-    if (direction1 == "space") {
+    if (direction1 == "space" || ok>0) {
         stage = -6;
-        if (harta[imario + 1][jmario] == 1) {
-            for (int i = 0;i < 3;i++) {
-                readimagefile("SkyBlock.jpg", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
-                if(harta[imario][jmario] == 3)
-                    readimagefile("mario_vine.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
-                if(harta[imario][jmario] == 4)
-                    readimagefile("mario_vine_top.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
-                imario--;
-                float imariof = (float)imario;
-                float jmariof = (float)jmario;
-                if (CheckBlock(imariof, jmariof, wh, (float)(imario - 1), (float)(jmario)) && (imario > 0 && harta[imario][jmario] != 1)) {
-                    delay(20);
-                    MarioStage();
-                }
-                else
-                    imario++;
-                
+        if (ok > 0) {
+            readimagefile("SkyBlock.jpg", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
+            if (harta[(int)imario][(int)jmario] == 3)
+                readimagefile("mario_vine.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
+            if (harta[(int)imario][(int)jmario] == 4)
+                readimagefile("mario_vine_top.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
+            imario-=0.5;
+            if (CheckBlock(imario, jmario, wh, (float)(imario - 1), (float)(jmario)) && (imario > 0 && harta[(int)imario][(int)jmario] != 1)) {
+                delay(20);
+                MarioStage();
+                ok--;
+            }
+            else {
+                imario+=0.5;
+                ok = 0;
             }
         }
     }
@@ -167,7 +178,7 @@ void NextState(string direction1) {
 }
 
 void MarioMovement() {
-    if (harta[imario + 1][jmario] == 1) {
+    if (harta[(int)imario + 1][(int)jmario] == 1) {
         safeimario = imario;
         safejmario = jmario;
     }
@@ -181,27 +192,32 @@ void MarioMovement() {
         mover = 1;
         direct = "right";
     }
-    if ((GetKeyState(0x57) < 0 || (GetKeyState(VK_UP) < 0)) && (harta[imario - 1][jmario] == 3 || harta[imario - 1][jmario] == 4)) {
+    if ((GetKeyState(0x57) < 0 || (GetKeyState(VK_UP) < 0)) && (harta[(int)imario][(int)jmario] == 3 || harta[(int)imario][(int)jmario] == 4)) {
         NextState("up");
         mover = 1;
         direct = "up";
     }
-    if ((GetKeyState(0x53) < 0 || (GetKeyState(VK_DOWN) < 0)) && (harta[imario + 1][jmario] == 3 || harta[imario + 1][jmario] == 4)) {
+    if ((GetKeyState(0x53) < 0 || (GetKeyState(VK_DOWN) < 0)) && (harta[(int)imario][(int)jmario] == 3 || harta[(int)imario][(int)jmario] == 4)) {
         NextState("down");
         mover = 1;
         direct = "down";
     }
-    if ((GetKeyState(VK_SPACE) < 0)) {
+    if ((GetKeyState(VK_SPACE) < 0) && harta[(int)imario + 1][(int)jmario] == 1) {
+        ok = 4;
         NextState("space");
         mover = 1;
         direct = "space";
         //k = 1;
     }
-    if (harta[imario + 1][jmario] == 0) {
+    if (ok > 0) {
+		delay(MarioInterval);
+        NextState("space");
+    }
+    if (harta[(int)imario + 1][(int)jmario] == 0 && ok==0) {
         mover = 1;
-        if (harta[imario + 1][jmario] == 0) {
+        if (harta[(int)imario + 1][(int)jmario] == 0) {
             readimagefile("SkyBlock.jpg", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
-            imario++;
+            imario+=0.5;
             readimagefile("mario_jump_1.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
         }
         if (imario > nl) {
@@ -213,24 +229,39 @@ void MarioMovement() {
         }
     }
     for (int i = 1;i <= n;i++) { //checker pentru coliziuni cu goomba
-        if (gompav[n].mapart == (int)(nci - nc1)) {
+		//cout << imario << " " << gompav[i].igompa << '\n';
+        if (gompav[n].mapart == (int)(nci - nc1) && gompav[i].dead == 0) {
             float imariof = (float)imario;
             float jmariof = (float)jmario;
             if (CheckBlock(imariof * wh, jmariof * wh, wh, (float)(gompav[i].igompa) * wh, (float)(gompav[i].jgompa) * wh) == 1 && direct == "right") {
-                NextState("left");
-                NextState("left");
-                if (invincibilityframes == 0) {
+                if (imario < gompav[i].igompa) {
+					gompav[i].dead = 1; 
+					readimagefile("SkyBlock.jpg", (gompav[i].jgompa - nci) * wh, gompav[i].igompa * wh, ((gompav[i].jgompa - nci) + 1) * wh, (gompav[i].igompa + 1) * wh);
+                    cout << "GOOMPA DEAD" << '\n';
+                }
+                else {
+                    NextState("left");
+                    NextState("left");
+                    if (invincibilityframes == 0) {
                         lifes--;
                         invincibilityframes = 10;
+                    }
                 }
                 
             }
             if (CheckBlock(imariof * wh, jmariof * wh, wh, (float)(gompav[i].igompa) * wh, (float)(gompav[i].jgompa) * wh) == 1 && direct == "left") {
-                NextState("right");
-                NextState("right");
-                if (invincibilityframes == 0) {
-                    lifes--;
-                    invincibilityframes = 10;
+                if (imario < gompav[i].igompa) {
+                    gompav[i].dead = 1;
+                    readimagefile("SkyBlock.jpg", (gompav[i].jgompa - nci) * wh, gompav[i].igompa * wh, ((gompav[i].jgompa - nci) + 1) * wh, (gompav[i].igompa + 1) * wh);
+                    cout << "GOOMPA DEAD" << '\n';
+                }
+                else {
+                    NextState("right");
+                    NextState("right");
+                    if (invincibilityframes == 0) {
+                        lifes--;
+                        invincibilityframes = 10;
+                    }
                 }
             }
         }
@@ -242,13 +273,13 @@ void MarioMovement() {
             if (CheckBlock(imariof * wh, jmariof * wh, wh, (float)(coins[i].icolec) * wh, (float)(coins[i].jcolec) * wh) == 1 && direct == "right" && coins[i].colected == 0) {
                 coinono++;
                 coins[i].colected = 1;
-                readimagefile("SkyBlock.jpg", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
+                readimagefile("SkyBlock.jpg", (coins[i].jcolec -nci) * wh, coins[i].icolec * wh, ((coins[i].jcolec - nci) + 1) * wh, (coins[i].icolec + 1) * wh);
                 readimagefile("mario_idle_right.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
             }
             if (CheckBlock(imariof * wh, jmariof * wh, wh, (float)(coins[i].icolec) * wh, (float)(coins[i].jcolec) * wh) == 1 && direct == "left" && coins[i].colected == 0) {
                 coinono++;
                 coins[i].colected = 1;
-                readimagefile("SkyBlock.jpg", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
+                readimagefile("SkyBlock.jpg", (coins[i].jcolec - nci) * wh, coins[i].icolec * wh, ((coins[i].jcolec - nci) + 1) * wh, (coins[i].icolec + 1) * wh);
                 readimagefile("mario_idle_left.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
             }
         }
@@ -276,5 +307,5 @@ void MarioMovement() {
         closegraph();
         exit(0);
     }
-    if (GetKeyState(VK_ESCAPE) & 0x8000) ok = 0;
+    if (GetKeyState(VK_ESCAPE) & 0x8000) okesc = 0;
 }

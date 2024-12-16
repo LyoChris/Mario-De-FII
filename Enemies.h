@@ -1,9 +1,10 @@
 #pragma once
 
 struct goompa {
-	int igompa, jgompa;
+	float igompa, jgompa;
 	int gdirection = 1;
 	int gstage = 1;
+	int dead = 0;
 	int mapart;
 };
 

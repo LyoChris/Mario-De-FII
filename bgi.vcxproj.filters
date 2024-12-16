@@ -103,5 +103,8 @@
     <Text Include="level1.txt">
       <Filter>Source Files</Filter>
     </Text>
+    <Text Include="testing.txt">
+      <Filter>Source Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

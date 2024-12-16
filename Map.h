@@ -5,6 +5,12 @@ struct pozitii {
 	int ifinal, jfinal;
 };
 
+struct ImageBuffer {
+	void* data;
+	int width, height;
+};
+
+void preloadImage(const char* filename, int width, void*& buffer);
 void MapReaderandSetter();
 void MapLoader();
 void MapLoader2();

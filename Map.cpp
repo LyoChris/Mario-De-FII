@@ -17,18 +17,27 @@ string cht = "level2.txt";
 ifstream f(chg);
 
 
+extern void* playerImg1;
+void* playerImg, * brickImg;
 
-
-/*9
-    thread map_thread(MapLoader(), a);
-    map_thread.join();
-*/
 extern colectible coins[100];
 pozitii spawn[100];
-float wh, ncf, nci = 0, nc1;
-int x, y, nl, nc, harta[30][1000], mv2, map, imario, jmario, mappart, spawncount = 1, vizc[100], vize[100];
+float wh, ncf, nci = 0, nc1, imario, jmario;
+int x, y, nl, nc, harta[30][1000], mv2, map, mappart, spawncount = 1, vizc[100], vize[100], buffersize;
 extern goompa gompav[100];
 extern int n, coino;
+
+// Function to preload an image
+void preloadImage(const char* filename, int width, void*& buffer) {
+    // Create a temporary window for loading
+    int tempWin = initwindow(width, width, "", -1, -1);
+    readimagefile(filename, 0, 0, width, width);
+
+    // Allocate memory for the image buffer
+    int size = imagesize(0, 0, width, width);
+    buffer = malloc(size);
+    getimage(0, 0, width, width, buffer);
+}
 
 void MapReaderandSetter() {
     f >> nl >> nc;
@@ -46,6 +55,7 @@ void MapReaderandSetter() {
 
 void MapLoader() {
     initwindow(x, y, "", -3, -3);
+    setcurrentwindow(getcurrentwindow());
     int ow = getcurrentwindow();
     setbkcolor(RGB(0, 0, 0));
     initwindow(x, y, "", -3, -3);
@@ -63,6 +73,7 @@ void MapLoader() {
                 readimagefile("mario_vine_top.gif", j * wh, i * wh, (j + 1) * wh, (i + 1) * wh);
             if (harta[i][j] == 9) {
                 readimagefile("mario_idle_right.gif", j * (wh), i * (wh), (j + 1) * (wh), (i + 1) * (wh));
+                //putimage(j * wh, i * wh, playerImg1, COPY_PUT);
                 imario = i, jmario = j;
                 harta[i][j] = 0;
             }
