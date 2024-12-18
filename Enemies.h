@@ -8,4 +8,12 @@ struct goompa {
 	int mapart;
 };
 
+struct pirhana {
+	float ipirana, jpirana;
+	int pdirection = 1;
+	int pstage = 1;
+	int dead = 0;
+	int mapart;
+};
+
 void EnemiesMoving();

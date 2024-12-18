@@ -20,7 +20,7 @@ extern float wh, nc1, imario, jmario;
 extern int x, y, nl, nc, harta[30][1000], mv2, map;
 string direction, direction1;
 int time1, okesc = 1, ok1=0;
-
+clock_t start;
 double MarioInterval = MARIO_TIME;
 double enemyInterval = ENEMY_TIME;
 double FrameInterval = FRAME_TIME;
@@ -35,6 +35,7 @@ int main() {
     clock_t lastMarioMove = clock(); //facem cate un ceas pentru inamici si Mario
     clock_t lastEnemyMove = clock();
     clock_t lastFrame = clock();
+    start = clock();
 
     int page = 0;
     /*preloadImage("mario_idle_right.gif", wh, playerImg1);

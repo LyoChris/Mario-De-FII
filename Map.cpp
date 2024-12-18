@@ -22,12 +22,13 @@ void* brickblock,* lucky_block, * mario_coin, * goomba_walking_1, * goomba_walki
     * mario_climbing_up_2, * mario_idle_left, * mario_idle_right, * mario_jump_1, * mario_left_run_1, * mario_left_run_2, * mario_left_run_3, * mario_right_run_1,
     * mario_right_run_2, * mario_right_run_3, * mario_vine, * mario_vine_top, *skyblock, * lucky_block_used, *one_up, *flagpolep;
 
+extern pirhana piranav[100];
 extern colectible coins[100], life[100];
 pozitii spawn[100];
 float wh, ncf, nci = 0, nc1, imario, jmario;
-int x, y, nl, nc, harta[30][1000], mv2, map, mappart, spawncount = 1, vizc[100], vize[100], buffersize, flagpole = 0;
+int x, y, nl, nc, harta[30][1000], mv2, map, mappart, spawncount = 1, vizc[100], vize[100], buffersize, flagpole = 00;
 extern goompa gompav[100];
-extern int n, coino, lifo;
+extern int n, coino, lifo, p;
 
 
 
@@ -109,6 +110,14 @@ void MapLoader() {
 				putimage(j * wh, (i-7) * wh, flagpolep, COPY_PUT);
                 harta[i][j] = 0;
             }
+            if (harta[i][j] == 2) {
+                setbkcolor(RGB(255, 0, 0));
+                bar(j * wh, i * wh, (j + 1) * wh, (i + 1) * wh); // placeholder pentru pipe
+                p++;
+				piranav[p].ipirana = i;
+				piranav[p].jpirana = j;
+				piranav[p].mapart = (int)(nci - nc1);
+            }
             if (harta[i][j] == 5) {
                     n++;
                     gompav[n].mapart = (int)(nci - nc1);
@@ -172,6 +181,11 @@ void MapLoaderNextRight() {
                 flagpole = j;
                 putimage((j - nci) * wh, (i-6) * wh, flagpolep, COPY_PUT);
                 harta[i][j] = 0;
+            }
+            if (harta[i][j] == 2) {
+                setbkcolor(RGB(255, 0, 0));
+				bar(j * wh, i * wh, (j + 1) * wh, (i + 1) * wh); // placeholder pentru pipe
+
             }
             if (harta[i][j] == 7) {
                 putimage((j - nci) * wh, i * wh, mario_coin, COPY_PUT);

@@ -12,6 +12,7 @@
 using namespace std;
 
 goompa gompav[100];
+pirhana piranav[100];
 extern colectible coins[100];
 
 ofstream gout("testing.txt");
@@ -21,7 +22,7 @@ extern void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goom
 
 extern float nci, ncf, nc1;
 extern int harta[30][1000], coino;
-int n = 0, hoverg = 0;
+int n = 0, hoverg = 0, p = 0;
 extern float wh;
 
 void gompastateput(int a) {
@@ -190,6 +191,15 @@ void gompa(int a) {
 		hoverg = 0;
 	}
 	hoverg = 0;
+}
+
+void pirhanastate(int a) {
+	switch (piranav[a].pstage) {
+		case 1:
+			putimage((piranav[a].jpirana - nci) * wh, piranav[a].ipirana * wh, mario_climbing_down_1, COPY_PUT); break;	
+		case 2:
+			putimage((piranav[a].jpirana - nci) * wh, piranav[a].ipirana * wh, mario_climbing_down_2, COPY_PUT); break;
+	}
 }
 
 void EnemiesMoving() {
