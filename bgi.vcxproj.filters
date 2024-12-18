@@ -66,6 +66,9 @@
     <ClCompile Include="Colectibles.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Loader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="winbgim.h">
@@ -98,12 +101,18 @@
     <ClInclude Include="Colectibles.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="Loader.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="level1.txt">
       <Filter>Source Files</Filter>
     </Text>
     <Text Include="testing.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="level2.txt">
       <Filter>Source Files</Filter>
     </Text>
   </ItemGroup>

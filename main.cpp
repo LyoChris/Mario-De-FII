@@ -11,7 +11,7 @@
 using namespace std;
 
 #define MARIO_TIME 0.05 // 80 ms
-#define ENEMY_TIME 0.3  // 300 ms
+#define ENEMY_TIME 0.2  // 200 ms
 #define FRAME_TIME 0.08 // 16 ms
 
 void* playerImg1;
