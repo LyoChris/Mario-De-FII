@@ -31,43 +31,30 @@ void MarioStageput() {
     switch (stage) {
     case -10:
 		putimage((jmario - nci) * wh, imario * wh, mario_climbing_up_1, COPY_PUT); break;
-        //readimagefile("mario_climbing_up_1.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
     case 10:
 		putimage((jmario - nci) * wh, imario * wh, mario_climbing_up_2, COPY_PUT); break;
-        //readimagefile("mario_climbing_up_2.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
     case -9:
 		putimage((jmario - nci) * wh, imario * wh, mario_climbing_down_1, COPY_PUT); break;
-        //readimagefile("mario_climbing_down_1.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
     case 9:
 		putimage((jmario - nci) * wh, imario * wh, mario_climbing_down_2, COPY_PUT); break;
-        //readimagefile("mario_climbing_down_2.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
     case -7:
 		putimage((jmario - nci) * wh, imario * wh, mario_idle_right, COPY_PUT); break;
-        //readimagefile("mario_idle_right.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
     case 7:
 		putimage((jmario - nci) * wh, imario * wh, mario_idle_left, COPY_PUT); break;
-        //readimagefile("mario_idle_left.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
     case 1:
 		putimage((jmario - nci) * wh, imario * wh, mario_left_run_1, COPY_PUT); break;
-        //readimagefile("mario_left_run_1.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
     case 2:
 		putimage((jmario - nci) * wh, imario * wh, mario_left_run_2, COPY_PUT); break;
-        //readimagefile("mario_left_run_2.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
     case 3:
 		putimage((jmario - nci) * wh, imario * wh, mario_left_run_3, COPY_PUT); break;
-        //readimagefile("mario_left_run_3.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
     case -1:
 		putimage((jmario - nci) * wh, imario * wh, mario_right_run_1, COPY_PUT); break;
-        //readimagefile("mario_right_run_1.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
     case -2:
 		putimage((jmario - nci) * wh, imario * wh, mario_right_run_2, COPY_PUT); break;
-        //readimagefile("mario_right_run_2.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
     case -3:
 		putimage((jmario - nci) * wh, imario * wh, mario_right_run_3, COPY_PUT); break;
-        //readimagefile("mario_right_run_3.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
     case -6:
 		putimage((jmario - nci) * wh, imario * wh, mario_jump_1, COPY_PUT); break;
-        //readimagefile("mario_jump_1.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
     }
 }
 
@@ -257,7 +244,6 @@ void NextState(string direction1) {
                     putimage(((int)jmario - nci +1) * wh, (int)imario * wh, mario_vine_top, COPY_PUT);
                     //readimagefile("mario_vine_top.gif", ((int)jmario + 1 - nci) * wh, (int)imario * wh, (((int)jmario + 1 - nci) + 1) * wh, ((int)imario + 1) * wh);
                 }
-                cout << "Mario : " << imario << " " << jmario << '\n';
             if (hoverm == 1) {
                 //jmario -= 0.5;
                 if (imario - (int)imario != 0) {
@@ -314,7 +300,6 @@ void NextState(string direction1) {
     {
         if (abs(stage) == 10) stage = -stage;
         else stage = 10;
-		cout << "Nature: " << harta[(int)imario][(int)jmario] << '\n';
         if (harta[(int)imario][(int)jmario] == 3) {
             readimagefile("SkyBlock.jpg", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
             readimagefile("mario_vine.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
@@ -327,7 +312,6 @@ void NextState(string direction1) {
             readimagefile("SkyBlock.jpg", ((int)jmario - 1 - nci) * wh, (int)imario * wh, (((int)jmario - 1 - nci) + 1) * wh, ((int)imario + 1) * wh);
             readimagefile("mario_vine.gif", ((int)jmario - 1 - nci) * wh, (int)imario * wh, (((int)jmario - 1 - nci) + 1) * wh, ((int)imario + 1) * wh);
         }
-		cout << "Mario : " << imario << " " << jmario <<" " << jmario - (int)jmario<< '\n';
         
         if (jmario - (int)jmario == 0) {
             imario-=0.5;
@@ -451,7 +435,7 @@ void NextState(string direction1) {
                 if (jmario - (int)jmario != 0) {
                     if ((imario > 0 && ((harta[(int)imario][(int)jmario] != 1 && (harta[(int)imario][(int)jmario + 1] != 1)) && (harta[(int)imario][(int)jmario] != 8 && (harta[(int)imario][(int)jmario + 1] != 8) 
                         && (harta[(int)imario][(int)jmario] != 10 && (harta[(int)imario][(int)jmario + 1] != 10)))))) {
-                        delay(20);
+                        
                         if (ok == 6) {
                             PlaySound(TEXT("jump_small.wav"), NULL, SND_FILENAME | SND_ASYNC);
                         }
@@ -465,7 +449,6 @@ void NextState(string direction1) {
                 }
                 else {
                     if (CheckBlock(imario, jmario, wh, (float)(imario - 1), (float)(jmario)) && (imario > 0 && (harta[(int)imario][(int)jmario] != 1) && (harta[(int)imario][(int)jmario] != 8) && (harta[(int)imario][(int)jmario] != 10))) {
-                        delay(20);
                         if (ok == 6) {
                             PlaySound(TEXT("jump_small.wav"), NULL, SND_FILENAME | SND_ASYNC);
                         }
@@ -477,7 +460,6 @@ void NextState(string direction1) {
                             //readimagefile("mario_vine.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
                             putimage(((int)jmario - nci) * wh, ((int)imario) * wh, lucky_block_used, COPY_PUT);
                             int ranblock = randnumb(0, 1);
-							cout << ranblock << '\n';
                             if (ranblock == 1) {
                                 lifo++;
                                 life[lifo].icolec = (int)imario-1;
@@ -593,7 +575,10 @@ void MarioMovement() {
                     gdead++;
                     ok += 4;
                     PlaySound(TEXT("stomp.wav"), NULL, SND_FILENAME | SND_ASYNC);
-					putimage((gompav[i].jgompa - nci) * wh, gompav[i].igompa * wh, skyblock, COPY_PUT);
+                    putimage((gompav[i].jgompa - nci) * wh, gompav[i].igompa * wh, skyblock, COPY_PUT);
+                    readimagefile("goomba_walking_1.gif", (gompav[i].jgompa - nci) * wh, (gompav[i].igompa + 0.5) * wh, (gompav[i].jgompa - nci + 1) * wh, (gompav[i].igompa + 1) * wh);
+                    delay(40);
+                    putimage((gompav[i].jgompa - nci) * wh, (gompav[i].igompa) * wh, skyblock, COPY_PUT);
 					//readimagefile("SkyBlock.jpg", (gompav[i].jgompa - nci) * wh, gompav[i].igompa * wh, ((gompav[i].jgompa - nci) + 1) * wh, (gompav[i].igompa + 1) * wh);
                     std::cout << "GOOMPA DEAD" << '\n';
                 }
@@ -613,8 +598,10 @@ void MarioMovement() {
                     gdead++;
                     ok += 4;
                     PlaySound(TEXT("stomp.wav"), NULL, SND_FILENAME | SND_ASYNC);
-					putimage((gompav[i].jgompa - nci)* wh, gompav[i].igompa* wh, skyblock, COPY_PUT);
-                    //readimagefile("SkyBlock.jpg", (gompav[i].jgompa - nci) * wh, gompav[i].igompa * wh, ((gompav[i].jgompa - nci) + 1) * wh, (gompav[i].igompa + 1) * wh);
+                    putimage((gompav[i].jgompa - nci)* wh, gompav[i].igompa* wh, skyblock, COPY_PUT);
+					readimagefile("goomba_walking_1.gif", (gompav[i].jgompa - nci) * wh, (gompav[i].igompa +0.5) * wh, (gompav[i].jgompa - nci + 1) * wh, (gompav[i].igompa + 1) * wh);
+					delay(40);
+                    putimage((gompav[i].jgompa - nci)* wh, (gompav[i].igompa) * wh, skyblock, COPY_PUT);
                     std::cout << "GOOMPA DEAD" << '\n';
                 }
                 else {
@@ -633,23 +620,31 @@ void MarioMovement() {
             if (CheckBlock(imario * wh, jmario * wh, wh, (float)(coins[i].icolec) * wh, (float)(coins[i].jcolec) * wh) == 1 && direct == "right" && coins[i].colected == 0) {
                 coinono++;
                 coins[i].colected = 1;
-                delay(30);
                 PlaySound(TEXT("coin.wav"), NULL, SND_FILENAME | SND_ASYNC);
 				putimage((coins[i].jcolec - nci)* wh, coins[i].icolec* wh, skyblock, COPY_PUT);
                 //readimagefile("SkyBlock.jpg", (coins[i].jcolec -nci) * wh, coins[i].icolec * wh, ((coins[i].jcolec - nci) + 1) * wh, (coins[i].icolec + 1) * wh);
                 //readimagefile("mario_idle_right.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
-				putimage((jmario - nci)* wh, imario* wh, mario_idle_right, COPY_PUT);
+                if (direct == "right") {
+                    putimage((jmario - nci) * wh, imario * wh, mario_idle_right, COPY_PUT);
+                }
+                else {
+					putimage((jmario - nci)* wh, imario* wh, mario_idle_left, COPY_PUT);
+                }
                 
             }
             if (CheckBlock(imario * wh, jmario * wh, wh, (float)(coins[i].icolec) * wh, (float)(coins[i].jcolec) * wh) == 1 && direct == "left" && coins[i].colected == 0) {
                 coinono++;
                 coins[i].colected = 1;
-                delay(30);
                 PlaySound(TEXT("coin.wav"), NULL, SND_FILENAME | SND_ASYNC);
                 putimage((coins[i].jcolec - nci)* wh, coins[i].icolec* wh, skyblock, COPY_PUT);
                 //readimagefile("SkyBlock.jpg", (coins[i].jcolec - nci) * wh, coins[i].icolec * wh, ((coins[i].jcolec - nci) + 1) * wh, (coins[i].icolec + 1) * wh);
                 //readimagefile("mario_idle_left.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
-                putimage((jmario - nci)* wh, imario* wh, mario_idle_right, COPY_PUT);
+                if (direct == "right") {
+                    putimage((jmario - nci) * wh, imario * wh, mario_idle_right, COPY_PUT);
+                }
+                else {
+                    putimage((jmario - nci) * wh, imario * wh, mario_idle_left, COPY_PUT);
+                }
             }
         }
     }
@@ -658,44 +653,40 @@ void MarioMovement() {
             if (CheckBlock(imario * wh, jmario * wh, wh, (float)(life[i].icolec) * wh, (float)(life[i].jcolec) * wh) == 1 && direct == "right" && life[i].colected == 0) {
                 lifes++;
                 life[i].colected = 1;
-                delay(100);
                 PlaySound(TEXT("one_up.wav"), NULL, SND_FILENAME | SND_ASYNC);
                 putimage((life[i].jcolec - nci)* wh, life[i].icolec* wh, skyblock, COPY_PUT);
                 //readimagefile("SkyBlock.jpg", (life[i].jcolec - nci) * wh, life[i].icolec * wh, ((life[i].jcolec - nci) + 1) * wh, (life[i].icolec + 1) * wh);
                 //readimagefile("mario_idle_right.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
-                putimage((jmario - nci)* wh, imario* wh, mario_idle_right, COPY_PUT);
+                if (direct == "right") {
+                    putimage((jmario - nci) * wh, imario * wh, mario_idle_right, COPY_PUT);
+                }
+                else {
+                    putimage((jmario - nci) * wh, imario * wh, mario_idle_left, COPY_PUT);
+                }
                 
             }
             if (CheckBlock(imario * wh, jmario * wh, wh, (float)(life[i].icolec) * wh, (float)(life[i].jcolec) * wh) == 1 && direct == "left" && life[i].colected == 0) {
                 lifes++;
                 life[i].colected = 1;
                 PlaySound(TEXT("one_up.wav"), NULL, SND_FILENAME | SND_ASYNC);
-                delay(100);
                 putimage((life[i].jcolec - nci)* wh, life[i].icolec* wh, skyblock, COPY_PUT);
                 //readimagefile("SkyBlock.jpg", (life[i].jcolec - nci) * wh, life[i].icolec * wh, ((life[i].jcolec - nci) + 1) * wh, (life[i].icolec + 1) * wh);
                 //readimagefile("mario_idle_right.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
-                putimage((jmario - nci)* wh, imario* wh, mario_idle_right, COPY_PUT);
+                if (direct == "right") {
+                    putimage((jmario - nci) * wh, imario * wh, mario_idle_right, COPY_PUT);
+                }
+                else {
+                    putimage((jmario - nci) * wh, imario * wh, mario_idle_left, COPY_PUT);
+                }
             }
         }
     }
-    if (mover == 0) {
-        if (jmario - (int)jmario == 0) {
-            if (harta[(int)imario][(int)jmario] == 3) {
-				putimage(((int)jmario - nci) * wh, (int)imario * wh, mario_vine, COPY_PUT);
-                putimage((jmario - nci) * wh, imario * wh, mario_climbing_up_1, COPY_PUT);
-            }
-            if (harta[(int)imario][(int)jmario] == 4) {
-				putimage(((int)jmario - nci)* wh, (int)imario* wh, mario_vine_top, COPY_PUT);
-				putimage((jmario - nci)* wh, imario* wh, mario_climbing_up_1, COPY_PUT);
-            }
+    if (mover == 0 && !(jmario-(int)jmario==0 && (harta[(int)imario][(int)jmario] == 3 || harta[(int)imario][(int)jmario] == 4))) {
+        if (direct == "right") {
+            putimage((jmario - nci) * wh, imario * wh, mario_idle_right, COPY_PUT);
         }
         else {
-            if (direct == "right") {
-                putimage((jmario - nci) * wh, imario * wh, mario_idle_right, COPY_PUT);
-            }
-            else {
-                putimage((jmario - nci) * wh, imario * wh, mario_idle_left, COPY_PUT);
-            }
+            putimage((jmario - nci) * wh, imario * wh, mario_idle_left, COPY_PUT);
         }
     }
     if (jmario >= (int)ncf) MapLoaderNextRight(); //randam urmatoarea parte din harta
@@ -731,7 +722,6 @@ void MarioMovement() {
         itoa((int)time_spent, ts, 10);
 		int score1 = 1000 - (int)time_spent * 10 + gdead * 100 + coinono * 100;
         itoa(score1, SCORE, 10);
-		cout << "Time spent: " << time_spent << '\n';
         settextstyle(SANS_SERIF_FONT, HORIZ_DIR, 3);
 		setvisualpage(1);
 		setactivepage(1);

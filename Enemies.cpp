@@ -57,7 +57,7 @@ void gompastateread(int a) {
 
 void gompa(int a) {
 	float w = 0;
-	if (harta[(int)gompav[a].igompa][(int)gompav[a].jgompa + 1] == 1 || gompav[a].jgompa + 1 > ncf) gompav[a].gdirection = 1;
+	if (harta[(int)gompav[a].igompa][(int)gompav[a].jgompa + 1] == 1 || gompav[a].jgompa + 1 > ncf || harta[(int)gompav[a].igompa + 1][(int)gompav[a].jgompa + 1] == 0) gompav[a].gdirection = 1;
 	if ((harta[(int)gompav[a].igompa][(int)gompav[a].jgompa - 1] == 1 && gompav[a].jgompa - (int)gompav[a].jgompa == 0) || gompav[a].jgompa - 1 < 0) gompav[a].gdirection = 0;
 	if (gompav[a].gdirection == 1) {
 		hoverg = 0;

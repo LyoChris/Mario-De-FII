@@ -26,31 +26,31 @@ extern pirhana piranav[100];
 extern colectible coins[100], life[100];
 pozitii spawn[100];
 float wh, ncf, nci = 0, nc1, imario, jmario;
-int x, y, nl, nc, harta[30][1000], mv2, map, mappart, spawncount = 1, vizc[100], vize[100], buffersize, flagpole = 00;
+int  x, y, nl = 20, nc, harta[30][1000], mv2, map, mappart, spawncount = 1, vizc[100], vize[100], buffersize, flagpole = 00;
 extern goompa gompav[100];
 extern int n, coino, lifo, p;
 
 
 
 void MapReaderandSetter() {
-    LevelLoader();
-    ifstream f(cht);
-    f >> nl >> nc;
-    for (int i = 0; i < nl;i++) {
-        for (int j = 0;j < nc;j++) {
-            f >> harta[i][j];
-        }
-    }
     x = GetSystemMetrics(SM_CXSCREEN);
     y = GetSystemMetrics(SM_CYSCREEN);
     wh = (float)y / (float)nl;
     nc1 = (float)x / wh;
     ncf = nc1;
-    AssetLoader();
+	AssetLoader();
+	initwindow(x, y, "", -3, -3);
 }
 
 void MapLoader() {
-    initwindow(x, y, "", -3, -3);
+    ifstream f(cht);
+    f >> nc;
+    for (int i = 0; i < nl;i++) {
+        for (int j = 0;j < nc;j++) {
+            f >> harta[i][j];
+        }
+    }
+    //initwindow(x, y, "", -3, -3);
 	setvisualpage(1);
     setactivepage(0);
 	cleardevice();

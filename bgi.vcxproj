@@ -127,10 +127,12 @@
     <ClCompile Include="drawing.cxx" />
     <ClCompile Include="Enemies.cpp" />
     <ClCompile Include="file.cxx" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="Loader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Mario.cpp" />
+    <ClCompile Include="Menus.cpp" />
     <ClCompile Include="misc.cxx" />
     <ClCompile Include="mouse.cxx" />
     <ClCompile Include="palette.cxx" />
@@ -143,11 +145,13 @@
     <ClInclude Include="Colectibles.h" />
     <ClInclude Include="dibutil.h" />
     <ClInclude Include="Enemies.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="graphics.h" />
     <ClInclude Include="Colissions.h" />
     <ClInclude Include="Loader.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Mario.h" />
+    <ClInclude Include="Menus.h" />
     <ClInclude Include="winbgi.h" />
     <ClInclude Include="winbgim.h" />
     <ClInclude Include="winbgitypes.h" />
