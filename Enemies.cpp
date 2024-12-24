@@ -9,6 +9,7 @@
 #include "Enemies.h"
 #include "Colissions.h"
 #include "Colectibles.h"
+#include "Loader.h"
 using namespace std;
 
 goompa gompav[100];
@@ -22,7 +23,7 @@ extern void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goom
 
 extern float nci, ncf, nc1;
 extern int harta[30][1000], coino;
-int n = 0, hoverg = 0, p = 0;
+int n = 0, hoverg = 0, p = 0, ranpirana = 0;
 extern float wh;
 
 void gompastateput(int a) {
@@ -58,7 +59,8 @@ void gompastateread(int a) {
 void gompa(int a) {
 	float w = 0;
 	if (harta[(int)gompav[a].igompa][(int)gompav[a].jgompa + 1] == 1 || gompav[a].jgompa + 1 > ncf || harta[(int)gompav[a].igompa + 1][(int)gompav[a].jgompa + 1] == 0) gompav[a].gdirection = 1;
-	if ((harta[(int)gompav[a].igompa][(int)gompav[a].jgompa - 1] == 1 && gompav[a].jgompa - (int)gompav[a].jgompa == 0) || gompav[a].jgompa - 1 < 0) gompav[a].gdirection = 0;
+	if ((harta[(int)gompav[a].igompa][(int)gompav[a].jgompa - 1] == 1 && gompav[a].jgompa - (int)gompav[a].jgompa == 0) || gompav[a].jgompa - 1 < 0 || 
+		(harta[(int)gompav[a].igompa + 1][(int)gompav[a].jgompa - 1] == 0 && (int)gompav[a].jgompa- gompav[a].jgompa==0)) gompav[a].gdirection = 0;
 	if (gompav[a].gdirection == 1) {
 		hoverg = 0;
 		if (gompav[a].gstage < 0) gompav[a].gstage = 0;
@@ -196,16 +198,83 @@ void gompa(int a) {
 void pirhanastate(int a) {
 	switch (piranav[a].pstage) {
 		case 1:
-			putimage((piranav[a].jpirana - nci) * wh, piranav[a].ipirana * wh, mario_climbing_down_1, COPY_PUT); break;	
+			putimage((piranav[a].jpirana - nci) * wh, piranav[a].ipirana * wh, mario_climbing_up_1, COPY_PUT); break;	
 		case 2:
+			putimage((piranav[a].jpirana - nci) * wh, piranav[a].ipirana * wh, mario_climbing_up_2, COPY_PUT); break;
+		case -1:
+			putimage((piranav[a].jpirana - nci) * wh, piranav[a].ipirana * wh, mario_climbing_down_1, COPY_PUT); break;
+		case -2:
 			putimage((piranav[a].jpirana - nci) * wh, piranav[a].ipirana * wh, mario_climbing_down_2, COPY_PUT); break;
 	}
+}
+
+void pirhana(int a) {
+	if (piranav[a].upframes <= 0 && piranav[a].reset == 0) {
+		ranpirana = randnumb(0, 1);
+		if (ranpirana == 1) {
+			piranav[a].upframes = 22;
+			piranav[a].reset = 2;
+		}
+	}
+	if (piranav[a].orientation == 1 && piranav[a].upframes > 0) {
+		if (piranav[a].pstage == 1) piranav[a].pstage = 2;
+		else piranav[a].pstage = 1;
+		putimage((piranav[a].jpirana - nci) * wh, piranav[a].ipirana * wh, skyblock, COPY_PUT);
+		if (piranav[a].upframes > 20) {
+			piranav[a].ipirana -= 0.5;
+			pirhanastate(a);
+			bar(piranav[a].jpinit * wh, piranav[a].ipinit * wh, (piranav[a].jpinit + 1) * wh, (piranav[a].ipinit + 1) * wh);
+		}
+		else {
+			pirhanastate(a);
+		}
+	}
+	else {
+		if (piranav[a].upframes > 0) {
+			if (piranav[a].pstage == -1) piranav[a].pstage = -2;
+			else piranav[a].pstage = -1;
+			putimage((piranav[a].jpirana - nci) * wh, piranav[a].ipirana * wh, skyblock, COPY_PUT);
+			if (piranav[a].upframes > 20) {
+				piranav[a].ipirana += 0.5;
+				pirhanastate(a);
+				bar(piranav[a].jpinit * wh, piranav[a].ipinit * wh, (piranav[a].jpinit + 1) * wh, (piranav[a].ipinit + 1) * wh);
+			}
+			else {
+				pirhanastate(a);
+			}
+		}
+	}
+	if (piranav[a].reset > 0 && piranav[a].upframes <=0) {
+		if (piranav[a].orientation == 1) {
+			if (piranav[a].pstage == 1) piranav[a].pstage = 2;
+			else piranav[a].pstage = 1;
+			putimage((piranav[a].jpirana - nci) * wh, piranav[a].ipirana * wh, skyblock, COPY_PUT);
+			piranav[a].ipirana += 0.5;
+			pirhanastate(a);
+			bar(piranav[a].jpinit * wh, piranav[a].ipinit * wh, (piranav[a].jpinit + 1) * wh, (piranav[a].ipinit + 1) * wh);
+		}
+		else {
+			if (piranav[a].pstage == -1) piranav[a].pstage = -2;
+			else piranav[a].pstage = -1;
+			putimage((piranav[a].jpirana - nci) * wh, piranav[a].ipirana * wh, skyblock, COPY_PUT);
+			piranav[a].ipirana -= 0.5;
+			pirhanastate(a);
+			bar(piranav[a].jpinit * wh, piranav[a].ipinit * wh, (piranav[a].jpinit + 1) * wh, (piranav[a].ipinit + 1) * wh);
+		}
+		piranav[a].reset--;
+	}
+	piranav[a].upframes--;
 }
 
 void EnemiesMoving() {
 	for (int i = 1;i <= n;i++) {
 		if (gompav[i].mapart == (int)(nci - nc1) && gompav[i].dead == 0) {
 			gompa(i);
+		}
+	}
+	for (int i = 1;i <= p;i++) {
+		if (piranav[i].mapart == (int)(nci - nc1) && piranav[i].dead == 0) {
+			pirhana(i);
 		}
 	}
 }

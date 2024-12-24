@@ -23,12 +23,12 @@ void* brickblock,* lucky_block, * mario_coin, * goomba_walking_1, * goomba_walki
     * mario_right_run_2, * mario_right_run_3, * mario_vine, * mario_vine_top, *skyblock, * lucky_block_used, *one_up, *flagpolep;
 
 extern pirhana piranav[100];
-extern colectible coins[100], life[100];
+extern colectible coins[100], life[100], starpow[100];
 pozitii spawn[100];
 float wh, ncf, nci = 0, nc1, imario, jmario;
 int  x, y, nl = 20, nc, harta[30][1000], mv2, map, mappart, spawncount = 1, vizc[100], vize[100], buffersize, flagpole = 00;
 extern goompa gompav[100];
-extern int n, coino, lifo, p;
+extern int n, coino, lifo, p, staro;
 
 
 
@@ -90,6 +90,15 @@ void MapLoader() {
                     coins[coino].mapart = (int)(nci - nc1);
                     harta[i][j] = 0;
             }
+            if (harta[i][j] == 15) {
+                setcolor(YELLOW);
+                bar((j - nci) * wh, i * wh, (j - nci + 1) * wh, (i + 1) * wh);
+                staro++;
+                starpow[staro].icolec = i;
+                starpow[staro].jcolec = j;
+                starpow[staro].mapart = (int)(nci - nc1);
+                harta[i][j] = 0;
+            }
             if (harta[i][j] == 8) {
 				putimage(j * wh, i * wh, lucky_block, COPY_PUT); 
             }
@@ -110,12 +119,19 @@ void MapLoader() {
 				putimage(j * wh, (i-7) * wh, flagpolep, COPY_PUT);
                 harta[i][j] = 0;
             }
-            if (harta[i][j] == 2) {
-                setbkcolor(RGB(255, 0, 0));
-                bar(j * wh, i * wh, (j + 1) * wh, (i + 1) * wh); // placeholder pentru pipe
+            if (harta[i][j] == 12) {
+                bar(j * wh, i * wh, (j + 1) * wh, (i + 1) * wh); // placeholder pentru pipe body
+            }
+            if(harta[i][j] == 14) {
+                bar(j * wh, i * wh, (j + 1) * wh, (i + 1) * wh); // placeholder pentru pipe head without pirhana
+            }
+            if (harta[i][j] == 13) {
+                bar(j * wh, i * wh, (j + 0.5) * wh, (i + 1) * wh); // placeholder pentru pipe head with pirhana
                 p++;
-				piranav[p].ipirana = i;
-				piranav[p].jpirana = j;
+				piranav[p].ipinit = i;
+				piranav[p].jpinit = j;
+                piranav[p].ipirana = i;
+                piranav[p].jpirana = j;
 				piranav[p].mapart = (int)(nci - nc1);
             }
             if (harta[i][j] == 5) {
@@ -182,10 +198,20 @@ void MapLoaderNextRight() {
                 putimage((j - nci) * wh, (i-6) * wh, flagpolep, COPY_PUT);
                 harta[i][j] = 0;
             }
-            if (harta[i][j] == 2) {
-                setbkcolor(RGB(255, 0, 0));
-				bar(j * wh, i * wh, (j + 1) * wh, (i + 1) * wh); // placeholder pentru pipe
-
+            if (harta[i][j] == 12) {
+                bar((j - nci) * wh, i * wh, (j - nci + 1) * wh, (i + 1) * wh); // placeholder pentru pipe body
+            }
+            if (harta[i][j] == 14) {
+                bar((j - nci) * wh, i * wh, (j - nci + 1) * wh, (i + 1) * wh); // placeholder pentru pipe head without pirhana
+            }
+            if (harta[i][j] == 13) {
+                bar((j - nci) * wh, i * wh, (j - nci + 1) * wh, (i + 1) * wh); // placeholder pentru pipe head with pirhana
+                p++;
+                piranav[p].ipinit = i;
+                piranav[p].jpinit = j;
+                piranav[p].ipirana = i;
+                piranav[p].jpirana = j;
+                piranav[p].mapart = (int)(nci - nc1);
             }
             if (harta[i][j] == 7) {
                 putimage((j - nci) * wh, i * wh, mario_coin, COPY_PUT);
@@ -193,6 +219,15 @@ void MapLoaderNextRight() {
                 coins[coino].icolec = i;
                 coins[coino].jcolec = j;
                 coins[coino].mapart = (int)(nci - nc1);
+                harta[i][j] = 0;
+            }
+            if (harta[i][j] == 15) {
+				setcolor(YELLOW);
+                bar((j - nci) * wh, i * wh, (j - nci + 1) * wh, (i + 1) * wh);
+                staro++;
+                starpow[staro].icolec = i;
+                starpow[staro].jcolec = j;
+                starpow[staro].mapart = (int)(nci - nc1);
                 harta[i][j] = 0;
             }
         }
@@ -221,6 +256,15 @@ void MapLoaderPrevLeft() {
                 putimage((j - nci) * wh, i * wh, mario_vine_top, COPY_PUT);
             if (harta[i][j] == 8) {
                 putimage((j-nci) * wh, i * wh, lucky_block, COPY_PUT);
+            }
+            if (harta[i][j] == 12) {
+                bar((j - nci) * wh, i * wh, (j - nci + 1) * wh, (i + 1) * wh); // placeholder pentru pipe body
+            }
+            if (harta[i][j] == 14) {
+                bar((j - nci) * wh, i * wh, (j - nci + 1) * wh, (i + 1) * wh); // placeholder pentru pipe head without pirhana
+            }
+            if (harta[i][j] == 13) {
+                bar((j - nci) * wh, i * wh, (j - nci + 1) * wh, (i + 1) * wh); // placeholder pentru pipe head with pirhana
             }
             if (harta[i][j] == 10) {
                 putimage((j-nci) * wh, i * wh, lucky_block_used, COPY_PUT);

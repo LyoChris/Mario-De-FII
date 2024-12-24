@@ -75,5 +75,5 @@ void MarioGame() {
     } while (okesc != 0);
     cleardevice();
     delay(300);
-    CloseWindow;
+	closegraph();
 }

@@ -8,6 +8,7 @@
 #include "Map.h"
 #include "Mario.h"
 #include "Enemies.h"
+#include "Loader.h"
 #include "Game.h"
 #include "Menus.h"
 using namespace std;
@@ -17,6 +18,8 @@ using namespace std;
 
 int main() {
 	MapReaderandSetter();
-	MainMenu();
+	LevelLoader();
+	MarioGame();
+	//MainMenu();
     return 0;
 }
