@@ -9,6 +9,9 @@
 #include "Mario.h"
 #include "Enemies.h"
 #include "Game.h"
+#include "Sounds.h"
+#include "miniaudio.h"
+#include "MapEditor.h"
 using namespace std;
 
 #define MARIO_TIME 0.05 // 80 ms
@@ -17,6 +20,8 @@ using namespace std;
 
 void* playerImg1;
 
+extern ma_engine engine;
+extern ma_sound BackGroundMusic;
 extern float wh, nc1, imario, jmario;
 extern int x, y, nl, nc, harta[30][1000], mv2, map;
 string direction, direction1;
@@ -27,6 +32,7 @@ double enemyInterval = ENEMY_TIME;
 double FrameInterval = FRAME_TIME;
 
 void MarioGame() {
+	SoundInitialisation();
     MapLoader();
     clock_t lastMarioMove = clock(); //facem cate un ceas pentru inamici si Mario
     clock_t lastEnemyMove = clock();
@@ -36,6 +42,9 @@ void MarioGame() {
     int page = 0;
 
     do {
+		if (!ma_sound_is_playing(&BackGroundMusic)) {
+			ma_sound_start(&BackGroundMusic);
+		}
         clock_t now = clock();
         if ((now - lastFrame) / (double)CLOCKS_PER_SEC >= FrameInterval) {
             /*if (tasta == 'd') {

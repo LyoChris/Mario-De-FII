@@ -13,6 +13,7 @@
 #include "Map.h"
 #include "Colectibles.h"
 #include "Loader.h"
+#include "MapEditor.h"
 using namespace std;
 
 
@@ -20,7 +21,7 @@ string cht;
 
 void* brickblock,* lucky_block, * mario_coin, * goomba_walking_1, * goomba_walking_2, * mario_climbing_down_1, * mario_climbing_down_2, * mario_climbing_up_1, 
     * mario_climbing_up_2, * mario_idle_left, * mario_idle_right, * mario_jump_1, * mario_left_run_1, * mario_left_run_2, * mario_left_run_3, * mario_right_run_1,
-    * mario_right_run_2, * mario_right_run_3, * mario_vine, * mario_vine_top, *skyblock, * lucky_block_used, *one_up, *flagpolep;
+    * mario_right_run_2, * mario_right_run_3, * mario_vine, * mario_vine_top, *skyblock, * lucky_block_used, *one_up, *flagpolep, *flagpolemapedit;
 
 extern pirhana piranav[100];
 extern colectible coins[100], life[100], starpow[100];
@@ -39,6 +40,7 @@ void MapReaderandSetter() {
     nc1 = (float)x / wh;
     ncf = nc1;
 	AssetLoader();
+	AssetLoaderMap();
 	initwindow(x, y, "", -3, -3);
 }
 

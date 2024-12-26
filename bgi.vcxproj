@@ -131,12 +131,14 @@
     <ClCompile Include="Loader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="MapEditor.cpp" />
     <ClCompile Include="Mario.cpp" />
     <ClCompile Include="Menus.cpp" />
     <ClCompile Include="misc.cxx" />
     <ClCompile Include="mouse.cxx" />
     <ClCompile Include="palette.cxx" />
     <ClCompile Include="main.cxx" />
+    <ClCompile Include="Sounds.cpp" />
     <ClCompile Include="text.cxx" />
     <ClCompile Include="winbgi.cxx" />
     <ClCompile Include="winthread.cxx" />
@@ -150,8 +152,10 @@
     <ClInclude Include="Colissions.h" />
     <ClInclude Include="Loader.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="MapEditor.h" />
     <ClInclude Include="Mario.h" />
     <ClInclude Include="Menus.h" />
+    <ClInclude Include="Sounds.h" />
     <ClInclude Include="winbgi.h" />
     <ClInclude Include="winbgim.h" />
     <ClInclude Include="winbgitypes.h" />

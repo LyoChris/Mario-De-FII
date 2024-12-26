@@ -11,6 +11,7 @@
 #include "Loader.h"
 #include "Game.h"
 #include "Menus.h"
+#include "MapEditor.h"
 using namespace std;
 
 
@@ -18,8 +19,9 @@ using namespace std;
 
 int main() {
 	MapReaderandSetter();
-	LevelLoader();
-	MarioGame();
+	MapEditorLevels();
+	//LevelLoader();
+	//MarioGame();
 	//MainMenu();
     return 0;
 }

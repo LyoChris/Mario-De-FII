@@ -8,6 +8,7 @@
 #include <windows.h>
 #include "Enemies.h"
 #include "Map.h"
+#include "MapEditor.h"
 #include "Colectibles.h"
 
 
@@ -15,7 +16,8 @@ extern std::string cht;
 extern float wh;
 extern void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goomba_walking_2, * mario_climbing_down_1, * mario_climbing_down_2, * mario_climbing_up_1,
 * mario_climbing_up_2, * mario_idle_left, * mario_idle_right, * mario_jump_1, * mario_left_run_1, * mario_left_run_2, * mario_left_run_3, * mario_right_run_1,
-* mario_right_run_2, * mario_right_run_3, * mario_vine, * mario_vine_top, * skyblock, * lucky_block_used, *one_up, *flagpolep;
+* mario_right_run_2, * mario_right_run_3, * mario_vine, * mario_vine_top, * skyblock, * lucky_block_used, *one_up, *flagpolep, * brickblockmap, * skyblockmap, * mario_vinemap, 
+* mario_vine_topmap, * lucky_blockmap, * mario_coinmap, * mario_idle_rightmap, * one_upmap, * flagpolepmap, * flagpolemapedit, * gombamap;
 
 void preloadImage(const char* filename, int width, int height, void*& buffer) {
     readimagefile(filename, 0, 0, width, height);
@@ -97,7 +99,45 @@ void AssetLoader() {
 	cleardevice(); 
     setbkcolor(RGB(126, 132, 246));
     preloadImage("Flagpole.gif", wh, 7*wh, flagpolep);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Flagpolecut.gif", wh, wh, flagpolemapedit);
 	closegraph();
+}
+
+void AssetLoaderMap() {
+    initwindow((0.7 * wh) + 1, 7 * (0.7 * wh) + 1, "", -3, -3);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("BrickBlock.jpg", (0.7 * wh), (0.7 * wh), brickblockmap);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("SkyBlock.jpg", (0.7 * wh), (0.7 * wh), skyblockmap);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("mario_vine.gif", (0.7 * wh), (0.7 * wh), mario_vinemap);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("mario_vine_top.gif", (0.7 * wh), (0.7 * wh), mario_vine_topmap);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("lucky_block.jpg", (0.7 * wh), (0.7 * wh), lucky_blockmap);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("mario_coin.gif", (0.7 * wh), (0.7 * wh), mario_coinmap);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("mario_idle_right.gif", (0.7 * wh), (0.7 * wh), mario_idle_rightmap);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("goomba_walking_1.gif", 0.7 * wh, 0.7 * wh, gombamap);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("one_up.gif", (0.7 * wh), (0.7 * wh), one_upmap);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Flagpole.gif", (0.7 * wh), 7 * (0.7 * wh), flagpolepmap);
+    closegraph();
 }
 
 int randnumb(int a, int b) {

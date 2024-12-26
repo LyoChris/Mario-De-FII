@@ -9,18 +9,23 @@
 #include "Colissions.h"
 #include "Colectibles.h"
 #include "Loader.h"
+#define MINIAUDIO_IMPLEMENTATION
+#include "miniaudio.h"
+
 using namespace std;
 
 #define MAX1 30
 #define MAX2 1000
 
+extern ma_engine engine;
+extern ma_sound JumpEffect, CoinEffect, ColideEffect, GombaDeadEffect, DeathEffect, BackGroundMusic, StageClear;
 extern clock_t start;
 extern colectible coins[100], life[100], starpow[100];
 extern goompa gompav[100];
 extern pirhana piranav[100];
 extern void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goomba_walking_2, * mario_climbing_down_1, * mario_climbing_down_2, * mario_climbing_up_1,
 * mario_climbing_up_2, * mario_idle_left, * mario_idle_right, * mario_jump_1, * mario_left_run_1, * mario_left_run_2, * mario_left_run_3, * mario_right_run_1,
-* mario_right_run_2, * mario_right_run_3, * mario_vine, * mario_vine_top, * skyblock, * lucky_block_used, *one_up, *flagpolep;
+* mario_right_run_2, * mario_right_run_3, * mario_vine, * mario_vine_top, * skyblock, * lucky_block_used, *one_up, *flagpolep, *flagpolemapedit;
 extern double MarioInterval;
 extern float wh, ncf, nci, nc1, imario, jmario;
 extern int x, y, nl, nc, harta[30][1000], mv2, map, stage=-7, mappart, coino, lifo, flagpole, staro;
@@ -171,7 +176,10 @@ void NextState(string direction1) {
                 || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario + 1][(int)jmario + 1] == 13 && (jmario - (int)jmario != 0)))) {
                     jmario -= 0.5;
                     stage = -7;
-                    PlaySound(TEXT("bump.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                    if (!ma_sound_is_playing(&ColideEffect)) { // Check if the sound is already playing
+                        ma_sound_start(&ColideEffect);
+                    }
+                    //PlaySound(TEXT("bump.wav"), NULL, SND_FILENAME | SND_ASYNC);
                     MarioStageread();
                 }
                 else {
@@ -184,7 +192,10 @@ void NextState(string direction1) {
                 || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario][(int)jmario + 1] == 13 && (jmario - (int)jmario != 0)))) {
                     jmario -= 0.5;
                     stage = -7;
-                    PlaySound(TEXT("bump.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                    if (!ma_sound_is_playing(&ColideEffect)) { // Check if the sound is already playing
+                        ma_sound_start(&ColideEffect);
+                    }
+                    //PlaySound(TEXT("bump.wav"), NULL, SND_FILENAME | SND_ASYNC);
                     MarioStageread();
                 }
                 else {
@@ -200,7 +211,10 @@ void NextState(string direction1) {
                 ||(CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario + 1][(int)jmario + 1] == 13 && (jmario - (int)jmario != 0)))) {
                     jmario -= 0.5;
                     stage = -7;
-                    PlaySound(TEXT("bump.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                    if (!ma_sound_is_playing(&ColideEffect)) { // Check if the sound is already playing
+                        ma_sound_start(&ColideEffect);
+                    }
+                    //PlaySound(TEXT("bump.wav"), NULL, SND_FILENAME | SND_ASYNC);
                     MarioStageput();
                 }
                 else {
@@ -213,7 +227,10 @@ void NextState(string direction1) {
                 || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario][(int)jmario + 1] == 13 && (jmario - (int)jmario != 0)))) {
                     jmario -= 0.5;
                     stage = -7;
-                    PlaySound(TEXT("bump.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                    if (!ma_sound_is_playing(&ColideEffect)) { // Check if the sound is already playing
+                        ma_sound_start(&ColideEffect);
+                    }
+                    //PlaySound(TEXT("bump.wav"), NULL, SND_FILENAME | SND_ASYNC);
                     MarioStageput();
                 }
                 else {
@@ -261,7 +278,10 @@ void NextState(string direction1) {
                     || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && harta[(int)imario + 1][(int)jmario] == 13)) {
                         jmario += 0.5;
                         stage = 7;
-                        PlaySound(TEXT("bump.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                        if (!ma_sound_is_playing(&ColideEffect)) { // Check if the sound is already playing
+                            ma_sound_start(&ColideEffect);
+                        }
+                        //PlaySound(TEXT("bump.wav"), NULL, SND_FILENAME | SND_ASYNC);
                         MarioStageread();
                     }
                     else {
@@ -274,7 +294,10 @@ void NextState(string direction1) {
                     || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario][(int)jmario] == 13))) {
                         jmario += 0.5;
                         stage = 7;
-                        PlaySound(TEXT("bump.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                        if (!ma_sound_is_playing(&ColideEffect)) { // Check if the sound is already playing
+                            ma_sound_start(&ColideEffect);
+                        }
+                        //PlaySound(TEXT("bump.wav"), NULL, SND_FILENAME | SND_ASYNC);
                         MarioStageread();
                     }
                     else {
@@ -290,7 +313,10 @@ void NextState(string direction1) {
                     || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && harta[(int)imario + 1][(int)jmario] == 13)) {
                         jmario += 0.5;
                         stage = 7;
-                        PlaySound(TEXT("bump.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                        if (!ma_sound_is_playing(&ColideEffect)) { // Check if the sound is already playing
+                            ma_sound_start(&ColideEffect);
+                        }
+                        //PlaySound(TEXT("bump.wav"), NULL, SND_FILENAME | SND_ASYNC);
                         MarioStageput();
                     }
                     else {
@@ -303,7 +329,10 @@ void NextState(string direction1) {
                     || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario][(int)jmario] == 13))){
                         jmario += 0.5;
                         stage = 7;
-                        PlaySound(TEXT("bump.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                        if (!ma_sound_is_playing(&ColideEffect)) { // Check if the sound is already playing
+                            ma_sound_start(&ColideEffect);
+                        }
+                        //PlaySound(TEXT("bump.wav"), NULL, SND_FILENAME | SND_ASYNC);
                         MarioStageput();
                     }
                     else {
@@ -401,7 +430,10 @@ void NextState(string direction1) {
                 if (jmario - (int)jmario != 0) {
                     if ((imario > 0 && ((harta[(int)imario][(int)jmario] != 1 && (harta[(int)imario][(int)jmario + 1] != 1)) && (harta[(int)imario][(int)jmario] != 8 && (harta[(int)imario][(int)jmario + 1] != 8) && (harta[(int)imario][(int)jmario] != 10 && (harta[(int)imario][(int)jmario + 1] != 10)))))) {
                         if (ok == 6) {
-                            PlaySound(TEXT("jump_small.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                            //PlaySound(TEXT("jump_small.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                            if (!ma_sound_is_playing(&JumpEffect)) { // Check if the sound is already playing
+                                ma_sound_start(&JumpEffect);
+                            }
                         }
                         MarioStageread();
                         ok--;
@@ -414,7 +446,10 @@ void NextState(string direction1) {
                 else {
                     if (CheckBlock(imario, jmario, wh, (float)(imario - 1), (float)(jmario)) && (imario > 0 && (harta[(int)imario][(int)jmario] != 1) && (harta[(int)imario][(int)jmario] != 8) && (harta[(int)imario][(int)jmario] != 10))) {
                         if (ok == 6) {
-                            PlaySound(TEXT("jump_small.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                            //PlaySound(TEXT("jump_small.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                            if (!ma_sound_is_playing(&JumpEffect)) { // Check if the sound is already playing
+                                ma_sound_start(&JumpEffect);
+                            }
                         }
                         MarioStageread();
                         ok--;
@@ -628,7 +663,10 @@ void MarioMovement() {
                         gompav[i].dead = 1;
                         gdead++;
                         ok += 4;
-                        PlaySound(TEXT("stomp.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                        if (!ma_sound_is_playing(&GombaDeadEffect)) { // Check if the sound is already playing
+                            ma_sound_start(&GombaDeadEffect);
+                        }
+                        //PlaySound(TEXT("stomp.wav"), NULL, SND_FILENAME | SND_ASYNC);
                         putimage((gompav[i].jgompa - nci) * wh, gompav[i].igompa * wh, skyblock, COPY_PUT);
                         readimagefile("goomba_walking_1.gif", (gompav[i].jgompa - nci) * wh, (gompav[i].igompa + 0.5) * wh, (gompav[i].jgompa - nci + 1) * wh, (gompav[i].igompa + 1) * wh);
                         delay(40);
@@ -655,7 +693,10 @@ void MarioMovement() {
                         gompav[i].dead = 1;
                         gdead++;
                         ok += 4;
-                        PlaySound(TEXT("stomp.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                        if (!ma_sound_is_playing(&GombaDeadEffect)) { // Check if the sound is already playing
+                            ma_sound_start(&GombaDeadEffect);
+                        }
+                        //PlaySound(TEXT("stomp.wav"), NULL, SND_FILENAME | SND_ASYNC);
                         putimage((gompav[i].jgompa - nci) * wh, gompav[i].igompa * wh, skyblock, COPY_PUT);
                         readimagefile("goomba_walking_1.gif", (gompav[i].jgompa - nci) * wh, (gompav[i].igompa + 0.5) * wh, (gompav[i].jgompa - nci + 1) * wh, (gompav[i].igompa + 1) * wh);
                         delay(40);
@@ -837,7 +878,7 @@ void MarioMovement() {
         play = 1;
     }
 	if (jmario > flagpole+ 1 && flagpole!=0) {
-		PlaySound(TEXT("stage_clear.wav"), NULL, SND_FILENAME | SND_ASYNC);
+		//PlaySound(TEXT("stage_clear.wav"), NULL, SND_FILENAME | SND_ASYNC);
         clock_t end = clock();
 		double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
         itoa((int)time_spent, ts, 10);
@@ -856,15 +897,26 @@ void MarioMovement() {
         line(x / 2, y / 2 + 130, x / 2 + 200, y / 2 + 130);
 		outtextxy(x / 2, y / 2 + 160, text5);
 		outtextxy(x / 2 + 100, y / 2 + 160, SCORE);
+		ma_sound_stop(&BackGroundMusic);
+		ma_sound_start(&StageClear);
         while (okesc!=0) {
             if (GetKeyState(VK_ESCAPE) & 0x8000) okesc = 0;
 
         }
     }
     if (lifes <= 0) {
-        PlaySound(TEXT("gameover.wav"), NULL, SND_FILENAME | SND_SYNC);
-        closegraph();
-        exit(0);
+		ma_sound_stop(&BackGroundMusic);;
+		if (!ma_sound_is_playing(&DeathEffect)) ma_sound_start(&DeathEffect);
+
+        setvisualpage(1);
+
+        char t = getch();
+        if (t=='r') {
+			closegraph();
+            exit(0);
+        }
+        //PlaySound(TEXT("gameover.wav"), NULL, SND_FILENAME | SND_SYNC);
+        
     }
     if (GetKeyState(VK_ESCAPE) & 0x8000) okesc = 0;
 }
