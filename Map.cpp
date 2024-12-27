@@ -19,9 +19,10 @@ using namespace std;
 
 string cht;
 
-void* brickblock,* lucky_block, * mario_coin, * goomba_walking_1, * goomba_walking_2, * mario_climbing_down_1, * mario_climbing_down_2, * mario_climbing_up_1, 
-    * mario_climbing_up_2, * mario_idle_left, * mario_idle_right, * mario_jump_1, * mario_left_run_1, * mario_left_run_2, * mario_left_run_3, * mario_right_run_1,
-    * mario_right_run_2, * mario_right_run_3, * mario_vine, * mario_vine_top, *skyblock, * lucky_block_used, *one_up, *flagpolep, *flagpolemapedit;
+void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goomba_walking_2, * mario_climbing_down_1, * mario_climbing_down_2, * mario_climbing_up_1,
+* mario_climbing_up_2, * mario_idle_left, * mario_idle_right, * mario_jump_1, * mario_left_run_1, * mario_left_run_2, * mario_left_run_3, * mario_right_run_1,
+* mario_right_run_2, * mario_right_run_3, * mario_vine, * mario_vine_top, * skyblock, * lucky_block_used, * one_up, * flagpolep, * flagpolemapedit, * pipebody, * pipehead, * pirana_1,
+* pirana_2, * pipeheadpir;
 
 extern pirhana piranav[100];
 extern colectible coins[100], life[100], starpow[100];
@@ -39,6 +40,7 @@ void MapReaderandSetter() {
     wh = (float)y / (float)nl;
     nc1 = (float)x / wh;
     ncf = nc1;
+	cout << "Dimensiuni ecran: " << x << " " << y << '\n';
 	AssetLoader();
 	AssetLoaderMap();
 	initwindow(x, y, "", -3, -3);
@@ -122,13 +124,16 @@ void MapLoader() {
                 harta[i][j] = 0;
             }
             if (harta[i][j] == 12) {
-                bar(j * wh, i * wh, (j + 1) * wh, (i + 1) * wh); // placeholder pentru pipe body
+                putimage(j * wh, i * wh, pipebody, COPY_PUT);
+                //bar(j * wh, i * wh, (j + 1) * wh, (i + 1) * wh); // placeholder pentru pipe body
             }
             if(harta[i][j] == 14) {
-                bar(j * wh, i * wh, (j + 1) * wh, (i + 1) * wh); // placeholder pentru pipe head without pirhana
+                putimage(j * wh, i * wh, pipehead, COPY_PUT);
+                //bar(j * wh, i * wh, (j + 1) * wh, (i + 1) * wh); // placeholder pentru pipe head without pirhana
             }
             if (harta[i][j] == 13) {
-                bar(j * wh, i * wh, (j + 0.5) * wh, (i + 1) * wh); // placeholder pentru pipe head with pirhana
+                putimage(j * wh, i * wh, pipehead, COPY_PUT);
+                //bar(j * wh, i * wh, (j + 0.5) * wh, (i + 1) * wh); // placeholder pentru pipe head with pirhana
                 p++;
 				piranav[p].ipinit = i;
 				piranav[p].jpinit = j;

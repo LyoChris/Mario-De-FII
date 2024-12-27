@@ -20,8 +20,8 @@ using namespace std;
 int main() {
 	MapReaderandSetter();
 	MapEditorLevels();
-	//LevelLoader();
-	//MarioGame();
+	LevelLoader();
+	MarioGame();
 	//MainMenu();
     return 0;
 }

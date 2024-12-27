@@ -19,7 +19,7 @@ extern colectible coins[100];
 ofstream gout("testing.txt");
 extern void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goomba_walking_2, * mario_climbing_down_1, * mario_climbing_down_2, * mario_climbing_up_1,
 * mario_climbing_up_2, * mario_idle_left, * mario_idle_right, * mario_jump_1, * mario_left_run_1, * mario_left_run_2, * mario_left_run_3, * mario_right_run_1,
-* mario_right_run_2, * mario_right_run_3, * mario_vine, * mario_vine_top, *skyblock;
+* mario_right_run_2, * mario_right_run_3, * mario_vine, * mario_vine_top, * skyblock, * pirana_1, * pirana_2, *pipehead;
 
 extern float nci, ncf, nc1;
 extern int harta[30][1000], coino;
@@ -198,17 +198,17 @@ void gompa(int a) {
 void pirhanastate(int a) {
 	switch (piranav[a].pstage) {
 		case 1:
-			putimage((piranav[a].jpirana - nci) * wh, piranav[a].ipirana * wh, mario_climbing_up_1, COPY_PUT); break;	
+			putimage((piranav[a].jpirana - nci) * wh, piranav[a].ipirana * wh, pirana_1, COPY_PUT); break;
 		case 2:
-			putimage((piranav[a].jpirana - nci) * wh, piranav[a].ipirana * wh, mario_climbing_up_2, COPY_PUT); break;
+			putimage((piranav[a].jpirana - nci) * wh, piranav[a].ipirana * wh, pirana_2, COPY_PUT); break;
 		case -1:
-			putimage((piranav[a].jpirana - nci) * wh, piranav[a].ipirana * wh, mario_climbing_down_1, COPY_PUT); break;
+			putimage((piranav[a].jpirana - nci) * wh, piranav[a].ipirana * wh, pirana_1, COPY_PUT); break;
 		case -2:
-			putimage((piranav[a].jpirana - nci) * wh, piranav[a].ipirana * wh, mario_climbing_down_2, COPY_PUT); break;
+			putimage((piranav[a].jpirana - nci) * wh, piranav[a].ipirana * wh, pirana_2, COPY_PUT); break;
 	}
 }
 
-void pirhana(int a) {
+void pirhananext(int a) {
 	if (piranav[a].upframes <= 0 && piranav[a].reset == 0) {
 		ranpirana = randnumb(0, 1);
 		if (ranpirana == 1) {
@@ -223,7 +223,7 @@ void pirhana(int a) {
 		if (piranav[a].upframes > 20) {
 			piranav[a].ipirana -= 0.5;
 			pirhanastate(a);
-			bar(piranav[a].jpinit * wh, piranav[a].ipinit * wh, (piranav[a].jpinit + 1) * wh, (piranav[a].ipinit + 1) * wh);
+			putimage((piranav[a].jpinit - nci) * wh, piranav[a].ipinit * wh, pipehead, COPY_PUT);
 		}
 		else {
 			pirhanastate(a);
@@ -237,7 +237,7 @@ void pirhana(int a) {
 			if (piranav[a].upframes > 20) {
 				piranav[a].ipirana += 0.5;
 				pirhanastate(a);
-				bar(piranav[a].jpinit * wh, piranav[a].ipinit * wh, (piranav[a].jpinit + 1) * wh, (piranav[a].ipinit + 1) * wh);
+				putimage((piranav[a].jpinit - nci) * wh, piranav[a].ipinit * wh, pipehead, COPY_PUT);
 			}
 			else {
 				pirhanastate(a);
@@ -251,7 +251,7 @@ void pirhana(int a) {
 			putimage((piranav[a].jpirana - nci) * wh, piranav[a].ipirana * wh, skyblock, COPY_PUT);
 			piranav[a].ipirana += 0.5;
 			pirhanastate(a);
-			bar(piranav[a].jpinit * wh, piranav[a].ipinit * wh, (piranav[a].jpinit + 1) * wh, (piranav[a].ipinit + 1) * wh);
+			putimage((piranav[a].jpinit - nci) * wh, piranav[a].ipinit * wh, pipehead, COPY_PUT);
 		}
 		else {
 			if (piranav[a].pstage == -1) piranav[a].pstage = -2;
@@ -259,7 +259,7 @@ void pirhana(int a) {
 			putimage((piranav[a].jpirana - nci) * wh, piranav[a].ipirana * wh, skyblock, COPY_PUT);
 			piranav[a].ipirana -= 0.5;
 			pirhanastate(a);
-			bar(piranav[a].jpinit * wh, piranav[a].ipinit * wh, (piranav[a].jpinit + 1) * wh, (piranav[a].ipinit + 1) * wh);
+			putimage((piranav[a].jpinit - nci) * wh, piranav[a].ipinit * wh, pipehead, COPY_PUT);
 		}
 		piranav[a].reset--;
 	}
@@ -274,7 +274,7 @@ void EnemiesMoving() {
 	}
 	for (int i = 1;i <= p;i++) {
 		if (piranav[i].mapart == (int)(nci - nc1) && piranav[i].dead == 0) {
-			pirhana(i);
+			pirhananext(i);
 		}
 	}
 }
