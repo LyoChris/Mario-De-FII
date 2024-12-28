@@ -19,7 +19,7 @@ using namespace std;
 
 int main() {
 	MapReaderandSetter();
-	MapEditorLevels();
+	//MapEditorLevels();
 	LevelLoader();
 	MarioGame();
 	//MainMenu();
