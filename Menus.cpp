@@ -37,10 +37,24 @@ void SettingsMenu();
 const int MENU_ITEMS = 4;
 char* menuText[MENU_ITEMS] = { "START", "CUSTOM LEVELS", "CONTROLS", "EXIT" };
 
+const int GAMEOVER_ITEMS = 2;
+char* gameOverText[GAMEOVER_ITEMS] = { "RESTART", "MAIN MENU" };
+
 // Global variable
 int selectedOption = 0;
 
-// Arrow
+// Function to calculate the width of the longest text element
+int calculateLongestTextWidthMenu() {
+	int maxWidth = 0;
+	for (int i = 0; i < MENU_ITEMS; i++) {
+		int textWidth = textwidth(menuText[i]);
+		if (textWidth > maxWidth) {
+			maxWidth = textWidth;
+		}
+	}
+	return maxWidth;
+}
+
 void drawArrowMainMenu(int option, int color, int menuX, int menuY, int menuSpacing) {
 	setcolor(color);
 	int x = menuX - 50;
@@ -51,12 +65,12 @@ void drawArrowMainMenu(int option, int color, int menuX, int menuY, int menuSpac
 	fillpoly(4, points);
 }
 
-// Menu
 void drawMenu(int box_color, int text_color) {
 	int winWidth = getmaxx();
 	int winHeight = getmaxy();
 
-	int menuWidth = winWidth / 3;
+	int padding = 30;
+	int menuWidth = winWidth / 3 + calculateLongestTextWidthMenu() +2* padding;
 	int menuHeight = winHeight - 100;
 	int menuX = 100;
 	int menuY = 100; // Adjusted to reduce top padding
@@ -70,7 +84,7 @@ void drawMenu(int box_color, int text_color) {
 	setcolor(text_color);
 	settextstyle(EUROPEAN_FONT, HORIZ_DIR, 5);
 	for (int i = 0; i < MENU_ITEMS; i++) {
-		int textX = menuX + menuWidth / 4;
+		int textX = menuX + menuWidth / 6;
 		int textY = menuY + (i + 1) * menuSpacing;
 		outtextxy(textX, textY, menuText[i]);
 	}
@@ -93,20 +107,20 @@ void MainMenu() {
 	int menuSpacing = menuHeight / (MENU_ITEMS + 2);
 
 	drawMenu(box_color, text_color);
-	drawArrowMainMenu(selectedOption, arrow_color, menuX + menuWidth / 4, menuY + menuSpacing, menuSpacing);
+	drawArrowMainMenu(selectedOption, arrow_color, menuX + menuWidth / 6, menuY + menuSpacing, menuSpacing);
 
 	bool running = true;
 	while (running) {
 		char key = getch();
 		if (key == 'w' || key == 72) {//UP
-			drawArrowMainMenu(selectedOption, 0, menuX + menuWidth / 4, menuY + menuSpacing, menuSpacing); // Erase current arrow
+			drawArrowMainMenu(selectedOption, 0, menuX + menuWidth / 6, menuY + menuSpacing, menuSpacing); // Erase current arrow
 			selectedOption = (selectedOption - 1 + MENU_ITEMS) % MENU_ITEMS;
-			drawArrowMainMenu(selectedOption, arrow_color, menuX + menuWidth / 4, menuY + menuSpacing, menuSpacing); // Draw new arrow
+			drawArrowMainMenu(selectedOption, arrow_color, menuX + menuWidth / 6, menuY + menuSpacing, menuSpacing); // Draw new arrow
 		}
 		if (key == 's' || key == 80) {//DOWN
-			drawArrowMainMenu(selectedOption, 0, menuX + menuWidth / 4, menuY + menuSpacing, menuSpacing); // Erase current arrow
+			drawArrowMainMenu(selectedOption, 0, menuX + menuWidth / 6, menuY + menuSpacing, menuSpacing); // Erase current arrow
 			selectedOption = (selectedOption + 1) % MENU_ITEMS;
-			drawArrowMainMenu(selectedOption, arrow_color, menuX + menuWidth / 4, menuY + menuSpacing, menuSpacing); // Draw new arrow
+			drawArrowMainMenu(selectedOption, arrow_color, menuX + menuWidth / 6, menuY + menuSpacing, menuSpacing); // Draw new arrow
 		}
 		if (key == 13 || key == 32) {//ENTER || SPACE
 			cleardevice();
@@ -123,12 +137,14 @@ void MainMenu() {
 				break;
 			case 3:
 				running = false;
+				exit(0);
+				closegraph();
 				break;
 			}
 			delay(1000);
 			cleardevice();
 			drawMenu(box_color, text_color);
-			drawArrowMainMenu(selectedOption, arrow_color, menuX + menuWidth / 4, menuY + menuSpacing, menuSpacing);
+			drawArrowMainMenu(selectedOption, arrow_color, menuX + menuWidth / 6, menuY + menuSpacing, menuSpacing);
 		}
 	}
 }
@@ -321,6 +337,109 @@ void MainMenu() {
 	}
 }*/
 
+
+int calculateLongestTextWidthOver() {
+	int maxWidth = 0;
+	for (int i = 0; i < GAMEOVER_ITEMS; i++) {
+		int textWidth = textwidth(gameOverText[i]);
+		if (textWidth > maxWidth) {
+			maxWidth = textWidth;
+		}
+	}
+	return maxWidth;
+}
+
+void drawArrowGameOver(int option, int color, int menuX, int menuY, int menuSpacing) {
+	setcolor(color);
+	int x = menuX - 50;
+	int y = menuY + (option * menuSpacing);
+	int points[8] = { x, y, x + 40, y + 20, x, y + 40, x, y };
+	drawpoly(4, points);
+	setfillstyle(SOLID_FILL, color);
+	fillpoly(4, points);
+}
+
+void drawGameOver(int text_color) {
+	int winWidth = getmaxx();
+	int winHeight = getmaxy();
+
+	int padding = 30;
+	int menuWidth = winWidth / 3 + calculateLongestTextWidthOver() + 2 * padding;
+	int menuHeight = winHeight - 100;
+
+	// Center the menu horizontally and vertically
+	int menuX = (winWidth - menuWidth) / 2;
+	int menuY = (winHeight - menuHeight) / 2;
+
+	int menuSpacing = menuHeight / (MENU_ITEMS + 2); // Adjusted spacing
+
+	setcolor(text_color);
+
+	// Draw "GAME OVER" text above the menu
+	settextstyle(EUROPEAN_FONT, HORIZ_DIR, 6);
+	int gameOverWidth = textwidth("GAME OVER");
+	int gameOverX = (winWidth - gameOverWidth) / 2;
+	int gameOverY = menuY - 50;  // Positioning above the menu
+	outtextxy(gameOverX, gameOverY, "GAME OVER");
+
+	// Draw menu options
+	settextstyle(EUROPEAN_FONT, HORIZ_DIR, 4);
+	for (int i = 0; i < GAMEOVER_ITEMS; i++) {
+		int textX = menuX + menuWidth / 6;
+		int textY = menuY + (i + 1) * menuSpacing;
+		outtextxy(textX, textY, gameOverText[i]);
+	}
+}
+
+void GameOverMenu() {
+	setbkcolor(BLACK);
+	cleardevice();
+	setbkcolor(BLACK);
+
+	int text_color = 14;
+	int arrow_color = 14;
+
+	int winWidth = getmaxx();
+	int winHeight = getmaxy();
+
+	int menuWidth = winWidth / 3;
+	int menuHeight = winHeight - 100;
+
+	// Calculate menu position
+	int menuX = (winWidth - menuWidth) / 2;
+	int menuY = (winHeight - menuHeight) / 2;
+	int menuSpacing = menuHeight / (GAMEOVER_ITEMS + 2);
+
+	drawGameOver(text_color);
+	drawArrowGameOver(selectedOption, arrow_color, menuX + menuWidth / 6, menuY + menuSpacing, menuSpacing);
+
+	bool running = true;
+	while (running) {
+		char key = getch();
+		if (key == 'w' || key == 72) { // UP
+			drawArrowGameOver(selectedOption, 0, menuX + menuWidth / 2, menuY + menuSpacing, menuSpacing); // Erase current arrow
+			selectedOption = (selectedOption - 1 + GAMEOVER_ITEMS) % GAMEOVER_ITEMS;
+			drawArrowGameOver(selectedOption, arrow_color, menuX + menuWidth / 2, menuY + menuSpacing, menuSpacing); // Draw new arrow
+		}
+		if (key == 's' || key == 80) { // DOWN
+			drawArrowGameOver(selectedOption, 0, menuX + menuWidth / 2, menuY + menuSpacing, menuSpacing); // Erase current arrow
+			selectedOption = (selectedOption + 1) % GAMEOVER_ITEMS;
+			drawArrowGameOver(selectedOption, arrow_color, menuX + menuWidth / 2, menuY + menuSpacing, menuSpacing); // Draw new arrow
+		}
+		if (key == 13 || key == 32) { // ENTER || SPACE
+			cleardevice();
+			settextstyle(DEFAULT_FONT, HORIZ_DIR, 4);
+			switch (selectedOption) {
+			case 0:
+				outtextxy(200, 400, "Starting Game...");
+				break;
+			case 1:
+				selectedOption = 0;
+				MainMenu();
+			}
+		}
+	}
+}
 void LevelsMenu() {
 	cleardevice();
 	setbkcolor(RGB(255, 0, 0));

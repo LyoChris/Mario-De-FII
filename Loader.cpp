@@ -158,6 +158,9 @@ void AssetLoader() {
     cleardevice();
     setbkcolor(RGB(126, 132, 246));
     preloadImage("FlagpolecutMono.gif", wh, wh, flagpolemapeditmono);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("mario_star.gif", wh, wh, mario_star);
 	closegraph();
 }
 

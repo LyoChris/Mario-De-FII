@@ -9,6 +9,7 @@
 #include "Colissions.h"
 #include "Colectibles.h"
 #include "Loader.h"
+#include "Menus.h"
 #define MINIAUDIO_IMPLEMENTATION
 #include "miniaudio.h"
 
@@ -29,7 +30,7 @@ extern void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goom
 extern double MarioInterval;
 extern float wh, ncf, nci, nc1, imario, jmario;
 extern int x, y, nl, nc, harta[30][1000], mv2, map, stage=-7, mappart, coino, lifo, flagpole, staro;
-extern int time1, okesc, n, p;
+extern int time1, okesc, n, selectedOption, p;
 string direct;
 int lifes = 3, safeimario, safejmario, mover = 0, coinono = 0, invincibilityframes = 0, ok = 0, hoverm = 0, play = 0, gdead = 0, hit, power = 0, pdead = 0;
 
@@ -101,76 +102,63 @@ void NextState(string direction1) {
         if (stage > 0) stage = -stage;
         stage--;
         if (stage == -4) stage = -1;
-        //readimagefile("SkyBlock.jpg", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
 		putimage((jmario - nci) * wh, imario * wh, skyblock, COPY_PUT);
         jmario += 0.5;
         if (jmario - (int)jmario != 0) {
             if (harta[(int)imario][(int)jmario] == 3) {
                 hoverm = 1;
                 putimage(((int)jmario - nci) * wh, (int)imario * wh, mario_vine, COPY_PUT);
-                //readimagefile("mario_vine.gif", ((int)jmario - nci) * wh, (int)imario * wh, (((int)jmario - nci) + 1) * wh, ((int)imario + 1) * wh);
             }
             if (harta[(int)imario][(int)jmario +1] == 3) {
                 hoverm = 1;
                 putimage(((int)jmario - nci+1) * wh, (int)imario * wh, mario_vine, COPY_PUT);
-                //readimagefile("mario_vine.gif", ((int)jmario - nci) * wh, (int)imario * wh, (((int)jmario - nci) + 1) * wh, ((int)imario + 1) * wh);
             }
             if (harta[(int)imario][(int)jmario+1] == 4) {
                 hoverm = 1;
                 putimage(((int)jmario - nci+1) * wh, (int)imario * wh, mario_vine, COPY_PUT);
-                //readimagefile("mario_vine.gif", ((int)jmario - nci) * wh, (int)imario * wh, (((int)jmario - nci) + 1) * wh, ((int)imario + 1) * wh);
             }
             if (harta[(int)imario][(int)jmario] == 4) {
                 hoverm = 1;
                 putimage(((int)jmario - nci) * wh, (int)imario * wh, mario_vine_top, COPY_PUT);
-                //readimagefile("mario_vine_top.gif", ((int)jmario - nci) * wh, (int)imario * wh, (((int)jmario - nci) + 1) * wh, ((int)imario + 1) * wh);
             }
             if (jmario + 1 == flagpole) {
                 hoverm = 1;
                 putimage(((int)jmario - nci + 1) * wh, (int)imario *6* wh, flagpolep, COPY_PUT);
-                //readimagefile("mario_vine.gif", ((int)jmario - nci) * wh, (int)imario * wh, (((int)jmario - nci) + 1) * wh, ((int)imario + 1) * wh);
             }
             if (jmario==flagpole) {
                 hoverm = 1;
                 putimage(((int)jmario - nci) * wh, (int)imario *6* wh, flagpolep, COPY_PUT);
-                //readimagefile("mario_vine_top.gif", ((int)jmario - nci) * wh, (int)imario * wh, (((int)jmario - nci) + 1) * wh, ((int)imario + 1) * wh);
             }
         }
         else {
             if (harta[(int)imario][(int)jmario] == 3) {
                 hoverm = 1;
                 putimage(((int)jmario - nci) * wh, (int)imario * wh, mario_vine, COPY_PUT);
-                //readimagefile("mario_vine.gif", ((int)jmario - nci) * wh, (int)imario * wh, (((int)jmario - nci) + 1) * wh, ((int)imario + 1) * wh);
             }
             if (harta[(int)imario][(int)jmario] == 4) {
                 hoverm = 1;
                 putimage(((int)jmario - nci) * wh, (int)imario * wh, mario_vine_top, COPY_PUT);
-                //readimagefile("mario_vine_top.gif", ((int)jmario - nci) * wh, (int)imario * wh, (((int)jmario - nci) + 1) * wh, ((int)imario + 1) * wh);
             }
             if (harta[(int)imario][(int)jmario -1] == 3) {
                 hoverm = 1;
                 putimage(((int)jmario -1 - nci) * wh, (int)imario * wh, mario_vine, COPY_PUT);
-                //readimagefile("mario_vine_top.gif", ((int)jmario - nci) * wh, (int)imario * wh, (((int)jmario - nci) + 1) * wh, ((int)imario + 1) * wh);
             }
             if (jmario == flagpole) {
                 hoverm = 1;
                 putimage(((int)jmario - nci) * wh, (int)imario * 6 * wh, flagpolep, COPY_PUT);
-                //readimagefile("mario_vine_top.gif", ((int)jmario - nci) * wh, (int)imario * wh, (((int)jmario - nci) + 1) * wh, ((int)imario + 1) * wh);
             }
             if (jmario-1 == flagpole) {
                 hoverm = 1;
                 putimage(((int)jmario -1- nci) * wh, (int)imario * 6 * wh, flagpolep, COPY_PUT);
-                //readimagefile("mario_vine_top.gif", ((int)jmario - nci) * wh, (int)imario * wh, (((int)jmario - nci) + 1) * wh, ((int)imario + 1) * wh);
             }
             if (harta[(int)imario][(int)jmario - 1] == 4) {
                 hoverm = 1;
                 putimage(((int)jmario - 1 - nci) * wh, (int)imario * wh, mario_vine_top, COPY_PUT);
-                //readimagefile("mario_vine_top.gif", ((int)jmario - nci) * wh, (int)imario * wh, (((int)jmario - nci) + 1) * wh, ((int)imario + 1) * wh);
             }
         }
         if (hoverm == 1) {
             //jmario += 0.5;
-            if (imario - (int)imario != 0) {
+            if (imario - (int)imario != 0 && !(harta[(int)imario + 1][(int)jmario +1] == 0 && harta[(int)imario][(int)jmario +1] != 0)) {
                 if (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario + 1][(int)jmario + 1] == 1 && (jmario - (int)jmario != 0)) || jmario > ncf
                 || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario + 1][(int)jmario + 1] == 12 && (jmario - (int)jmario != 0)))
                 || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario + 1][(int)jmario + 1] == 13 && (jmario - (int)jmario != 0)))) {
@@ -179,7 +167,6 @@ void NextState(string direction1) {
                     if (!ma_sound_is_playing(&ColideEffect)) { // Check if the sound is already playing
                         ma_sound_start(&ColideEffect);
                     }
-                    //PlaySound(TEXT("bump.wav"), NULL, SND_FILENAME | SND_ASYNC);
                     MarioStageread();
                 }
                 else {
@@ -195,7 +182,6 @@ void NextState(string direction1) {
                     if (!ma_sound_is_playing(&ColideEffect)) { // Check if the sound is already playing
                         ma_sound_start(&ColideEffect);
                     }
-                    //PlaySound(TEXT("bump.wav"), NULL, SND_FILENAME | SND_ASYNC);
                     MarioStageread();
                 }
                 else {
@@ -205,7 +191,7 @@ void NextState(string direction1) {
         }
         else {
             //jmario += 0.5;
-            if (imario - (int)imario != 0) {
+            if (imario - (int)imario != 0 && !(harta[(int)imario + 1][(int)jmario + 1] == 0 && harta[(int)imario][(int)jmario + 1] != 0)) {
                 if ((CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario + 1][(int)jmario + 1] == 1 && (jmario - (int)jmario != 0)) || jmario > ncf)
                 || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario + 1][(int)jmario + 1] == 12 && (jmario - (int)jmario != 0)))
                 ||(CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario + 1][(int)jmario + 1] == 13 && (jmario - (int)jmario != 0)))) {
@@ -214,7 +200,6 @@ void NextState(string direction1) {
                     if (!ma_sound_is_playing(&ColideEffect)) { // Check if the sound is already playing
                         ma_sound_start(&ColideEffect);
                     }
-                    //PlaySound(TEXT("bump.wav"), NULL, SND_FILENAME | SND_ASYNC);
                     MarioStageput();
                 }
                 else {
@@ -230,7 +215,6 @@ void NextState(string direction1) {
                     if (!ma_sound_is_playing(&ColideEffect)) { // Check if the sound is already playing
                         ma_sound_start(&ColideEffect);
                     }
-                    //PlaySound(TEXT("bump.wav"), NULL, SND_FILENAME | SND_ASYNC);
                     MarioStageput();
                 }
                 else {
@@ -249,31 +233,26 @@ void NextState(string direction1) {
             if (stage == 4) stage = 1;
 			putimage((jmario - nci) * wh, imario * wh, skyblock, COPY_PUT);
             jmario -= 0.5;
-            //readimagefile("SkyBlock.jpg", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
                 if (harta[(int)imario][(int)jmario] == 3) {
                     hoverm = 1;
 					putimage(((int)jmario - nci)* wh, (int)imario* wh, mario_vine, COPY_PUT);
-                    //readimagefile("mario_vine.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, ((imario + 1) * wh));
                 }
                 if (harta[(int)imario][(int)jmario + 1] == 3) {
 					hoverm = 1;
                     putimage(((int)jmario - nci + 1) * wh, (int)imario * wh, mario_vine, COPY_PUT);
-                    //readimagefile("mario_vine.gif", ((int)jmario + 1 - nci) * wh, (int)imario * wh, (((int)jmario + 1 - nci) + 1) * wh, ((int)imario + 1) * wh);
                 }
                 if (harta[(int)imario][(int)jmario] == 4) {
                     hoverm = 1;
                     putimage(((int)jmario - nci) * wh, (int)imario * wh, mario_vine_top, COPY_PUT);
-                    //readimagefile("mario_vine_top.gif", ((int)jmario + 1 - nci) * wh, (int)imario * wh, (((int)jmario + 1 - nci) + 1) * wh, ((int)imario + 1) * wh);
                 }
                 if (harta[(int)imario][(int)jmario +1] == 4) {
                     hoverm = 1;
                     putimage(((int)jmario - nci +1) * wh, (int)imario * wh, mario_vine_top, COPY_PUT);
-                    //readimagefile("mario_vine_top.gif", ((int)jmario + 1 - nci) * wh, (int)imario * wh, (((int)jmario + 1 - nci) + 1) * wh, ((int)imario + 1) * wh);
                 }
             if (hoverm == 1) {
-                //jmario -= 0.5;
-                if (imario - (int)imario != 0) {
-                    if (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario + 1][(int)jmario] == 1 || jmario < 0)
+                if (imario - (int)imario != 0 && !(harta[(int)imario + 1][(int)jmario] == 0 && harta[(int)imario][(int)jmario] != 0)) {
+                    std::cout << harta[(int)imario +1][(int)jmario] << '\n';
+                    if ((CheckBlock(imario * wh, jmario * wh, wh, (float)(imario) * wh, (float)(jmario)*wh) && (harta[(int)imario +1 ][(int)jmario] == 1)) || (jmario < 0)
                     || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario + 1][(int)jmario] == 12))
                     || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && harta[(int)imario + 1][(int)jmario] == 13)) {
                         jmario += 0.5;
@@ -281,7 +260,6 @@ void NextState(string direction1) {
                         if (!ma_sound_is_playing(&ColideEffect)) { // Check if the sound is already playing
                             ma_sound_start(&ColideEffect);
                         }
-                        //PlaySound(TEXT("bump.wav"), NULL, SND_FILENAME | SND_ASYNC);
                         MarioStageread();
                     }
                     else {
@@ -297,7 +275,6 @@ void NextState(string direction1) {
                         if (!ma_sound_is_playing(&ColideEffect)) { // Check if the sound is already playing
                             ma_sound_start(&ColideEffect);
                         }
-                        //PlaySound(TEXT("bump.wav"), NULL, SND_FILENAME | SND_ASYNC);
                         MarioStageread();
                     }
                     else {
@@ -307,7 +284,7 @@ void NextState(string direction1) {
             }
             else {
                 //jmario -= 0.5;
-                if (imario - (int)imario != 0) {
+                if (imario - (int)imario != 0 && !(harta[(int)imario + 1][(int)jmario] == 0 && harta[(int)imario][(int)jmario] != 0)) {
                     if ((CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario + 1][(int)jmario] == 1 || jmario < 0))
                     || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario + 1][(int)jmario] == 12))
                     || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && harta[(int)imario + 1][(int)jmario] == 13)) {
@@ -316,7 +293,6 @@ void NextState(string direction1) {
                         if (!ma_sound_is_playing(&ColideEffect)) { // Check if the sound is already playing
                             ma_sound_start(&ColideEffect);
                         }
-                        //PlaySound(TEXT("bump.wav"), NULL, SND_FILENAME | SND_ASYNC);
                         MarioStageput();
                     }
                     else {
@@ -332,7 +308,6 @@ void NextState(string direction1) {
                         if (!ma_sound_is_playing(&ColideEffect)) { // Check if the sound is already playing
                             ma_sound_start(&ColideEffect);
                         }
-                        //PlaySound(TEXT("bump.wav"), NULL, SND_FILENAME | SND_ASYNC);
                         MarioStageput();
                     }
                     else {
@@ -358,17 +333,14 @@ void NextState(string direction1) {
             readimagefile("SkyBlock.jpg", ((int)jmario - 1 - nci) * wh, (int)imario * wh, (((int)jmario - 1 - nci) + 1) * wh, ((int)imario + 1) * wh);
             readimagefile("mario_vine.gif", ((int)jmario - 1 - nci) * wh, (int)imario * wh, (((int)jmario - 1 - nci) + 1) * wh, ((int)imario + 1) * wh);
         }
-        
-        if (jmario - (int)jmario == 0) {
-            imario-=0.5;
-            if (CheckBlock(imario, jmario, wh, (float)(imario), (float)(jmario)) && !((harta[(int)imario][(int)jmario] == 3) || harta[(int)imario][(int)jmario] == 4) && (jmario - (int)jmario == 0)) {
-                imario += 0.5;
-                stage = 10;
-                MarioStageread();
-            }
-            else
-                MarioStageread();
+        imario -= 0.5;
+        if (CheckBlock(imario, jmario, wh, (float)(imario), (float)(jmario)) && !((harta[(int)imario][(int)jmario] == 3) || harta[(int)imario][(int)jmario] == 4) && (jmario - (int)jmario == 0)) {
+            imario += 0.5;
+            stage = 10;
+            MarioStageread();
         }
+        else
+            MarioStageread();
     }
 
     if (direction1 == "down")
@@ -383,57 +355,47 @@ void NextState(string direction1) {
             readimagefile("SkyBlock.jpg", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
             readimagefile("mario_vine_top.gif", ((int)jmario - nci) * wh, (int)imario * wh, (((int)jmario - nci) + 1) * wh, ((int)imario + 1) * wh);
         }
-        if(harta[(int)imario][(int)jmario + 1] == 3) {
+        if (harta[(int)imario][(int)jmario + 1] == 3) {
             readimagefile("SkyBlock.jpg", ((int)jmario + 1 - nci) * wh, (int)imario * wh, (((int)jmario + 1 - nci) + 1) * wh, ((int)imario + 1) * wh);
             readimagefile("mario_vine.gif", ((int)jmario + 1 - nci) * wh, (int)imario * wh, (((int)jmario + 1 - nci) + 1) * wh, ((int)imario + 1) * wh);
         }
-        
-        if (jmario - (int)jmario == 0) {
-            imario+=0.5;
-            if (CheckBlock(imario, jmario, wh, (float)(imario), (float)(jmario)) && !(harta[(int)imario][(int)jmario] == 3 || harta[(int)imario][(int)jmario] == 4)) {
-                imario -= 0.5;
-                stage = 9;
-                MarioStageread();
-            }
-            else
-                MarioStageread();
+        imario += 0.5;
+        if (CheckBlock(imario, jmario, wh, (float)(imario), (float)(jmario)) && !(harta[(int)imario][(int)jmario] == 3 || harta[(int)imario][(int)jmario] == 4) && harta[(int)imario][(int)jmario] == 1) {
+            imario -= 0.5;
+            stage = 9;
+            MarioStageread();
         }
+        else
+            MarioStageread();
     }
+
     if (direction1 == "space" || ok>0) {
         stage = -6;
         if (ok > 0) {
-            //readimagefile("SkyBlock.jpg", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
 			putimage((jmario - nci)* wh, imario* wh, skyblock, COPY_PUT);
             imario -= 0.5;
             if (harta[(int)imario][(int)jmario] == 3) {
                 hoverm = 1;
-                //readimagefile("mario_vine.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
                 putimage(((int)jmario - nci) * wh, (int)imario * wh, mario_vine, COPY_PUT);
             }
             if (harta[(int)imario][(int)jmario] == 4) {
                 hoverm = 1;
-                //readimagefile("mario_vine_top.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
                 putimage(((int)jmario - nci) * wh, (int)imario * wh, mario_vine_top, COPY_PUT);
             }
             if (harta[(int)imario+1][(int)jmario] == 3) {
                 hoverm = 1;
-                //readimagefile("mario_vine.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
                 putimage(((int)jmario - nci) * wh, ((int)imario+1) * wh, mario_vine, COPY_PUT);
             }
             if (harta[(int)imario+1][(int)jmario] == 4) {
                 hoverm = 1;
-                //readimagefile("mario_vine_top.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
                 putimage(((int)jmario - nci) * wh, ((int)imario+1) * wh, mario_vine_top, COPY_PUT);
             }
             if (hoverm == 1) {
-                //imario-=0.5;
                 if (jmario - (int)jmario != 0) {
-                    if ((imario > 0 && ((harta[(int)imario][(int)jmario] != 1 && (harta[(int)imario][(int)jmario + 1] != 1)) && (harta[(int)imario][(int)jmario] != 8 && (harta[(int)imario][(int)jmario + 1] != 8) && (harta[(int)imario][(int)jmario] != 10 && (harta[(int)imario][(int)jmario + 1] != 10)))))) {
+                    if ((imario > 0 && ((harta[(int)imario][(int)jmario] != 1 && (harta[(int)imario][(int)jmario + 1] != 1)) && (harta[(int)imario][(int)jmario] != 8 && (harta[(int)imario][(int)jmario + 1] != 8) && (harta[(int)imario][(int)jmario] != 10 && (harta[(int)imario][(int)jmario + 1] != 10)))))
+                        && (harta[(int)imario][(int)jmario] != 12 && (harta[(int)imario][(int)jmario + 1] != 12)) && (harta[(int)imario][(int)jmario] != 14 && (harta[(int)imario][(int)jmario + 1] != 14))
+                        && (harta[(int)imario][(int)jmario] != 13 && (harta[(int)imario][(int)jmario + 1] != 13))) {
                         if (ok == 6) {
-                            //PlaySound(TEXT("jump_small.wav"), NULL, SND_FILENAME | SND_ASYNC);
-                            if (!ma_sound_is_playing(&JumpEffect)) { // Check if the sound is already playing
-                                ma_sound_start(&JumpEffect);
-                            }
                         }
                         MarioStageread();
                         ok--;
@@ -444,19 +406,16 @@ void NextState(string direction1) {
                     }
                 }
                 else {
-                    if (CheckBlock(imario, jmario, wh, (float)(imario - 1), (float)(jmario)) && (imario > 0 && (harta[(int)imario][(int)jmario] != 1) && (harta[(int)imario][(int)jmario] != 8) && (harta[(int)imario][(int)jmario] != 10))) {
+                    if (CheckBlock(imario, jmario, wh, (float)(imario - 1), (float)(jmario)) && (imario > 0 && (harta[(int)imario][(int)jmario] != 1)
+                        && (harta[(int)imario][(int)jmario] != 12) && (harta[(int)imario][(int)jmario] != 8) && (harta[(int)imario][(int)jmario] != 10)
+                        && (harta[(int)imario][(int)jmario] != 13) && (harta[(int)imario][(int)jmario] != 14))) {
                         if (ok == 6) {
-                            //PlaySound(TEXT("jump_small.wav"), NULL, SND_FILENAME | SND_ASYNC);
-                            if (!ma_sound_is_playing(&JumpEffect)) { // Check if the sound is already playing
-                                ma_sound_start(&JumpEffect);
-                            }
                         }
                         MarioStageread();
                         ok--;
                     }
                     else {
                         if (harta[(int)imario][(int)jmario] == 8) {
-                            //readimagefile("mario_vine.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
 							putimage(((int)jmario - nci)* wh, ((int)imario)* wh, lucky_block_used, COPY_PUT);
                             int ranblock = randnumb(0, 1);
                             if (ranblock == 1) {
@@ -481,13 +440,12 @@ void NextState(string direction1) {
                 }
             }
             else {
-                //imario -= 0.5;
                 if (jmario - (int)jmario != 0) {
                     if ((imario > 0 && ((harta[(int)imario][(int)jmario] != 1 && (harta[(int)imario][(int)jmario + 1] != 1)) && (harta[(int)imario][(int)jmario] != 8 && (harta[(int)imario][(int)jmario + 1] != 8) 
-                        && (harta[(int)imario][(int)jmario] != 10 && (harta[(int)imario][(int)jmario + 1] != 10)))))) {
-                        if (ok == 6) {
-                            PlaySound(TEXT("jump_small.wav"), NULL, SND_FILENAME | SND_ASYNC);
-                        }
+                        && (harta[(int)imario][(int)jmario] != 10 && (harta[(int)imario][(int)jmario + 1] != 10)))))
+                        && (harta[(int)imario][(int)jmario] != 12 && (harta[(int)imario][(int)jmario + 1] != 12)) && (harta[(int)imario][(int)jmario] != 14 && (harta[(int)imario][(int)jmario + 1] != 14))
+                        && (harta[(int)imario][(int)jmario] != 13 && (harta[(int)imario][(int)jmario + 1] != 13))) {
+                        
                         MarioStageput();
                         ok--;
                     }
@@ -497,16 +455,15 @@ void NextState(string direction1) {
                     }
                 }
                 else {
-                    if (CheckBlock(imario, jmario, wh, (float)(imario - 1), (float)(jmario)) && (imario > 0 && (harta[(int)imario][(int)jmario] != 1) && (harta[(int)imario][(int)jmario] != 8) && (harta[(int)imario][(int)jmario] != 10))) {
-                        if (ok == 6) {
-                            PlaySound(TEXT("jump_small.wav"), NULL, SND_FILENAME | SND_ASYNC);
-                        }
+                    if (CheckBlock(imario, jmario, wh, (float)(imario - 1), (float)(jmario)) && (imario > 0 && (harta[(int)imario][(int)jmario] != 1) 
+                        && (harta[(int)imario][(int)jmario] != 12) && (harta[(int)imario][(int)jmario] != 8) && (harta[(int)imario][(int)jmario] != 10)
+                        && (harta[(int)imario][(int)jmario] != 13) && (harta[(int)imario][(int)jmario] != 14))) {
+                       
                         MarioStageput();
                         ok--;
                     }
                     else {
                         if (harta[(int)imario][(int)jmario] == 8) {
-                            //readimagefile("mario_vine.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
                             putimage(((int)jmario - nci) * wh, ((int)imario) * wh, lucky_block_used, COPY_PUT);
                             int ranblock = randnumb(0, 1);
                             if (ranblock == 1) {
@@ -542,32 +499,38 @@ void MarioMovement() {
         safeimario = imario;
         safejmario = jmario;
     }
-    if ((GetKeyState(0x41) < 0 || (GetKeyState(VK_LEFT) < 0)) && jmario > 0) {
+    if (((GetKeyState(0x41) < 0 || (GetKeyState(VK_LEFT) < 0))) && jmario > 0) {
         NextState("left");
         mover = 1;
         direct = "left";
+        std::cout << imario << " " << jmario << endl;
     }
-    if ((GetKeyState(0x44) < 0 || (GetKeyState(VK_RIGHT) < 0)) && jmario < ncf - 1) {
+    if (((GetKeyState(0x44) < 0 || (GetKeyState(VK_RIGHT) < 0))) && jmario < ncf - 1) {
         NextState("right");
         mover = 1;
         direct = "right";
+        std::cout << imario << " " << jmario << endl;
     }
-    if ((GetKeyState(0x57) < 0 || (GetKeyState(VK_UP) < 0)) && (harta[(int)imario][(int)jmario] == 3 || harta[(int)imario][(int)jmario] == 4)) {
+    if (((GetKeyState(0x57) < 0 || (GetKeyState(VK_UP) < 0))) && (harta[(int)imario][(int)jmario] == 3 || harta[(int)imario][(int)jmario] == 4) && jmario - (int)jmario == 0) {
         NextState("up");
         mover = 1;
         direct = "up";
+        std::cout << imario << " " << jmario << endl;
     }
-    if ((GetKeyState(0x53) < 0 || (GetKeyState(VK_DOWN) < 0)) && (harta[(int)imario][(int)jmario] == 3 || harta[(int)imario][(int)jmario] == 4)) {
+    if (((GetKeyState(0x53) < 0 || (GetKeyState(VK_DOWN) < 0))) && (harta[(int)imario][(int)jmario] == 3 || harta[(int)imario][(int)jmario] == 4) && jmario-(int)jmario==0) {
         NextState("down");
         mover = 1;
         direct = "down";
+        std::cout << imario << " " << jmario << endl;
     }
-    if ((GetKeyState(VK_SPACE) < 0) && (harta[(int)imario + 1][(int)jmario] == 1 || harta[(int)imario + 1][(int)jmario] == 8 || harta[(int)imario + 1][(int)jmario] == 10
+    if (((GetKeyState(VK_SPACE) < 0)) && (harta[(int)imario + 1][(int)jmario] == 1 || harta[(int)imario + 1][(int)jmario] == 8 || harta[(int)imario + 1][(int)jmario] == 10
         || harta[(int)imario + 1][(int)jmario] == 14 || harta[(int)imario + 1][(int)jmario] == 13)) {
+		ma_sound_start(&JumpEffect);
         ok = 6;
         NextState("space");
         mover = 1;
         direct = "space";
+        std::cout << imario << " " << jmario << endl;
         //k = 1;
     }
     if (ok > 0) {
@@ -599,6 +562,7 @@ void MarioMovement() {
     else {
         if (harta[(int)imario + 1][(int)jmario] == 0 && ok == 0) {
             mover = 1;
+            std::cout << imario << " " << jmario << endl;
             if (harta[(int)imario + 1][(int)jmario] == 0) {
                 //readimagefile("SkyBlock.jpg", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
                 putimage((jmario - nci) * wh, imario * wh, skyblock, COPY_PUT);
@@ -719,18 +683,26 @@ void MarioMovement() {
             }
         }
         else {
-            if (piranav[i].mapart == (int)(nci - nc1) && piranav[i].dead == 0) {
-                if (CheckBlock(imario * wh, jmario * wh, wh, (float)(piranav[i].ipirana) * wh, (float)(piranav[i].jpirana) * wh) == 1 && direct == "right") {
-                    piranav[i].dead = 1;
-                    pdead++;
-                    putimage((piranav[i].jpirana - nci) * wh, piranav[i].ipirana * wh, skyblock, COPY_PUT);
-                }
-                else {
-                    if (CheckBlock(imario * wh, jmario * wh, wh, (float)(piranav[i].ipirana) * wh, (float)(piranav[i].jpirana) * wh) == 1 && direct == "right") {
-                        piranav[i].dead = 1;
-                        pdead++;
-                        putimage((piranav[i].jpirana - nci) * wh, piranav[i].ipirana * wh, skyblock, COPY_PUT);
+            if (gompav[i].mapart == (int)(nci - nc1) && gompav[i].dead == 0) {
+                if (CheckBlock(imario * wh, jmario * wh, wh, (float)(gompav[i].igompa) * wh, (float)(gompav[i].jgompa) * wh) == 1 && direct == "left") {
+                    gompav[i].dead = 1;
+                    gdead++;
+                    if (!ma_sound_is_playing(&GombaDeadEffect)) { // Check if the sound is already playing
+                        ma_sound_start(&GombaDeadEffect);
                     }
+                    //PlaySound(TEXT("stomp.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                    putimage((gompav[i].jgompa - nci) * wh, gompav[i].igompa * wh, skyblock, COPY_PUT);
+                    std::cout << "GOOMPA DEAD 2" << '\n';
+                }
+                if (CheckBlock(imario * wh, jmario * wh, wh, (float)(gompav[i].igompa) * wh, (float)(gompav[i].jgompa) * wh) == 1 && direct == "right") {
+                    gompav[i].dead = 1;
+                    gdead++;
+                    if (!ma_sound_is_playing(&GombaDeadEffect)) { // Check if the sound is already playing
+                        ma_sound_start(&GombaDeadEffect);
+                    }
+                    //PlaySound(TEXT("stomp.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                    putimage((gompav[i].jgompa - nci) * wh, gompav[i].igompa * wh, skyblock, COPY_PUT);
+                    std::cout << "GOOMPA DEAD 2" << '\n';
                 }
             }
         }
@@ -855,7 +827,6 @@ void MarioMovement() {
     if (jmario <= (int)nci && jmario > 0) MapLoaderPrevLeft(); //randam o parte anterioara a hartii
 
     mover = 0;
-	cout << "Power stat: " << power << '\n';
 	if (power != 0) power--;
     if(invincibilityframes!=0) invincibilityframes--;
 
@@ -908,14 +879,7 @@ void MarioMovement() {
 		ma_sound_stop(&BackGroundMusic);;
 		if (!ma_sound_is_playing(&DeathEffect)) ma_sound_start(&DeathEffect);
 
-        setvisualpage(1);
-
-        char t = getch();
-        if (t=='r') {
-			closegraph();
-            exit(0);
-        }
-        //PlaySound(TEXT("gameover.wav"), NULL, SND_FILENAME | SND_SYNC);
+		GameOverMenu();
         
     }
     if (GetKeyState(VK_ESCAPE) & 0x8000) okesc = 0;

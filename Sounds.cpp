@@ -14,7 +14,7 @@
 using namespace std;
 
 ma_engine engine;
-ma_sound JumpEffect, CoinEffect, ColideEffect, GombaDeadEffect, BackGroundMusic, DeathEffect, StageClear;
+ma_sound JumpEffect, CoinEffect, ColideEffect, GombaDeadEffect, BackGroundMusic, DeathEffect, StageClear, StarTheme;
 
 
 void SoundInitialisation() {
@@ -35,7 +35,7 @@ void SoundInitialisation() {
         printf("Failed to load sound effect 2.\n");
         ma_sound_uninit(&CoinEffect);
         ma_engine_uninit(&engine);
-		exit(0);
+        exit(0);
     }
     if (ma_sound_init_from_file(&engine, "bump.wav", 0, NULL, NULL, &ColideEffect) != MA_SUCCESS) {
         printf("Failed to load sound effect 2.\n");
@@ -61,11 +61,16 @@ void SoundInitialisation() {
         ma_engine_uninit(&engine);
         exit(0);
     }
-    
-        if (ma_sound_init_from_file(&engine, "stage_clear.wav", 0, NULL, NULL, &StageClear) != MA_SUCCESS) {
-            printf("Failed to load sound effect 2.\n");
-            ma_sound_uninit(&StageClear);
-            ma_engine_uninit(&engine);
-            exit(0);
-        }
+    if (ma_sound_init_from_file(&engine, "stage_clear.wav", 0, NULL, NULL, &StageClear) != MA_SUCCESS) {
+        printf("Failed to load sound effect 2.\n");
+        ma_sound_uninit(&StageClear);
+        ma_engine_uninit(&engine);
+        exit(0);
+    }
+    if (ma_sound_init_from_file(&engine, "StarTheme.wav", 0, NULL, NULL, &StarTheme) != MA_SUCCESS) {
+        printf("Failed to load sound effect 2.\n");
+        ma_sound_uninit(&StageClear);
+        ma_engine_uninit(&engine);
+        exit(0);
+    }
 }

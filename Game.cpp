@@ -21,9 +21,9 @@ using namespace std;
 void* playerImg1;
 
 extern ma_engine engine;
-extern ma_sound BackGroundMusic;
+extern ma_sound BackGroundMusic, StarTheme;
 extern float wh, nc1, imario, jmario;
-extern int x, y, nl, nc, harta[30][1000], mv2, map;
+extern int x, y, nl, nc, harta[30][1000], mv2, map, power;
 string direction, direction1;
 int time1, okesc = 1, ok1 = 0;
 clock_t start;
@@ -42,9 +42,19 @@ void MarioGame() {
     int page = 0;
 
     do {
-		if (!ma_sound_is_playing(&BackGroundMusic)) {
-			ma_sound_start(&BackGroundMusic);
-		}
+        if (power == 0) {
+            if (!ma_sound_is_playing(&BackGroundMusic)) {
+                ma_sound_stop(&StarTheme);
+                ma_sound_start(&BackGroundMusic);
+            }
+        }
+        else {
+            ma_sound_stop(&BackGroundMusic);
+            if (!ma_sound_is_playing(&StarTheme)) {
+                ma_sound_start(&StarTheme);
+            }
+        }
+
         clock_t now = clock();
         if ((now - lastFrame) / (double)CLOCKS_PER_SEC >= FrameInterval) {
             /*if (tasta == 'd') {

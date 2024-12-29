@@ -21,8 +21,10 @@ string cht;
 
 void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goomba_walking_2, * mario_climbing_down_1, * mario_climbing_down_2, * mario_climbing_up_1,
 * mario_climbing_up_2, * mario_idle_left, * mario_idle_right, * mario_jump_1, * mario_left_run_1, * mario_left_run_2, * mario_left_run_3, * mario_right_run_1,
-* mario_right_run_2, * mario_right_run_3, * mario_vine, * mario_vine_top, * skyblock, * lucky_block_used, * one_up, * flagpolep, * flagpolemapedit, * pipebody, * pipehead, * pirana_1,
-* pirana_2, * pipeheadpir, * mariostar;
+* mario_right_run_2, * mario_right_run_3, * mario_vine, * mario_vine_top, * skyblock, * lucky_block_used, * one_up, * flagpolep, * flagpolemapedit, * pipebody,
+* mario_star, * pipehead, * pirana_1, * pirana_2, * pipeheadpir, * mariostar, * mario_climbing_down_1_star, * mario_climbing_down_2_star, * mario_climbing_up_1_star,
+* mario_climbing_up_2_star, * mario_idle_left_star, * mario_idle_right_star, * mario_jump_1_star, * mario_left_run_1_star, * mario_left_run_2_star,
+* mario_left_run_3_star, * mario_right_run_1_star, * mario_right_run_2_star, * mario_right_run_3_star;
 
 extern pirhana piranav[100];
 extern colectible coins[100], life[100], starpow[100];
@@ -95,8 +97,7 @@ void MapLoader() {
                     harta[i][j] = 0;
             }
             if (harta[i][j] == 15) {
-                setcolor(YELLOW);
-                bar((j - nci) * wh, i * wh, (j - nci + 1) * wh, (i + 1) * wh);
+				putimage(j * wh, i * wh, mario_star, COPY_PUT);
                 staro++;
                 starpow[staro].icolec = i;
                 starpow[staro].jcolec = j;
