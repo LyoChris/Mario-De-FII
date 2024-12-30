@@ -21,7 +21,7 @@ using namespace std;
 void* playerImg1;
 
 extern ma_engine engine;
-extern ma_sound BackGroundMusic, StarTheme;
+extern ma_sound BackGroundMusic, StarTheme, DeathEffect;
 extern float wh, nc1, imario, jmario;
 extern int x, y, nl, nc, harta[30][1000], mv2, map, power;
 string direction, direction1;
@@ -32,7 +32,6 @@ double enemyInterval = ENEMY_TIME;
 double FrameInterval = FRAME_TIME;
 
 void MarioGame() {
-	SoundInitialisation();
     MapLoader();
     clock_t lastMarioMove = clock(); //facem cate un ceas pentru inamici si Mario
     clock_t lastEnemyMove = clock();
@@ -42,6 +41,8 @@ void MarioGame() {
     int page = 0;
 
     do {
+        setbkcolor(RGB(126, 132, 246));
+        setcolor(WHITE);
         if (power == 0) {
             if (!ma_sound_is_playing(&BackGroundMusic)) {
                 ma_sound_stop(&StarTheme);

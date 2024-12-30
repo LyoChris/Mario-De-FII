@@ -9,12 +9,16 @@
 #include "Colissions.h"
 #include "Colectibles.h"
 #include "Loader.h"
+#include "Sounds.h"
+#include "miniaudio.h"
 #include "Game.h"
+#include "MapEditor.h"
 using namespace std;
 
 #define MAX1 30
 #define MAX2 1000
 
+extern ma_sound JumpEffect, CoinEffect, ColideEffect, GombaDeadEffect, DeathEffect, BackGroundMusic, StageClear;
 extern clock_t start;
 extern colectible coins[100], life[100];
 extern goompa gompav[100];
@@ -25,7 +29,7 @@ extern double MarioInterval;
 extern float wh, ncf, nci, nc1, imario, jmario;
 extern int x, y, nl, nc, harta[30][1000];
 extern int time1, okesc, n;
-extern string direct;
+extern string direct, levelselect, cht;
 //extern int lifes = 3, safeimario, safejmario, mover = 0, coinono = 0, invincibilityframes = 0, ok = 0, hoverm = 0, play = 0, gdead = 0;
 
 void MainMenu();
@@ -37,12 +41,15 @@ void SettingsMenu();
 const int MENU_ITEMS = 4;
 char* menuText[MENU_ITEMS] = { "START", "CUSTOM LEVELS", "CONTROLS", "EXIT" };
 
-const int GAMEOVER_ITEMS = 2;
-char* gameOverText[GAMEOVER_ITEMS] = { "RESTART", "MAIN MENU" };
+const int GAMEOVER_ITEMS = 3;
+char* gameOverText[GAMEOVER_ITEMS] = { "RESTART", "LEVELS", "MAIN MENU" };
+
+const int PAUSE_ITEMS = 3;
+char* PauseText[PAUSE_ITEMS] = { "RESUME", "LEVELS", "MAIN MENU" };
 
 // Global variable
 int selectedOption = 0;
-
+/*
 // Function to calculate the width of the longest text element
 int calculateLongestTextWidthMenu() {
 	int maxWidth = 0;
@@ -68,6 +75,7 @@ void drawArrowMainMenu(int option, int color, int menuX, int menuY, int menuSpac
 void drawMenu(int box_color, int text_color) {
 	int winWidth = getmaxx();
 	int winHeight = getmaxy();
+	settextstyle(DEFAULT_FONT, HORIZ_DIR, 1);
 
 	int padding = 30;
 	int menuWidth = winWidth / 3 + calculateLongestTextWidthMenu() +2* padding;
@@ -75,6 +83,7 @@ void drawMenu(int box_color, int text_color) {
 	int menuX = 100;
 	int menuY = 100; // Adjusted to reduce top padding
 	int menuSpacing = menuHeight / (MENU_ITEMS + 2); // Adjusted spacing to reduce bottom padding
+
 
 	setcolor(box_color);
 	for (int i = 0; i < 10; i++) {
@@ -88,11 +97,13 @@ void drawMenu(int box_color, int text_color) {
 		int textY = menuY + (i + 1) * menuSpacing;
 		outtextxy(textX, textY, menuText[i]);
 	}
+	
 }
 
 void MainMenu() {
+	setbkcolor(BLACK);
 	cleardevice();
-
+	setbkcolor(BLACK);
 	int box_color = 4;
 	int text_color = 14;
 	int arrow_color = 14;
@@ -130,7 +141,7 @@ void MainMenu() {
 				outtextxy(200, 400, "Starting Game...");
 				break;
 			case 1:
-				outtextxy(200, 400, "Opening Settings...");
+				MapEditorLevels();
 				break;
 			case 2:
 				outtextxy(200, 400, "Loading Controls...");
@@ -147,7 +158,137 @@ void MainMenu() {
 			drawArrowMainMenu(selectedOption, arrow_color, menuX + menuWidth / 6, menuY + menuSpacing, menuSpacing);
 		}
 	}
+}*/
+
+// Function to calculate the width of the longest text element
+int calculateLongestTextWidthMenu() {
+	int maxWidth = 0;
+	for (int i = 0; i < MENU_ITEMS; i++) {
+		int textWidth = textwidth(menuText[i]);
+		if (textWidth > maxWidth) {
+			maxWidth = textWidth;
+		}
+	}
+	return maxWidth;
 }
+
+void drawArrowMainMenu(int option, int color, int menuX, int menuY, int menuSpacing) {
+	setcolor(color);
+
+	// Arrow dimensions scaled proportionally
+	int arrowWidth = menuSpacing / 6;  // Smaller, proportional width
+	int arrowHeight = menuSpacing / 3; // Proportional height
+
+	// Calculate arrow's position to align its center with the middle of the text
+	int x = menuX - arrowWidth - 10; // Offset slightly to the left of the text
+	int y = menuY + (option * menuSpacing) + menuSpacing / 2 - arrowHeight / 2; // Center of arrow aligns with text middle
+
+	// Define the arrow points
+	int points[8] = {
+		x, y,
+		x + arrowWidth, y + arrowHeight / 2,
+		x, y + arrowHeight,
+		x, y
+	};
+
+	drawpoly(4, points);
+	setfillstyle(SOLID_FILL, color);
+	fillpoly(4, points);
+}
+
+void drawMenu(int box_color, int text_color) {
+	int winWidth = getmaxx();
+	int winHeight = getmaxy();
+
+	int fontSize = winHeight / 40; // Dynamically calculate font size
+	if (fontSize > 15) fontSize = 5;
+	settextstyle(DEFAULT_FONT, HORIZ_DIR, 1);
+	cout << fontSize << endl;
+	cout << calculateLongestTextWidthMenu();
+	int padding = 30;
+	int menuWidth = winWidth / 3 + calculateLongestTextWidthMenu() + padding;
+	int menuHeight = winHeight - 100;
+	int menuX = 100;
+	int menuY = 100;
+	int menuSpacing = menuHeight / (MENU_ITEMS + 2);
+	if (menuWidth >= winWidth / 2) {
+		menuWidth = winWidth / 2;
+		cout << "am intrat";
+	}
+	cout << '\n'<< menuWidth << " " << winWidth << " " <<winWidth/3<< '\n';
+	// Draw the red rectangle (menu container)
+	setcolor(box_color);
+	for (int i = 0; i < 10; i++) {
+		rectangle(menuX - i, menuY - i, menuX + menuWidth + i, menuY + menuHeight - menuSpacing + i);
+	}
+	settextstyle(EUROPEAN_FONT, HORIZ_DIR, fontSize);
+	// Draw menu text
+	setcolor(text_color);
+	for (int i = 0; i < MENU_ITEMS; i++) {
+		int textX = menuX + menuWidth / 6;
+		int textY = menuY + (i + 1) * menuSpacing;
+		outtextxy(textX, textY, menuText[i]);
+	}
+}
+
+void MainMenu() {
+	setbkcolor(BLACK);
+	cleardevice();
+	int box_color = 4;
+	int text_color = 14;
+	int arrow_color = 14;
+
+	int winWidth = getmaxx();
+	int winHeight = getmaxy();
+
+	int menuWidth = winWidth / 3;
+	int menuHeight = winHeight - 100;
+	int menuX = 100;
+	int menuY = 100;
+	int menuSpacing = menuHeight / (MENU_ITEMS + 2);
+
+	drawMenu(box_color, text_color);
+	drawArrowMainMenu(selectedOption, arrow_color, menuX + menuWidth / 6, menuY + menuSpacing/1.5, menuSpacing);
+
+	bool running = true;
+	while (running) {
+		char key = getch();
+		if (key == 'w' || key == 72) { // UP
+			drawArrowMainMenu(selectedOption, 0, menuX + menuWidth / 6, menuY + menuSpacing/1.5, menuSpacing); // Erase current arrow
+			selectedOption = (selectedOption - 1 + MENU_ITEMS) % MENU_ITEMS;
+			drawArrowMainMenu(selectedOption, arrow_color, menuX + menuWidth / 6, menuY + menuSpacing/1.5, menuSpacing); // Draw new arrow
+		}
+		if (key == 's' || key == 80) { // DOWN
+			drawArrowMainMenu(selectedOption, 0, menuX + menuWidth / 6, menuY + menuSpacing/1.5, menuSpacing); // Erase current arrow
+			selectedOption = (selectedOption + 1) % MENU_ITEMS;
+			drawArrowMainMenu(selectedOption, arrow_color, menuX + menuWidth / 6, menuY + menuSpacing/1.5, menuSpacing); // Draw new arrow
+		}
+		if (key == 13 || key == 32) { // ENTER || SPACE
+			cleardevice();
+			settextstyle(DEFAULT_FONT, HORIZ_DIR, 4);
+			switch (selectedOption) {
+			case 0:
+				outtextxy(200, 400, "Starting Game...");
+				break;
+			case 1:
+				MapEditorLevels();
+				outtextxy(200, 400, "Opening Levels...");
+				break;
+			case 2:
+				outtextxy(200, 400, "Loading Controls...");
+				break;
+			case 3:
+				running = false;
+				exit(0);
+				closegraph();
+				break;
+			}
+		}
+	}
+}
+
+
+
 
 /*
 // Arrow
@@ -337,23 +478,22 @@ void MainMenu() {
 	}
 }*/
 
-
-int calculateLongestTextWidthOver() {
-	int maxWidth = 0;
-	for (int i = 0; i < GAMEOVER_ITEMS; i++) {
-		int textWidth = textwidth(gameOverText[i]);
-		if (textWidth > maxWidth) {
-			maxWidth = textWidth;
-		}
-	}
-	return maxWidth;
-}
-
-void drawArrowGameOver(int option, int color, int menuX, int menuY, int menuSpacing) {
+void drawArrowGameOver(int option, int color, int menuX, int menuY, int menuSpacing, int winWidth, int winHeight) {
 	setcolor(color);
-	int x = menuX - 50;
-	int y = menuY + (option * menuSpacing);
-	int points[8] = { x, y, x + 40, y + 20, x, y + 40, x, y };
+
+	// Scale the arrow dimensions relative to the window size
+	int arrowWidth = winWidth / 40;  // Scalable width (proportional to window width)
+	int arrowHeight = winHeight / 30; // Scalable height (proportional to window height)
+
+	// Arrow's horizontal position (offset slightly to the left of the text)
+	int x = menuX - arrowWidth - 10;
+
+	// Arrow's vertical position aligned to the text
+	int textHeight = textheight(gameOverText[option]);
+	int y = menuY + (option * menuSpacing) + (menuSpacing / 2) - (textHeight / 2);
+
+	// Define the arrow points
+	int points[8] = { x, y, x + arrowWidth, y + arrowHeight / 2, x, y + arrowHeight, x, y };
 	drawpoly(4, points);
 	setfillstyle(SOLID_FILL, color);
 	fillpoly(4, points);
@@ -363,35 +503,42 @@ void drawGameOver(int text_color) {
 	int winWidth = getmaxx();
 	int winHeight = getmaxy();
 
-	int padding = 30;
-	int menuWidth = winWidth / 3 + calculateLongestTextWidthOver() + 2 * padding;
-	int menuHeight = winHeight - 100;
+	// Dynamically calculate font size
+	int fontSize = winHeight / 40; // Dynamically calculate font size
+	if (fontSize > 15) fontSize = 15;  // Set a max font size
+	settextstyle(DEFAULT_FONT, HORIZ_DIR, fontSize);
+
+	int menuWidth = winWidth / 3;
+	int menuHeight = winHeight / 4; // Adjusted menu height for better centering
 
 	// Center the menu horizontally and vertically
 	int menuX = (winWidth - menuWidth) / 2;
 	int menuY = (winHeight - menuHeight) / 2;
 
-	int menuSpacing = menuHeight / (MENU_ITEMS + 2); // Adjusted spacing
+	int menuSpacing = menuHeight / (GAMEOVER_ITEMS + 1); // Adjusted spacing for centering
 
 	setcolor(text_color);
 
 	// Draw "GAME OVER" text above the menu
-	settextstyle(EUROPEAN_FONT, HORIZ_DIR, 6);
+	settextstyle(EUROPEAN_FONT, HORIZ_DIR, fontSize + 4);
 	int gameOverWidth = textwidth("GAME OVER");
 	int gameOverX = (winWidth - gameOverWidth) / 2;
-	int gameOverY = menuY - 50;  // Positioning above the menu
+	int gameOverY = menuY - 150;  // Increased padding above "GAME OVER"
 	outtextxy(gameOverX, gameOverY, "GAME OVER");
 
 	// Draw menu options
-	settextstyle(EUROPEAN_FONT, HORIZ_DIR, 4);
+	settextstyle(EUROPEAN_FONT, HORIZ_DIR, fontSize);
 	for (int i = 0; i < GAMEOVER_ITEMS; i++) {
-		int textX = menuX + menuWidth / 6;
-		int textY = menuY + (i + 1) * menuSpacing;
+		int textX = menuX + (menuWidth - textwidth(gameOverText[i])) / 2; // Center text horizontally
+		int textY = menuY + i * menuSpacing;
 		outtextxy(textX, textY, gameOverText[i]);
 	}
 }
 
 void GameOverMenu() {
+	ma_sound_stop(&BackGroundMusic);
+	if (!ma_sound_is_playing(&DeathEffect)) ma_sound_start(&DeathEffect);
+	selectedOption = 0;
 	setbkcolor(BLACK);
 	cleardevice();
 	setbkcolor(BLACK);
@@ -403,43 +550,170 @@ void GameOverMenu() {
 	int winHeight = getmaxy();
 
 	int menuWidth = winWidth / 3;
-	int menuHeight = winHeight - 100;
+	int menuHeight = winHeight / 4; // Adjusted menu height
 
 	// Calculate menu position
 	int menuX = (winWidth - menuWidth) / 2;
 	int menuY = (winHeight - menuHeight) / 2;
-	int menuSpacing = menuHeight / (GAMEOVER_ITEMS + 2);
+	int menuSpacing = menuHeight / (GAMEOVER_ITEMS + 1);
 
 	drawGameOver(text_color);
-	drawArrowGameOver(selectedOption, arrow_color, menuX + menuWidth / 6, menuY + menuSpacing, menuSpacing);
+	drawArrowGameOver(selectedOption, arrow_color, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight);
 
 	bool running = true;
 	while (running) {
 		char key = getch();
 		if (key == 'w' || key == 72) { // UP
-			drawArrowGameOver(selectedOption, 0, menuX + menuWidth / 2, menuY + menuSpacing, menuSpacing); // Erase current arrow
+			drawArrowGameOver(selectedOption, 0, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight); // Erase current arrow
 			selectedOption = (selectedOption - 1 + GAMEOVER_ITEMS) % GAMEOVER_ITEMS;
-			drawArrowGameOver(selectedOption, arrow_color, menuX + menuWidth / 2, menuY + menuSpacing, menuSpacing); // Draw new arrow
+			drawArrowGameOver(selectedOption, arrow_color, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight); // Draw new arrow
 		}
 		if (key == 's' || key == 80) { // DOWN
-			drawArrowGameOver(selectedOption, 0, menuX + menuWidth / 2, menuY + menuSpacing, menuSpacing); // Erase current arrow
+			drawArrowGameOver(selectedOption, 0, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight); // Erase current arrow
 			selectedOption = (selectedOption + 1) % GAMEOVER_ITEMS;
-			drawArrowGameOver(selectedOption, arrow_color, menuX + menuWidth / 2, menuY + menuSpacing, menuSpacing); // Draw new arrow
+			drawArrowGameOver(selectedOption, arrow_color, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight); // Draw new arrow
 		}
 		if (key == 13 || key == 32) { // ENTER || SPACE
 			cleardevice();
 			settextstyle(DEFAULT_FONT, HORIZ_DIR, 4);
 			switch (selectedOption) {
 			case 0:
-				outtextxy(200, 400, "Starting Game...");
+				MapReseter();
+				cht = levelselect;
+				ma_sound_stop(&DeathEffect);
+				MarioGame();
 				break;
 			case 1:
 				selectedOption = 0;
 				MainMenu();
+				break;
+			case 2:
+				selectedOption = 0;
+				MainMenu();
+				break;
 			}
 		}
 	}
 }
+
+void drawArrowPause(int option, int r, int g, int b, int menuX, int menuY, int menuSpacing, int winWidth, int winHeight) {
+	setcolor(RGB(r, g, b));
+
+	// Scale the arrow dimensions relative to the window size
+	int arrowWidth = winWidth / 40;  // Scalable width (proportional to window width)
+	int arrowHeight = winHeight / 30; // Scalable height (proportional to window height)
+
+	// Arrow's horizontal position (offset slightly to the left of the text)
+	int x = menuX - arrowWidth - 10;
+
+	// Arrow's vertical position aligned to the text
+	int textHeight = textheight(PauseText[option]);
+	int y = menuY + (option * menuSpacing) + (menuSpacing / 2) - (textHeight / 2);
+
+	// Define the arrow points
+	int points[8] = { x, y, x + arrowWidth, y + arrowHeight / 2, x, y + arrowHeight, x, y };
+	drawpoly(4, points);
+	setfillstyle(SOLID_FILL, RGB(r, g, b));
+	fillpoly(4, points);
+}
+
+void drawPause(int r, int g, int b) {
+	int winWidth = getmaxx();
+	int winHeight = getmaxy();
+
+	int fontSize = winHeight / 40; // Dynamically calculate font size
+	if (fontSize > 15) fontSize = 15;  // Set a max font size
+	settextstyle(DEFAULT_FONT, HORIZ_DIR, fontSize);
+	int menuWidth = winWidth / 3;
+	int menuHeight = winHeight / 4; // Adjusted menu height for better centering
+
+	// Center the menu horizontally and vertically
+	int menuX = (winWidth - menuWidth) / 2;
+	int menuY = (winHeight - menuHeight) / 2;
+
+	int menuSpacing = menuHeight / (PAUSE_ITEMS + 1); // Adjusted spacing for centering
+
+	setcolor(RGB(r, g, b));
+
+	// Draw "GAME PAUSED" text above the menu
+	settextstyle(EUROPEAN_FONT, HORIZ_DIR, fontSize + 4);
+	int gameOverWidth = textwidth("GAME PAUSED");
+	int gameOverX = (winWidth - gameOverWidth) / 2;
+	int gameOverY = menuY - 150;  // Increased padding above "GAME PAUSED"
+	outtextxy(gameOverX, gameOverY, "GAME PAUSED");
+
+	// Draw menu options
+	settextstyle(EUROPEAN_FONT, HORIZ_DIR, fontSize);
+	for (int i = 0; i < PAUSE_ITEMS; i++) {
+		int textX = menuX + (menuWidth - textwidth(PauseText[i])) / 2; // Center text horizontally
+		int textY = menuY + i * menuSpacing;
+		outtextxy(textX, textY, PauseText[i]);
+	}
+}
+
+void PauseMenu() {
+	setvisualpage(1);
+	setactivepage(1);
+	selectedOption = 2;
+	setbkcolor(RGB(126, 132, 246));
+	cleardevice();
+	setbkcolor(RGB(126, 132, 246));
+
+	int arrow_color[3] = { 255, 255, 255 };
+	char text_color[20] = "RGB(126, 132, 246)";
+
+	int winWidth = getmaxx();
+	int winHeight = getmaxy();
+	int menuWidth = winWidth / 3;
+	int menuHeight = winHeight / 4; // Adjusted menu height
+
+	// Calculate menu position
+	int menuX = (winWidth - menuWidth) / 2;
+	int menuY = (winHeight - menuHeight) / 2;
+	int menuSpacing = menuHeight / (PAUSE_ITEMS + 1);
+
+	drawPause(255, 255, 255);
+	drawArrowPause(selectedOption, 255, 255, 255, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight);
+
+	bool running = true;
+	while (running) {
+		char key = getch();
+		cout << (int)key << '\n';
+		cout << selectedOption << '\n';
+		if (key == 'w' || key == 72) { // UP
+			drawArrowPause(selectedOption, 126, 132, 246, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight); // Erase current arrow
+			selectedOption = (selectedOption - 1 + PAUSE_ITEMS) % PAUSE_ITEMS;
+			drawArrowPause(selectedOption, 255, 255, 255, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight); // Draw new arrow
+		}
+		if (key == 's' || key == 80) { // DOWN
+			drawArrowPause(selectedOption, 126, 132, 246, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight); // Erase current arrow
+			selectedOption = (selectedOption + 1) % PAUSE_ITEMS;
+			drawArrowPause(selectedOption, 255, 255, 255, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight); // Draw new arrow
+		}
+		if (key == 13 || key == 32) { // ENTER || SPACE
+			cleardevice();
+			settextstyle(DEFAULT_FONT, HORIZ_DIR, 4);
+			switch (selectedOption) {
+			case 0:
+				setvisualpage(0);
+				setactivepage(0);
+				delay(1000);
+				return;
+				break;
+			case 1:
+				std::cout << "Levels Menu";
+				exit(0);
+				break;
+			case 2:
+				selectedOption = 0;
+				MainMenu();
+				break;
+			}
+		}
+	}
+}
+
+
 void LevelsMenu() {
 	cleardevice();
 	setbkcolor(RGB(255, 0, 0));

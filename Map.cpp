@@ -13,11 +13,12 @@
 #include "Map.h"
 #include "Colectibles.h"
 #include "Loader.h"
+#include "Sounds.h"
 #include "MapEditor.h"
 using namespace std;
 
 
-string cht;
+string cht,  levelselect;
 
 void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goomba_walking_2, * mario_climbing_down_1, * mario_climbing_down_2, * mario_climbing_up_1,
 * mario_climbing_up_2, * mario_idle_left, * mario_idle_right, * mario_jump_1, * mario_left_run_1, * mario_left_run_2, * mario_left_run_3, * mario_right_run_1,
@@ -37,7 +38,7 @@ extern int n, coino, lifo, p, staro;
 
 
 void MapReaderandSetter() {
-    x = GetSystemMetrics(SM_CXSCREEN);
+    x = GetSystemMetrics(SM_CXSCREEN); //1536 864
     y = GetSystemMetrics(SM_CYSCREEN);
     wh = (float)y / (float)nl;
     nc1 = (float)x / wh;
@@ -56,6 +57,7 @@ void MapLoader() {
             f >> harta[i][j];
         }
     }
+    levelselect = cht;
     //initwindow(x, y, "", -3, -3);
 	setvisualpage(1);
     setactivepage(0);

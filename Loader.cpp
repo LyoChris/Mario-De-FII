@@ -12,6 +12,11 @@
 #include "Colectibles.h"
 
 
+extern int coinono, lifes, ok, gdead, power, pdead, lifo, staro, coino;
+extern colectible coins[100], life[100], starpow[100];
+extern goompa gompav[100];
+extern pirhana piranav[100];
+extern int harta[30][1000], n, p;
 extern std::string cht;
 extern float wh;
 extern void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goomba_walking_2, * mario_climbing_down_1, * mario_climbing_down_2, * mario_climbing_up_1,
@@ -239,4 +244,58 @@ void LevelLoader() {
 	case 6:
 		cht = "level6.txt"; break;
     }
+}
+
+void MapReseter() {
+    coinono = 0;
+    lifes = 3;
+    ok = 0;
+    gdead = 0;
+    power = 0;
+    pdead = 0;
+    for(int i = 1;i <= n;i++) {
+        gompav[i].igompa = 0;
+        gompav[i].jgompa = 0;
+        gompav[i].gdirection = 1;
+        gompav[i].gstage = 1;
+        gompav[i].dead = 0;
+        gompav[i].hit = 0;
+        gompav[i].mapart=0;
+    }
+    n = 0;
+	for (int i = 1;i <= p;i++) {
+		piranav[i].ipinit = 0;
+		piranav[i].jpinit = 0;
+		piranav[i].ipirana = 0;
+		piranav[i].jpirana = 0;
+		piranav[i].pdirection = 1;
+		piranav[i].pstage = 1;
+		piranav[i].upframes = 0;
+		piranav[i].orientation = 1;
+		piranav[i].reset = 0;
+		piranav[i].dead = 0;
+		piranav[i].mapart = 0;
+	}
+    p = 0;
+	for (int i = 1;i <= coino;i++) {
+		coins[i].icolec = 0;
+		coins[i].jcolec = 0;
+		coins[i].mapart = 0;
+		life[i].colected = 0;
+	}
+	for (int i = 1;i <= lifo;i++) {
+		life[i].icolec = 0;
+		life[i].jcolec = 0;
+		life[i].mapart = 0;
+		life[i].colected = 0;
+	}
+    for (int i = 1;i <= staro;i++) {
+        starpow[i].icolec = 0;
+        starpow[i].jcolec = 0;
+        starpow[i].mapart = 0;
+		starpow[i].colected = 0;
+    }
+    staro = 0;
+    coino = 0;
+    lifo = 0;
 }

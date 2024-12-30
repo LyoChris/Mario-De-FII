@@ -12,6 +12,7 @@
 #include "Colissions.h"
 #include "Colectibles.h"
 #include "Loader.h"
+#include "Menus.h"
 #include "miniaudio.h"
 using namespace std;
 
@@ -94,35 +95,35 @@ void PutMapEditor(int i, int j, int block) {
 }
 
 void SelectorImageMono(int i){
-	if (iselec == 0) putimage((3 + 0) * wh, 17 * wh, brickblockmono, COPY_PUT);
-	if (iselec == 1) putimage((3 + 1.5) * wh, 17 * wh, skyblockmono, COPY_PUT);
-	if (iselec == 2)putimage((3 + 3.0) * wh, 17 * wh, mario_vinemono, COPY_PUT);
-	if (iselec == 3)putimage((3 + 4.5) * wh, 17 * wh, mario_vine_topmono, COPY_PUT);
-	if (iselec == 4)putimage((3 + 6.0) * wh, 17 * wh, pipebodymono, COPY_PUT); //placeholder pt pipe body
-	if (iselec == 5)putimage((3 + 7.5) * wh, 17 * wh, pipeheadpirmono, COPY_PUT); //placeholder pt pirhana
-	if (iselec == 6)putimage((3 + 9.0) * wh, 17 * wh, pipeheadmono, COPY_PUT); //placeholder pt pipe head
-	if (iselec == 7)putimage((3 + 10.5) * wh, 17 * wh, lucky_blockmono, COPY_PUT);
-	if (iselec == 8)putimage((3 + 12.0) * wh, 17 * wh, mario_coinmono, COPY_PUT);
-	if (iselec == 9)putimage((3 + 13.5) * wh, 17 * wh, one_upmono, COPY_PUT);
-	if (iselec == 10)putimage((3 + 15.0) * wh, 17 * wh, gombamono, COPY_PUT);
-	if (iselec == 11)putimage((3 + 16.5) * wh, 17 * wh, mario_idle_rightmono, COPY_PUT);
-	if (iselec == 12)putimage((3 + 18.0) * wh, 17 * wh, flagpolemapeditmono, COPY_PUT);
+	if (iselec == 0) putimage((1 + 0) * wh, 17 * wh, brickblockmono, COPY_PUT);
+	if (iselec == 1) putimage((1 + 1.5) * wh, 17 * wh, skyblockmono, COPY_PUT);
+	if (iselec == 2)putimage((1 + 3.0) * wh, 17 * wh, mario_vinemono, COPY_PUT);
+	if (iselec == 3)putimage((1 + 4.5) * wh, 17 * wh, mario_vine_topmono, COPY_PUT);
+	if (iselec == 4)putimage((1 + 6.0) * wh, 17 * wh, pipebodymono, COPY_PUT); //placeholder pt pipe body
+	if (iselec == 5)putimage((1 + 7.5) * wh, 17 * wh, pipeheadpirmono, COPY_PUT); //placeholder pt pirhana
+	if (iselec == 6)putimage((1 + 9.0) * wh, 17 * wh, pipeheadmono, COPY_PUT); //placeholder pt pipe head
+	if (iselec == 7)putimage((1 + 10.5) * wh, 17 * wh, lucky_blockmono, COPY_PUT);
+	if (iselec == 8)putimage((1 + 12.0) * wh, 17 * wh, mario_coinmono, COPY_PUT);
+	if (iselec == 9)putimage((1 + 13.5) * wh, 17 * wh, one_upmono, COPY_PUT);
+	if (iselec == 10)putimage((1 + 15.0) * wh, 17 * wh, gombamono, COPY_PUT);
+	if (iselec == 11)putimage((1 + 16.5) * wh, 17 * wh, mario_idle_rightmono, COPY_PUT);
+	if (iselec == 12)putimage((1 + 18.0) * wh, 17 * wh, flagpolemapeditmono, COPY_PUT);
 }
 
 void SelectorImage(int i) {
-	if (iselec == 0) putimage((3 + 0) * wh, 17 * wh, brickblock, COPY_PUT);
-	if (iselec == 1) putimage((3 + 1.5) * wh, 17 * wh, skyblock, COPY_PUT);
-	if (iselec == 2)putimage((3 + 3.0) * wh, 17 * wh, mario_vine, COPY_PUT);
-	if (iselec == 3)putimage((3 + 4.5) * wh, 17 * wh, mario_vine_top, COPY_PUT);
-	if (iselec == 4)putimage((3 + 6.0) * wh, 17 * wh, pipebody, COPY_PUT); //placeholder pt pipe body
-	if (iselec == 5)putimage((3 + 7.5) * wh, 17 * wh, pipeheadpir, COPY_PUT); //placeholder pt pirhana
-	if (iselec == 6)putimage((3 + 9.0) * wh, 17 * wh, pipehead, COPY_PUT); //placeholder pt pipe head
-	if (iselec == 7)putimage((3 + 10.5) * wh, 17 * wh, lucky_block, COPY_PUT);
-	if (iselec == 8)putimage((3 + 12.0) * wh, 17 * wh, mario_coin, COPY_PUT);
-	if (iselec == 9)putimage((3 + 13.5) * wh, 17 * wh, one_up, COPY_PUT);
-	if (iselec == 10)putimage((3 + 15.0) * wh, 17 * wh, goomba_walking_1, COPY_PUT);
-	if (iselec == 11)putimage((3 + 16.5) * wh, 17 * wh, mario_idle_right, COPY_PUT);
-	if (iselec == 11)putimage((3 + 18.0) * wh, 17 * wh, flagpolemapedit, COPY_PUT);
+	if (iselec == 0) putimage((1 + 0) * wh, 17 * wh, brickblock, COPY_PUT);
+	if (iselec == 1) putimage((1 + 1.5) * wh, 17 * wh, skyblock, COPY_PUT);
+	if (iselec == 2)putimage((1 + 3.0) * wh, 17 * wh, mario_vine, COPY_PUT);
+	if (iselec == 3)putimage((1 + 4.5) * wh, 17 * wh, mario_vine_top, COPY_PUT);
+	if (iselec == 4)putimage((1 + 6.0) * wh, 17 * wh, pipebody, COPY_PUT); //placeholder pt pipe body
+	if (iselec == 5)putimage((1 + 7.5) * wh, 17 * wh, pipeheadpir, COPY_PUT); //placeholder pt pirhana
+	if (iselec == 6)putimage((1 + 9.0) * wh, 17 * wh, pipehead, COPY_PUT); //placeholder pt pipe head
+	if (iselec == 7)putimage((1 + 10.5) * wh, 17 * wh, lucky_block, COPY_PUT);
+	if (iselec == 8)putimage((1 + 12.0) * wh, 17 * wh, mario_coin, COPY_PUT);
+	if (iselec == 9)putimage((1 + 13.5) * wh, 17 * wh, one_up, COPY_PUT);
+	if (iselec == 10)putimage((1 + 15.0) * wh, 17 * wh, goomba_walking_1, COPY_PUT);
+	if (iselec == 11)putimage((1 + 16.5) * wh, 17 * wh, mario_idle_right, COPY_PUT);
+	if (iselec == 11)putimage((1 + 18.0) * wh, 17 * wh, flagpolemapedit, COPY_PUT);
 }
 
 void MapPaneler() {
@@ -157,19 +158,19 @@ void InitialDrawing() {
 		}
 	}
 
-	putimage((3 + 0) * wh, 17 * wh, brickblockmono, COPY_PUT);
-	putimage((3 + 1.5) * wh, 17 * wh, skyblockmono, COPY_PUT);
-	putimage((3 + 3.0) * wh, 17 * wh, mario_vinemono, COPY_PUT);
-	putimage((3 + 4.5) * wh, 17 * wh, mario_vine_topmono, COPY_PUT);
-	putimage((3 + 6.0) * wh, 17 * wh, pipebodymono, COPY_PUT); //placeholder pt pipe body
-	putimage((3 + 7.5) * wh, 17 * wh, pipeheadpirmono, COPY_PUT); //placeholder pt pirhana
-	putimage((3 + 9.0) * wh, 17 * wh, pipeheadmono, COPY_PUT); //placeholder pt pipe head
-	putimage((3 + 10.5) * wh, 17 * wh, lucky_blockmono, COPY_PUT);
-	putimage((3 + 12.0) * wh, 17 * wh, mario_coinmono, COPY_PUT);
-	putimage((3 + 13.5) * wh, 17 * wh, one_upmono, COPY_PUT);
-	putimage((3 + 15.0) * wh, 17 * wh, gombamono, COPY_PUT);
-	putimage((3 + 16.5) * wh, 17 * wh, mario_idle_rightmono, COPY_PUT);
-	putimage((3 + 18.0) * wh, 17 * wh, flagpolemapeditmono, COPY_PUT);
+	putimage((1 + 0) * wh, 17 * wh, brickblockmono, COPY_PUT);
+	putimage((1 + 1.5) * wh, 17 * wh, skyblockmono, COPY_PUT);
+	putimage((1 + 3.0) * wh, 17 * wh, mario_vinemono, COPY_PUT);
+	putimage((1 + 4.5) * wh, 17 * wh, mario_vine_topmono, COPY_PUT);
+	putimage((1 + 6.0) * wh, 17 * wh, pipebodymono, COPY_PUT); //placeholder pt pipe body
+	putimage((1 + 7.5) * wh, 17 * wh, pipeheadpirmono, COPY_PUT); //placeholder pt pirhana
+	putimage((1 + 9.0) * wh, 17 * wh, pipeheadmono, COPY_PUT); //placeholder pt pipe head
+	putimage((1 + 10.5) * wh, 17 * wh, lucky_blockmono, COPY_PUT);
+	putimage((1 + 12.0) * wh, 17 * wh, mario_coinmono, COPY_PUT);
+	putimage((1 + 13.5) * wh, 17 * wh, one_upmono, COPY_PUT);
+	putimage((1 + 15.0) * wh, 17 * wh, gombamono, COPY_PUT);
+	putimage((1 + 16.5) * wh, 17 * wh, mario_idle_rightmono, COPY_PUT);
+	putimage((1 + 18.0) * wh, 17 * wh, flagpolemapeditmono, COPY_PUT);
 
 }
 
@@ -443,8 +444,7 @@ void MapEditorLevels() {
 
 		}
 		if (GetKeyState(VK_ESCAPE) & 0x8000) {
-			exit(0);
-			closegraph();
+			MainMenu();
 		}
 	}
 	

@@ -74,3 +74,15 @@ void SoundInitialisation() {
         exit(0);
     }
 }
+
+void SoundUnInit() {
+    ma_sound_uninit(&JumpEffect);
+    ma_sound_uninit(&CoinEffect);
+    ma_sound_uninit(&ColideEffect);
+    ma_sound_uninit(&GombaDeadEffect);
+    ma_sound_uninit(&BackGroundMusic);
+    ma_sound_uninit(&DeathEffect);
+    ma_sound_uninit(&StageClear);
+    ma_sound_uninit(&StageClear);
+    ma_engine_uninit(&engine);
+}

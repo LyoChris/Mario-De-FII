@@ -10,7 +10,6 @@
 #include "Colectibles.h"
 #include "Loader.h"
 #include "Menus.h"
-#define MINIAUDIO_IMPLEMENTATION
 #include "miniaudio.h"
 
 using namespace std;
@@ -876,11 +875,17 @@ void MarioMovement() {
         }
     }
     if (lifes <= 0) {
-		ma_sound_stop(&BackGroundMusic);;
+        char key = getch();
+		ma_sound_stop(&BackGroundMusic);
 		if (!ma_sound_is_playing(&DeathEffect)) ma_sound_start(&DeathEffect);
-
 		GameOverMenu();
         
     }
-    if (GetKeyState(VK_ESCAPE) & 0x8000) okesc = 0;
+    if (GetKeyState(VK_ESCAPE)<0) {
+		//ma_sound_stop(&BackGroundMusic);
+        char key = getch();
+        key = getch();
+        PauseMenu();
+        okesc = 1;
+    }
 }
