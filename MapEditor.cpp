@@ -151,8 +151,9 @@ void MapPaneler() {
 
 void InitialDrawing() {
 	cleardevice();
-	for (int i = 0;i < nl;i += 1) {
-		for (int j = (int)ncimap;j < ncfmap; j += 1) {
+
+	for (int i = 0; i < nl; i += 1) {
+		for (int j = (int)ncimap; j < ncfmap; j += 1) {
 			cout << i << " " << j << endl;
 			PutMovingImage(i, j);
 		}
@@ -162,9 +163,9 @@ void InitialDrawing() {
 	putimage((1 + 1.5) * wh, 17 * wh, skyblockmono, COPY_PUT);
 	putimage((1 + 3.0) * wh, 17 * wh, mario_vinemono, COPY_PUT);
 	putimage((1 + 4.5) * wh, 17 * wh, mario_vine_topmono, COPY_PUT);
-	putimage((1 + 6.0) * wh, 17 * wh, pipebodymono, COPY_PUT); //placeholder pt pipe body
-	putimage((1 + 7.5) * wh, 17 * wh, pipeheadpirmono, COPY_PUT); //placeholder pt pirhana
-	putimage((1 + 9.0) * wh, 17 * wh, pipeheadmono, COPY_PUT); //placeholder pt pipe head
+	putimage((1 + 6.0) * wh, 17 * wh, pipebodymono, COPY_PUT);
+	putimage((1 + 7.5) * wh, 17 * wh, pipeheadpirmono, COPY_PUT);
+	putimage((1 + 9.0) * wh, 17 * wh, pipeheadmono, COPY_PUT);
 	putimage((1 + 10.5) * wh, 17 * wh, lucky_blockmono, COPY_PUT);
 	putimage((1 + 12.0) * wh, 17 * wh, mario_coinmono, COPY_PUT);
 	putimage((1 + 13.5) * wh, 17 * wh, one_upmono, COPY_PUT);
@@ -172,6 +173,36 @@ void InitialDrawing() {
 	putimage((1 + 16.5) * wh, 17 * wh, mario_idle_rightmono, COPY_PUT);
 	putimage((1 + 18.0) * wh, 17 * wh, flagpolemapeditmono, COPY_PUT);
 
+	// Scalable menu on the right side of the window
+	int winWidth = getmaxx();
+	int winHeight = getmaxy();
+
+	int padding = winWidth / 50;          // Padding between elements
+	int elementHeight = winHeight / 15;  // Height of each menu element
+	int rectWidth = elementHeight;       // Width of the key rectangle
+	int textSize = elementHeight / 3;    // Font size proportional to element height
+
+	int baseX = winWidth - rectWidth - padding * 2;  // Base X position
+	int baseY = padding;                            // Base Y position
+
+	char* menuItems[3] = { "SAVE MAP", "LOAD MAP", "BACK" };
+	char keys[3] = { 'M', 'N', 'B' };
+
+	settextstyle(SANS_SERIF_FONT, HORIZ_DIR, textSize);  // Scalable font style
+
+	for (int i = 0; i < 3; i++) {
+		int textY = baseY + i * (elementHeight + padding);
+
+		// Draw key rectangle
+		rectangle(baseX - rectWidth - padding, textY, baseX - padding, textY + elementHeight);
+		settextjustify(CENTER_TEXT, CENTER_TEXT);
+		char key[2] = { keys[i], '\0' };  // Convert char to string
+		outtextxy(baseX - rectWidth / 2 - padding, textY + elementHeight / 2, key);
+
+		// Draw menu text
+		settextjustify(LEFT_TEXT, CENTER_TEXT);
+		outtextxy(baseX, textY + elementHeight / 2, menuItems[i]);
+	}
 }
 
 void saveMap() {
@@ -204,6 +235,11 @@ void saveMap() {
 				filename[pos] = '\0';
 				// Clear and redraw the filename input
 				setfillstyle(SOLID_FILL, BLACK);
+
+
+
+
+
 				bar(50, y / 2, x - 50, y / 2 + 50); // Clear area
 				outtextxy((x - textwidth(filename)) / 2, y / 2, filename);
 			}

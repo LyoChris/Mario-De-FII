@@ -23,8 +23,8 @@ int main() {
 	MapReaderandSetter();
 	SoundInitialisation();
 	//MapEditorLevels();
-	LevelLoader();
-	MarioGame();
+	//LevelLoader();
+	//MarioGame();
 	//GameOverMenu();
 	MainMenu();
     return 0;

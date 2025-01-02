@@ -24,7 +24,7 @@ extern colectible coins[100], life[100];
 extern goompa gompav[100];
 extern void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goomba_walking_2, * mario_climbing_down_1, * mario_climbing_down_2, * mario_climbing_up_1,
 * mario_climbing_up_2, * mario_idle_left, * mario_idle_right, * mario_jump_1, * mario_left_run_1, * mario_left_run_2, * mario_left_run_3, * mario_right_run_1,
-* mario_right_run_2, * mario_right_run_3, * mario_vine, * mario_vine_top, * skyblock, * lucky_block_used, * one_up, * flagpolep;
+* mario_right_run_2, * mario_right_run_3, * mario_vine, * mario_vine_top, * skyblock, * lucky_block_used, * one_up, * flagpolep, *mario_main_screen, * mario_levels_menu;
 extern double MarioInterval;
 extern float wh, ncf, nci, nc1, imario, jmario;
 extern int x, y, nl, nc, harta[30][1000];
@@ -36,6 +36,8 @@ void MainMenu();
 void LevelsMenu();
 void ScoreLevel();
 void SettingsMenu();
+void CustomMenu();
+void CustomLevelsMenu();
 
 
 const int MENU_ITEMS = 4;
@@ -47,9 +49,20 @@ char* gameOverText[GAMEOVER_ITEMS] = { "RESTART", "LEVELS", "MAIN MENU" };
 const int PAUSE_ITEMS = 3;
 char* PauseText[PAUSE_ITEMS] = { "RESUME", "LEVELS", "MAIN MENU" };
 
+const int LEVEL_ITEMS = 9;
+char* levelText[LEVEL_ITEMS] = { "LEVEL 1", "LEVEL 2", "LEVEL 3", "LEVEL 4", "LEVEL 5", "LEVEL 6", "LEVEL 7", "LEVEL 8", "BACK" };
+
+const int CUSTOM_ITEMS = 3;
+char* customText[CUSTOM_ITEMS] = { "PLAY", "MAP EDITOR", "BACK" };
+
+int CUSTOM_LEVEL_ITEMS = 1;
+char* customLevelText[10] = { "BACK" };
+
 // Global variable
 int selectedOption = 0;
-/*
+int hoveredButton = -1;  // Index of the button being hovered over
+int clickedButton = -1;  // Index of the button clicked
+
 // Function to calculate the width of the longest text element
 int calculateLongestTextWidthMenu() {
 	int maxWidth = 0;
@@ -62,116 +75,462 @@ int calculateLongestTextWidthMenu() {
 	return maxWidth;
 }
 
-void drawArrowMainMenu(int option, int color, int menuX, int menuY, int menuSpacing) {
-	setcolor(color);
-	int x = menuX - 50;
-	int y = menuY + (option * menuSpacing);
-	int points[8] = { x, y, x + 40, y + 20, x, y + 40, x, y };
-	drawpoly(4, points);
-	setfillstyle(SOLID_FILL, color);
-	fillpoly(4, points);
+// Function to Draw a Button
+void drawButton(int x, int y, int width, int height, char* text, int default_text_color, int button_color, bool isHovered) {
+	int finalColor = isHovered ? RED : button_color;  // Highlight hovered button
+	int textColor = isHovered ? YELLOW : default_text_color;
+
+	setfillstyle(SOLID_FILL, finalColor);
+	bar(x, y, x + width, y + height);
+
+	// Draw border
+	setcolor(WHITE);
+	rectangle(x, y, x + width, y + height);
+
+	// Draw text
+	setbkcolor(finalColor);
+	setcolor(textColor);
+	settextstyle(EUROPEAN_FONT, HORIZ_DIR, 4);
+	int textX = x + (width - textwidth(text)) / 2;
+	int textY = y + (height - textheight(text)) / 2;
+	outtextxy(textX, textY, text);
+
+	// Reset background color
+	setbkcolor(button_color);
 }
 
-void drawMenu(int box_color, int text_color) {
-	int winWidth = getmaxx();
-	int winHeight = getmaxy();
-	settextstyle(DEFAULT_FONT, HORIZ_DIR, 1);
+// Function to Detect Which Button the Mouse is Hovering Over
+int detectMouseHover(int mouseX, int mouseY, int screenWidth, int screenHeight) {
+	int buttonWidth = screenWidth / 4;
+	int buttonHeight = screenHeight / 10;
+	int marginX = screenWidth / 7;
+	int marginY = screenHeight / 5;
 
-	int padding = 30;
-	int menuWidth = winWidth / 3 + calculateLongestTextWidthMenu() +2* padding;
-	int menuHeight = winHeight - 100;
-	int menuX = 100;
-	int menuY = 100; // Adjusted to reduce top padding
-	int menuSpacing = menuHeight / (MENU_ITEMS + 2); // Adjusted spacing to reduce bottom padding
-
-
-	setcolor(box_color);
-	for (int i = 0; i < 10; i++) {
-		rectangle(menuX - i, menuY - i, menuX + menuWidth + i, menuY + menuHeight - menuSpacing + i); // Scaled rectangle to match text area
-	}
-
-	setcolor(text_color);
-	settextstyle(EUROPEAN_FONT, HORIZ_DIR, 5);
 	for (int i = 0; i < MENU_ITEMS; i++) {
-		int textX = menuX + menuWidth / 6;
-		int textY = menuY + (i + 1) * menuSpacing;
-		outtextxy(textX, textY, menuText[i]);
+		int x = marginX;
+		int y = marginY + i * (buttonHeight + screenHeight / 20);  // Vertical spacing as 5% of screen height
+
+		// Check if the mouse is over this button
+		if (mouseX >= x && mouseX <= x + buttonWidth && mouseY >= y && mouseY <= y + buttonHeight) {
+			return i;
+		}
 	}
-	
+	return -1;  // No button is being hovered over
+}
+
+// Draw Menu
+void drawMenu(int screenWidth, int screenHeight) {
+	int buttonWidth = screenWidth / 4;
+	int buttonHeight = screenHeight / 10;
+	int marginX = screenWidth / 7;
+	int marginY = screenHeight / 5;
+
+	for (int i = 0; i < MENU_ITEMS; i++) {
+		int x = marginX;
+		int y = marginY + i * (buttonHeight + screenHeight / 20);  // Vertical spacing as 5% of screen height
+
+		bool isHovered = (i == hoveredButton);
+		drawButton(x, y, buttonWidth, buttonHeight, menuText[i], WHITE, BLACK, isHovered);
+	}
+	int imageWidth = screenWidth / 3;  // Image takes 1/3 of the screen width
+	int imageX = (screenWidth - imageWidth) / 2;  // Center horizontally
+	int imageY = marginY - (x / 3 * 612) / x - screenHeight / 20;  // Place above the first button with padding
+
+	putimage((x - x / 3) / 2, marginY - (x / 3 * 7) / x - y / 20, mario_main_screen, COPY_PUT);
 }
 
 void MainMenu() {
-	setbkcolor(BLACK);
-	cleardevice();
-	setbkcolor(BLACK);
-	int box_color = 4;
-	int text_color = 14;
-	int arrow_color = 14;
-
-	int winWidth = getmaxx();
-	int winHeight = getmaxy();
-
-	int menuWidth = winWidth / 3;
-	int menuHeight = winHeight - 100;
-	int menuX = 100;
-	int menuY = 100;
-	int menuSpacing = menuHeight / (MENU_ITEMS + 2);
-
-	drawMenu(box_color, text_color);
-	drawArrowMainMenu(selectedOption, arrow_color, menuX + menuWidth / 6, menuY + menuSpacing, menuSpacing);
-
+	int screenWidth = x;
+	int screenHeight = y;
 	bool running = true;
-	while (running) {
-		char key = getch();
-		if (key == 'w' || key == 72) {//UP
-			drawArrowMainMenu(selectedOption, 0, menuX + menuWidth / 6, menuY + menuSpacing, menuSpacing); // Erase current arrow
-			selectedOption = (selectedOption - 1 + MENU_ITEMS) % MENU_ITEMS;
-			drawArrowMainMenu(selectedOption, arrow_color, menuX + menuWidth / 6, menuY + menuSpacing, menuSpacing); // Draw new arrow
-		}
-		if (key == 's' || key == 80) {//DOWN
-			drawArrowMainMenu(selectedOption, 0, menuX + menuWidth / 6, menuY + menuSpacing, menuSpacing); // Erase current arrow
-			selectedOption = (selectedOption + 1) % MENU_ITEMS;
-			drawArrowMainMenu(selectedOption, arrow_color, menuX + menuWidth / 6, menuY + menuSpacing, menuSpacing); // Draw new arrow
-		}
-		if (key == 13 || key == 32) {//ENTER || SPACE
-			cleardevice();
-			settextstyle(DEFAULT_FONT, HORIZ_DIR, 4);
-			switch (selectedOption) {
-			case 0:
-				outtextxy(200, 400, "Starting Game...");
-				break;
-			case 1:
-				MapEditorLevels();
-				break;
-			case 2:
-				outtextxy(200, 400, "Loading Controls...");
-				break;
-			case 3:
-				running = false;
-				exit(0);
-				closegraph();
-				break;
-			}
-			delay(1000);
-			cleardevice();
-			drawMenu(box_color, text_color);
-			drawArrowMainMenu(selectedOption, arrow_color, menuX + menuWidth / 6, menuY + menuSpacing, menuSpacing);
-		}
-	}
-}*/
+	int page = 0;
 
-// Function to calculate the width of the longest text element
-int calculateLongestTextWidthMenu() {
-	int maxWidth = 0;
-	for (int i = 0; i < MENU_ITEMS; i++) {
-		int textWidth = textwidth(menuText[i]);
-		if (textWidth > maxWidth) {
-			maxWidth = textWidth;
+	while (running) {
+		setactivepage(page);
+		setvisualpage(1 - page);
+		setbkcolor(BLACK);
+		cleardevice();
+
+		// Get mouse position
+		int mouseX = mousex();
+		int mouseY = mousey();
+
+		// Detect hover
+		hoveredButton = detectMouseHover(mouseX, mouseY, screenWidth, screenHeight);
+
+		// Draw the menu
+		drawMenu(screenWidth, screenHeight);
+
+		// Check for mouse click
+		if (ismouseclick(WM_LBUTTONDOWN)) {
+			clearmouseclick(WM_LBUTTONDOWN);
+
+			if (hoveredButton != -1) {
+				clickedButton = hoveredButton;
+
+				// Perform action based on the clicked button
+				cleardevice();
+				setvisualpage(page);
+				settextstyle(DEFAULT_FONT, HORIZ_DIR, 7);
+				switch (clickedButton) {
+				case 0:
+					LevelsMenu();
+					/*outtextxy(screenWidth / 4, screenHeight / 2, "Starting Game...");
+					delay(2000);
+					break;*/
+				case 1:
+					CustomMenu();
+					break;
+				case 2:
+					outtextxy(screenWidth / 5, screenHeight / 2, "Opening Controls...");
+					delay(2000);
+					break;
+				case 3:
+					running = false;
+					break;
+				}
+			}
 		}
+
+		page = 1 - page;
+		delay(50);  // Reduce CPU usage
 	}
-	return maxWidth;
+
+	//closegraph();
+	exit(0);
 }
 
+// Function to Draw a Button
+void drawButtonLevels(int x, int y, int width, int height, char* text, int default_text_color, int button_color, bool isHovered) {
+	// Set button color
+	int finalColor = isHovered ? RED : button_color;
+	int textColor = isHovered ? YELLOW : default_text_color;
+	setcolor(10);
+	setfillstyle(SOLID_FILL, finalColor);
+	bar(x, y, x + width, y + height);
+
+	// Draw border
+	setcolor(WHITE);
+	rectangle(x, y, x + width, y + height);
+
+	// Draw text
+	/*setcolor(text_color);
+	setbkcolor(BLACK);*/
+	setbkcolor(finalColor);
+	setcolor(textColor);
+	settextstyle(EUROPEAN_FONT, HORIZ_DIR, 4);
+	int textX = x + (width - textwidth(text)) / 2;
+	int textY = y + (height - textheight(text)) / 2;
+	outtextxy(textX, textY, text);
+	setbkcolor(button_color);
+}
+
+// Function to Detect Which Button the Mouse is Hovering Over
+int detectMouseHoverLevels(int mouseX, int mouseY, int screenWidth, int screenHeight) {
+	int cellWidth = screenWidth / 4;  // Button width
+	int cellHeight = screenHeight / 6; // Button height
+	int marginX = (screenWidth - (3 * cellWidth)) / 4; // Horizontal margin
+	int marginY = (screenHeight - (3 * cellHeight)) / 4; // Vertical margin
+
+	for (int i = 0; i < LEVEL_ITEMS; i++) {
+		int column = i % 3; // Column index
+		int row = i / 3;    // Row index
+
+		int x = marginX + column * (cellWidth + marginX);
+		int y = marginY + row * (cellHeight + marginY);
+
+		// Check if the mouse is over this button
+		if (mouseX >= x && mouseX <= x + cellWidth && mouseY >= y && mouseY <= y + cellHeight) {
+			return i;
+		}
+	}
+	return -1; // No button is being hovered over
+}
+// Draw Levels Menu
+void drawLevelsMenu(int screenWidth, int screenHeight) {
+	int cellWidth = screenWidth / 4;  // Button width
+	int cellHeight = screenHeight / 6; // Button height
+	int marginX = (screenWidth - (3 * cellWidth)) / 4; // Horizontal margin
+	int marginY = (screenHeight - (3 * cellHeight)) / 4; // Vertical margin
+
+	for (int i = 0; i < LEVEL_ITEMS; i++) {
+		int column = i % 3; // Column index
+		int row = i / 3;    // Row index
+
+		int x = marginX + column * (cellWidth + marginX);
+		int y = marginY + row * (cellHeight + marginY);
+
+		bool isHovered = (i == hoveredButton);
+		drawButtonLevels(x, y, cellWidth, cellHeight, levelText[i], WHITE, BLUE, isHovered);
+	}
+}
+
+void LevelsMenu() {
+
+	int screenWidth = x;
+	int screenHeight = y;
+	bool running = true;
+	int page = 0;
+
+	while (running) {
+		setactivepage(page);
+		setvisualpage(1 - page);
+		cleardevice();
+		putimage(0, 0, mario_levels_menu, COPY_PUT);
+
+		// Get mouse position
+		int mouseX = mousex();
+		int mouseY = mousey();
+
+		// Detect hover
+		hoveredButton = detectMouseHoverLevels(mouseX, mouseY, screenWidth, screenHeight);
+
+		// Draw the menu
+		drawLevelsMenu(screenWidth, screenHeight);
+
+		//Check for mouse click
+		if (ismouseclick(WM_LBUTTONDOWN)) {
+			clearmouseclick(WM_LBUTTONDOWN);
+
+			if (hoveredButton != -1) {
+				clickedButton = hoveredButton;
+
+				// Perform action based on the clicked button
+				setvisualpage(page);
+				cleardevice();
+				settextstyle(DEFAULT_FONT, HORIZ_DIR, 6);
+				switch (clickedButton) {
+				case 0: 
+					cht = "level1.txt";
+					outtextxy(screenWidth / 4, screenHeight / 2, "Loading Level 2..."); 
+					MapLoader();
+					delay(1000);
+					MarioGame();
+					break;
+				case 1: 
+					cht = "level2.txt";
+					outtextxy(screenWidth / 4, screenHeight / 2, "Loading Level 2...");
+					MapLoader();
+					delay(1000);
+					MarioGame();
+					break;
+				case 2: cht = "level3.txt";
+					outtextxy(screenWidth / 4, screenHeight / 2, "Loading Level 2...");
+					MapLoader();
+					delay(1000);
+					MarioGame();
+					break;
+				case 3: cht = "level4.txt";
+					outtextxy(screenWidth / 4, screenHeight / 2, "Loading Level 2...");
+					MapLoader();
+					delay(1000);
+					MarioGame();
+					break;
+				case 4: cht = "level5.txt";
+					outtextxy(screenWidth / 4, screenHeight / 2, "Loading Level 2...");
+					MapLoader();
+					delay(1000);
+					MarioGame();
+					break;
+				case 5: cht = "level6.txt";
+					outtextxy(screenWidth / 4, screenHeight / 2, "Loading Level 2...");
+					MapLoader();
+					delay(1000);
+					MarioGame();
+					break;
+				case 6: cht = "level7.txt";
+					outtextxy(screenWidth / 4, screenHeight / 2, "Loading Level 2...");
+					MapLoader();
+					delay(1000);
+					MarioGame();
+					break;
+				case 7: cht = "level8.txt";
+					outtextxy(screenWidth / 4, screenHeight / 2, "Loading Level 2...");
+					MapLoader();
+					delay(1000);
+					MarioGame();
+					break;
+				case 8: 
+					MainMenu();
+					break;
+				}
+			}
+		}
+		page = 1 - page;
+		delay(50);
+	}
+
+	//closegraph();
+	exit(0);
+}
+
+int detectMouseHoverCustom(int mouseX, int mouseY, int screenWidth, int screenHeight) {
+	int buttonWidth = screenWidth / 4;
+	int buttonHeight = screenHeight / 10;
+	int marginX = screenWidth / 7;
+	int marginY = screenHeight / 3;
+
+	for (int i = 0; i < MENU_ITEMS; i++) {
+		int x = marginX;
+		int y = marginY + i * (buttonHeight + screenHeight / 20);  // Vertical spacing as 5% of screen height
+
+		// Check if the mouse is over this button
+		if (mouseX >= x && mouseX <= x + buttonWidth && mouseY >= y && mouseY <= y + buttonHeight) {
+			return i;
+		}
+	}
+	return -1;  // No button is being hovered over
+}
+
+// Draw Menu
+void drawCustomMenu(int screenWidth, int screenHeight) {
+	int buttonWidth = screenWidth / 4;
+	int buttonHeight = screenHeight / 10;
+	int marginX = screenWidth / 7;
+	int marginY = screenHeight / 3;
+
+	for (int i = 0; i < CUSTOM_ITEMS; i++) {
+		int x = marginX;
+		int y = marginY + i * (buttonHeight + screenHeight / 20);  // Vertical spacing as 5% of screen height
+
+		bool isHovered = (i == hoveredButton);
+		drawButton(x, y, buttonWidth, buttonHeight, customText[i], WHITE, BLACK, isHovered);
+	}
+	int imageWidth = screenWidth / 3;  // Image takes 1/3 of the screen width
+	int imageX = (screenWidth - imageWidth) / 2;  // Center horizontally
+	int imageY = marginY - (x / 3 * 612) / x - screenHeight / 20;  // Place above the first button with padding
+
+	putimage((x - x / 3) / 2, marginY - (x / 3 * 7) / x - y / 20, mario_main_screen, COPY_PUT);
+}
+
+void CustomMenu() {
+	int screenWidth = x;
+	int screenHeight = y;
+	bool running = true;
+	int page = 0;
+
+	while (running) {
+		setactivepage(page);
+		setvisualpage(1 - page);
+		setbkcolor(BLACK);
+		cleardevice();
+
+		// Get mouse position
+		int mouseX = mousex();
+		int mouseY = mousey();
+
+		// Detect hover
+		hoveredButton = detectMouseHoverCustom(mouseX, mouseY, screenWidth, screenHeight);
+
+		// Draw the menu
+		drawCustomMenu(screenWidth, screenHeight);
+
+		// Check for mouse click
+		if (ismouseclick(WM_LBUTTONDOWN)) {
+			clearmouseclick(WM_LBUTTONDOWN);
+
+			if (hoveredButton != -1) {
+				clickedButton = hoveredButton;
+
+				// Perform action based on the clicked button
+				cleardevice();
+				setvisualpage(page);
+				settextstyle(DEFAULT_FONT, HORIZ_DIR, 7);
+				switch (clickedButton) {
+				case 0:
+					CustomLevelsMenu();
+					/*outtextxy(screenWidth / 4, screenHeight / 2, "Starting Game...");
+					delay(2000);*/
+					break;
+				case 1:
+					MapEditorLevels();
+					break;
+				case 2:
+					MainMenu();
+				}
+			}
+		}
+
+		page = 1 - page;
+		delay(50);  // Reduce CPU usage
+	}
+
+	//closegraph();
+	exit(0);
+}
+
+// Draw Levels Menu
+void drawCustomLevelsMenu(int screenWidth, int screenHeight) {
+	int cellWidth = screenWidth / 4;  // Button width
+	int cellHeight = screenHeight / 6; // Button height
+	int marginX = (screenWidth - (3 * cellWidth)) / 4; // Horizontal margin
+	int marginY = (screenHeight - (3 * cellHeight)) / 4; // Vertical margin
+
+	for (int i = 0; i < CUSTOM_LEVEL_ITEMS; i++) {
+		int column = i % 3; // Column index
+		int row = i / 3;    // Row index
+
+		int x = marginX + column * (cellWidth + marginX);
+		int y = marginY + row * (cellHeight + marginY);
+
+		bool isHovered = (i == hoveredButton);
+		drawButtonLevels(x, y, cellWidth, cellHeight, customLevelText[i], WHITE, BLUE, isHovered);
+	}
+}
+
+void CustomLevelsMenu() {
+
+	int screenWidth = x;
+	int screenHeight = y;
+	bool running = true;
+	int page = 0;
+
+	while (running) {
+		setactivepage(page);
+		setvisualpage(1 - page);
+		cleardevice();
+		putimage(0, 0, mario_levels_menu, COPY_PUT);
+
+		// Get mouse position
+		int mouseX = mousex();
+		int mouseY = mousey();
+
+		// Detect hover
+		hoveredButton = detectMouseHoverLevels(mouseX, mouseY, screenWidth, screenHeight);
+
+		// Draw the menu
+		drawCustomLevelsMenu(screenWidth, screenHeight);
+
+		//Check for mouse click
+		if (ismouseclick(WM_LBUTTONDOWN)) {
+			clearmouseclick(WM_LBUTTONDOWN);
+
+			if (hoveredButton != -1) {
+				clickedButton = hoveredButton;
+
+				// Perform action based on the clicked button
+				setvisualpage(page);
+				cleardevice();
+				settextstyle(DEFAULT_FONT, HORIZ_DIR, 6);
+				if (strcmp(customLevelText[clickedButton], "BACK") == 0) {
+					CustomMenu();
+				}
+				else {
+					cht = customLevelText[clickedButton];
+					MapLoader();
+					MarioGame();
+				}
+			}
+		}
+		page = 1 - page;
+		delay(50);
+	}
+
+	//closegraph();
+	exit(0);
+}
+
+/*
 void drawArrowMainMenu(int option, int color, int menuX, int menuY, int menuSpacing) {
 	setcolor(color);
 
@@ -288,7 +647,7 @@ void MainMenu() {
 }
 
 
-
+*/
 
 /*
 // Arrow
@@ -559,6 +918,8 @@ void GameOverMenu() {
 
 	drawGameOver(text_color);
 	drawArrowGameOver(selectedOption, arrow_color, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight);
+	
+	int key = getch();
 
 	bool running = true;
 	while (running) {
@@ -675,6 +1036,8 @@ void PauseMenu() {
 	drawPause(255, 255, 255);
 	drawArrowPause(selectedOption, 255, 255, 255, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight);
 
+	char key = getch();
+
 	bool running = true;
 	while (running) {
 		char key = getch();
@@ -709,23 +1072,6 @@ void PauseMenu() {
 				MainMenu();
 				break;
 			}
-		}
-	}
-}
-
-
-void LevelsMenu() {
-	cleardevice();
-	setbkcolor(RGB(255, 0, 0));
-	cleardevice();
-	char t = getch();
-	if (t == 'a') {
-		ScoreLevel();
-	}
-	else {
-		if (t == 'b') {
-			LevelLoader();
-			MarioGame();
 		}
 	}
 }

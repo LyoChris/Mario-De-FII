@@ -25,13 +25,13 @@ void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goomba_walk
 * mario_right_run_2, * mario_right_run_3, * mario_vine, * mario_vine_top, * skyblock, * lucky_block_used, * one_up, * flagpolep, * flagpolemapedit, * pipebody,
 * mario_star, * pipehead, * pirana_1, * pirana_2, * pipeheadpir, * mariostar, * mario_climbing_down_1_star, * mario_climbing_down_2_star, * mario_climbing_up_1_star,
 * mario_climbing_up_2_star, * mario_idle_left_star, * mario_idle_right_star, * mario_jump_1_star, * mario_left_run_1_star, * mario_left_run_2_star,
-* mario_left_run_3_star, * mario_right_run_1_star, * mario_right_run_2_star, * mario_right_run_3_star;
+* mario_left_run_3_star, * mario_right_run_1_star, * mario_right_run_2_star, * mario_right_run_3_star, * mario_main_screen, * mario_levels_menu;
 
 extern pirhana piranav[100];
 extern colectible coins[100], life[100], starpow[100];
 pozitii spawn[100];
 float wh, ncf, nci = 0, nc1, imario, jmario;
-int  x, y, nl = 20, nc, harta[30][1000], mv2, map, mappart, spawncount = 1, vizc[100], vize[100], buffersize, flagpole = 00;
+int  x, y, nl = 20, nc, harta[30][1000], mv2, map, mappart, spawncount = 1, vizc[100], vize[100], buffersize, flagpole = 0, okmap = 1;
 extern goompa gompav[100];
 extern int n, coino, lifo, p, staro;
 
@@ -163,6 +163,7 @@ void MapLoader() {
 void MapLoaderNextRight() {
     nci = nci + nc1;
     ncf = ncf + nc1;
+    okmap = 1;
     setvisualpage(1);
     setactivepage(0);
     cleardevice();
@@ -241,9 +242,22 @@ void MapLoaderNextRight() {
                 harta[i][j] = 0;
             }
         }
+        for (int i = nl; i >imario - 1;--i) {
+            for (int j = (int)jmario+1;j < ncf;++j) {
+                if (harta[i + 1][j] == 1 && harta[i][j]!=1 && okmap==1) {
+                    imario = i;
+                    jmario = j;
+                    okmap = 0;
+                }
+				if (okmap == 0)
+					break;
+            }
+        }
+        putimage((jmario - nci) * wh, imario * wh, mario_idle_right, COPY_PUT);
+        /*
         imario = spawn[(int)(nci / nc1)].ibegin;
         jmario = spawn[(int)(nci / nc1)].jbegin;
-		putimage((spawn[(int)(nci / nc1)].jbegin - nci) * wh, spawn[(int)(nci / nc1)].ibegin * wh, mario_idle_right, COPY_PUT);
+		putimage((spawn[(int)(nci / nc1)].jbegin - nci) * wh, spawn[(int)(nci / nc1)].ibegin * wh, mario_idle_right, COPY_PUT);*/
     }
     setvisualpage(0);
 }
@@ -251,6 +265,7 @@ void MapLoaderNextRight() {
 void MapLoaderPrevLeft() {
     nci = nci - nc1;
     ncf = ncf - nc1;
+    okmap = 1;
     setvisualpage(1);
     setactivepage(0);
     cleardevice();
@@ -280,9 +295,21 @@ void MapLoaderPrevLeft() {
                 putimage((j-nci) * wh, i * wh, lucky_block_used, COPY_PUT);
             }
         }
+        for (int i = nl; i > imario - 1;--i) {
+            for (int j = ncf - 1;j > nci;--j) {
+                if (harta[i + 1][j] == 1 && harta[i][j] != 1 && okmap == 1) {
+                    imario = i;
+                    jmario = j;
+                    okmap = 0;
+                }
+                if (okmap == 0)
+                    break;
+            }
+        }
+        /*
         imario = spawn[(int)(nci / nc1)].ifinal;
         jmario = spawn[(int)(nci / nc1)].jfinal;
-		putimage((spawn[(int)(nci / nc1)].jfinal - nci) * wh, spawn[(int)(nci / nc1)].ifinal * wh, mario_idle_left, COPY_PUT);
+		putimage((spawn[(int)(nci / nc1)].jfinal - nci) * wh, spawn[(int)(nci / nc1)].ifinal * wh, mario_idle_left, COPY_PUT);*/
     }
 	setvisualpage(0);
 }

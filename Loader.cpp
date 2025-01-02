@@ -16,7 +16,7 @@ extern int coinono, lifes, ok, gdead, power, pdead, lifo, staro, coino;
 extern colectible coins[100], life[100], starpow[100];
 extern goompa gompav[100];
 extern pirhana piranav[100];
-extern int harta[30][1000], n, p;
+extern int harta[30][1000], n, p, x, y;
 extern std::string cht;
 extern float wh;
 extern void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goomba_walking_2, * mario_climbing_down_1, * mario_climbing_down_2, * mario_climbing_up_1,
@@ -24,7 +24,8 @@ extern void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goom
 * mario_right_run_2, * mario_right_run_3, * mario_vine, * mario_vine_top, * skyblock, * lucky_block_used, * one_up, * flagpolep, * pipehead, * pipebody, * pirana_1, * pirana_2, * pipeheadpir,
 * brickblockmap, * skyblockmap, * mario_vinemap, * mario_vine_topmap, * mario_star, * lucky_blockmap, * mario_coinmap, * mario_idle_rightmap, * one_upmap, * flagpolepmap, * flagpolemapedit,
 * gombamap, * pipeheadmap, * pipebodymap, * pipeheadpirmap, * brickblockmono, * skyblockmono, * mario_vinemono, * mario_vine_topmono, * lucky_blockmono, * mario_coinmono,
-* mario_idle_rightmono, * one_upmono, * flagpolepmono, * gombamono, * pipeheadmono, * pipebodymono, * pipeheadpirmono, * flagpolemapeditmono, * flagpolemapeditp;
+* mario_idle_rightmono, * one_upmono, * flagpolepmono, * gombamono, * pipeheadmono, * pipebodymono, * pipeheadpirmono, * flagpolemapeditmono, * flagpolemapeditp, 
+* mario_main_screen, * mario_levels_menu;
 
 void preloadImage(const char* filename, int width, int height, void*& buffer) {
     readimagefile(filename, 0, 0, width, height);
@@ -33,7 +34,9 @@ void preloadImage(const char* filename, int width, int height, void*& buffer) {
 }
 
 void AssetLoader() {
-    initwindow(wh + 1, 7* wh + 1, "", -3, -3);
+    initwindow(x, y, "", -3, -3);
+    setvisualpage(0);
+    setactivepage(1);
     cleardevice();
     setbkcolor(RGB(126, 132, 246));
     preloadImage("BrickBlock.jpg", wh, wh, brickblock);
@@ -97,7 +100,7 @@ void AssetLoader() {
     cleardevice();
     setbkcolor(RGB(126, 132, 246));
     preloadImage("mario_right_run_3.gif", wh, wh, mario_right_run_3);
-	cleardevice();
+    cleardevice();
     setbkcolor(RGB(126, 132, 246));
     preloadImage("lucky_block_used.jpg", wh, wh, lucky_block_used);
     cleardevice();
@@ -118,9 +121,9 @@ void AssetLoader() {
     cleardevice();
     setbkcolor(RGB(126, 132, 246));
     preloadImage("pipe_head_pirana.gif", wh, wh, pipeheadpir);
-	cleardevice(); 
+    cleardevice();
     setbkcolor(RGB(126, 132, 246));
-    preloadImage("Flagpole.gif", wh, 7*wh, flagpolep);
+    preloadImage("Flagpole.gif", wh, 7 * wh, flagpolep);
     cleardevice();
     setbkcolor(RGB(126, 132, 246));
     preloadImage("Flagpolecut.gif", wh, wh, flagpolemapedit);
@@ -166,7 +169,13 @@ void AssetLoader() {
     cleardevice();
     setbkcolor(RGB(126, 132, 246));
     preloadImage("mario_star.gif", wh, wh, mario_star);
-	closegraph();
+    cleardevice();
+    setbkcolor(RGB(0, 0, 0));
+    preloadImage("mario_main.gif", x/3, (x / 3 * 612)/x, mario_main_screen);
+    cleardevice();
+    setbkcolor(RGB(0, 0, 0));
+    preloadImage("MarioLevelsMenu.jpg", x-3, y-3, mario_levels_menu);
+    closegraph();
 }
 
 void AssetLoaderMap() {
