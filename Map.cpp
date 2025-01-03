@@ -38,8 +38,8 @@ extern int n, coino, lifo, p, staro;
 
 
 void MapReaderandSetter() {
-    x = GetSystemMetrics(SM_CXSCREEN); //1536 864
-    y = GetSystemMetrics(SM_CYSCREEN);
+    x = 800;//GetSystemMetrics(SM_CXSCREEN); //1536 864
+    y = 600;//GetSystemMetrics(SM_CYSCREEN);
     wh = (float)y / (float)nl;
     nc1 = (float)x / wh;
     ncf = nc1;
@@ -57,6 +57,8 @@ void MapLoader() {
             f >> harta[i][j];
         }
     }
+    cout << "Dimensiuni harta: " << nl << " " << nc << '\n';
+    cout << "Dimensiuni tile: " << wh << " " << nc1 <<  '\n';
     levelselect = cht;
     //initwindow(x, y, "", -3, -3);
 	setvisualpage(1);
@@ -163,12 +165,24 @@ void MapLoader() {
 void MapLoaderNextRight() {
     nci = nci + nc1;
     ncf = ncf + nc1;
+	cout << ncf << '\n';
+	if (ncf > nc) ncf = nc;
+	cout <<"DIMEN MADS: "<< nci << " " << ncf << '\n';
     okmap = 1;
+    setactivepage(1);
+    cleardevice();
     setvisualpage(1);
     setactivepage(0);
     cleardevice();
     setbkcolor(RGB(126, 132, 246));
     cleardevice();
+    cout << ncf << '\n';
+    for (int i = 0;i < nl;i += 1) {
+        for (int j = (int)nci;j < ncf; j += 1) {
+            cout << harta[i][j] << " ";
+        }
+        cout << '\n';
+    }
     for (int i = 0;i < nl;i += 1) {
         for (int j = (int)nci;j < ncf; j += 1) {
             if (harta[i][j] == 1)
@@ -177,18 +191,6 @@ void MapLoaderNextRight() {
 				putimage((j - nci) * wh, i * wh, mario_vine, COPY_PUT);
             if (harta[i][j] == 4)
 				putimage((j - nci) * wh, i * wh, mario_vine_top, COPY_PUT);
-            if (harta[i][j] == 6) {
-                if (spawn[(int)(nci / nc1)].ibegin == 0 && spawn[(int)(nci / nc1)].jbegin == 0) {
-                    spawn[(int)(nci / nc1)].ibegin = i;
-                    spawn[(int)(nci / nc1)].jbegin = j;
-                }
-                else {
-                    spawn[(int)(nci / nc1)].jfinal = j;
-                    spawn[(int)(nci / nc1)].ifinal = i;
-
-                }
-                harta[i][j] = 0;
-            }
             if (harta[i][j] == 8) {
                 putimage((j - nci) * wh, i * wh, lucky_block, COPY_PUT);
             }
@@ -258,8 +260,9 @@ void MapLoaderNextRight() {
         imario = spawn[(int)(nci / nc1)].ibegin;
         jmario = spawn[(int)(nci / nc1)].jbegin;
 		putimage((spawn[(int)(nci / nc1)].jbegin - nci) * wh, spawn[(int)(nci / nc1)].ibegin * wh, mario_idle_right, COPY_PUT);*/
-    }
+    };
     setvisualpage(0);
+    cout << ncf << '\n';
 }
 
 void MapLoaderPrevLeft() {

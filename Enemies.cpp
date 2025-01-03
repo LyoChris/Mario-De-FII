@@ -76,13 +76,13 @@ void gompa(int a) {
 		if (gompav[a].jgompa - (int)gompav[a].jgompa != 0) {
 			if (harta[(int)gompav[a].igompa][(int)gompav[a].jgompa] == 3) {
 				hoverg = 1;
-				cout << 2;
+				//cout << 2;
 				putimage(((int)gompav[a].jgompa -nci) * wh, gompav[a].igompa * wh, mario_vine, COPY_PUT);
 				//readimagefile("mario_vine.gif", ((int)gompav[a].jgompa - nci) * wh, gompav[a].igompa * wh, (((int)gompav[a].jgompa - nci) + 1) * wh, (gompav[a].igompa + 1) * wh);
 			}
 			if (harta[(int)gompav[a].igompa][(int)gompav[a].jgompa + 1] == 3) {
 				hoverg = 1;
-				cout << 3;
+				//cout << 3;
 				putimage(((int)gompav[a].jgompa + 1 - nci) * wh, gompav[a].igompa * wh, mario_vine, COPY_PUT);
 				//readimagefile("mario_vine.gif", ((int)gompav[a].jgompa + 1 - nci) * wh, gompav[a].igompa * wh, (((int)gompav[a].jgompa + 1 - nci) + 1) * wh, (gompav[a].igompa + 1) * wh);
 			}
@@ -90,7 +90,7 @@ void gompa(int a) {
 		else {
 			if (harta[(int)gompav[a].igompa][(int)gompav[a].jgompa] == 3) {
 				hoverg = 1;
-				cout << 4;
+				//cout << 4;
 				putimage((gompav[a].jgompa - nci) * wh, gompav[a].igompa * wh, mario_vine, COPY_PUT);
 				//readimagefile("mario_vine.gif", (gompav[a].jgompa - nci) * wh, gompav[a].igompa * wh, ((gompav[a].jgompa - nci) + 1) * wh, (gompav[a].igompa + 1) * wh);
 			}
@@ -99,7 +99,7 @@ void gompa(int a) {
 			if (coins[i].mapart == (int)(nci - nc1) && coins[i].icolec == gompav[a].igompa && coins[i].colected == 0) {
 				if (CheckBlock(gompav[a].igompa, gompav[a].jgompa, wh, coins[i].icolec, coins[i].jcolec)) {
 					hoverg = 1;
-					cout << 5;
+					//cout << 5;
 					putimage((coins[i].jcolec - nci) * wh, coins[i].icolec * wh, mario_coin, COPY_PUT);
 					//readimagefile("mario_coin.gif", (coins[i].jcolec - nci) * wh, coins[i].icolec * wh, ((coins[i].jcolec - nci) + 1) * wh, (coins[i].icolec + 1) * wh);
 				}
@@ -109,7 +109,7 @@ void gompa(int a) {
 			if (starpow[i].mapart == (int)(nci - nc1) && starpow[i].icolec == gompav[a].igompa && starpow[i].colected == 0) {
 				if (CheckBlock(gompav[a].igompa, gompav[a].jgompa, wh, starpow[i].icolec, starpow[i].jcolec)) {
 					hoverg = 1;
-					cout << 6;
+					//cout << 6;
 					putimage((starpow[i].jcolec - nci) * wh, starpow[i].icolec * wh, mario_star, COPY_PUT);
 					//readimagefile("mario_coin.gif", (coins[i].jcolec - nci) * wh, coins[i].icolec * wh, ((coins[i].jcolec - nci) + 1) * wh, (coins[i].icolec + 1) * wh);
 				}
@@ -119,13 +119,13 @@ void gompa(int a) {
 			if (life[i].mapart == (int)(nci - nc1) && life[i].icolec == gompav[a].igompa && life[i].colected == 0) {
 				if (CheckBlock(gompav[a].igompa, gompav[a].jgompa, wh, life[i].icolec, life[i].jcolec)) {
 					hoverg = 1;
-					cout << 7;
+					//cout << 7;
 					putimage((life[i].jcolec - nci) * wh, life[i].icolec * wh, one_up, COPY_PUT);
 					//readimagefile("mario_coin.gif", (coins[i].jcolec - nci) * wh, coins[i].icolec * wh, ((coins[i].jcolec - nci) + 1) * wh, (coins[i].icolec + 1) * wh);
 				}
 			}
 		}
-		cout << hoverg << '\n';
+		//cout << hoverg << '\n';
 		if (hoverg == 1) {
 			if (gompav[a].jgompa > 0 && harta[(int)gompav[a].igompa][(int)gompav[a].jgompa] != 1) {
 				gompav[a].jgompa -= 0.5;
@@ -192,7 +192,7 @@ void gompa(int a) {
 				}
 			}
 		}
-		cout << hoverg << '\n';
+		//cout << hoverg << '\n';
 		if (hoverg == 1) {
 			if (gompav[a].jgompa < ncf) {
 				gompav[a].jgompa += 0.5;
@@ -282,11 +282,13 @@ void pirhananext(int a) {
 void EnemiesMoving() {
 	for (int i = 1;i <= n;i++) {
 		if (gompav[i].mapart == (int)(nci - nc1) && gompav[i].dead == 0) {
+			cout << ncf << '\n';
 			gompa(i);
 		}
 	}
 	for (int i = 1;i <= p;i++) {
 		if (piranav[i].mapart == (int)(nci - nc1) && piranav[i].dead == 0) {
+			cout << ncf << '\n';
 			pirhananext(i);
 		}
 	}

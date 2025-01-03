@@ -17,11 +17,14 @@
 #include "miniaudio.h"
 using namespace std;
 
+extern int CUSTOM_LEVEL_ITEMS;
+extern char* customLevelText[10];
 
 
 int main() {
 	MapReaderandSetter();
 	SoundInitialisation();
+	loadData(customLevelText, CUSTOM_LEVEL_ITEMS);
 	//MapEditorLevels();
 	//LevelLoader();
 	//MarioGame();

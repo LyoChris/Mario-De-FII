@@ -25,7 +25,10 @@ struct spawnpoint {
 
 }spawn[100];
 
-int hartaloader[30][1000] = { 0 }, nr=0, edit = 1, mapi = 0, mapj = 1, selecpoz[14] = { 1,0,3,4,12,13,14,8,7,2,5,9,11,6 }, iselec = 0, bkselect = 1, panelnr = 0, ncmax = 0, jpole = -1, ipole = -1;
+extern int CUSTOM_LEVEL_ITEMS;
+extern char* customLevelText[10];
+
+int hartaloader[20][1000] = { 0 }, nr=0, edit = 1, mapi = 0, mapj = 1, selecpoz[14] = { 1,0,3,4,12,13,14,8,7,2,5,9,11,6 }, iselec = 0, bkselect = 1, panelnr = 0, ncmax = 0, jpole = -1, ipole = -1;
 float nwh, ncimap=0, ncfmap;
 
 extern void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goomba_walking_2, * mario_climbing_down_1, * mario_climbing_down_2, * mario_climbing_up_1,
@@ -127,38 +130,26 @@ void SelectorImage(int i) {
 }
 
 void MapPaneler() {
-	for (int i = 0;i < nl;i += 1) {
-		for (int j = (int)ncimap;j < ncfmap; j += 1) {
-			PutMovingImage(i, j);
-		}
-	}
-	putimage((3 + 0) * wh, 17 * wh, brickblockmono, COPY_PUT);
-	putimage((3 + 1.5) * wh, 17 * wh, skyblockmono, COPY_PUT);
-	putimage((3 + 3.0) * wh, 17 * wh, mario_vinemono, COPY_PUT);
-	putimage((3 + 4.5) * wh, 17 * wh, mario_vine_topmono, COPY_PUT);
-	putimage((3 + 6.0) * wh, 17 * wh, pipebodymono, COPY_PUT); //placeholder pt pipe body
-	putimage((3 + 7.5) * wh, 17 * wh, pipeheadpirmono, COPY_PUT); //placeholder pt pirhana
-	putimage((3 + 9.0) * wh, 17 * wh, pipeheadmono, COPY_PUT); //placeholder pt pipe head
-	putimage((3 + 10.5) * wh, 17 * wh, lucky_blockmono, COPY_PUT);
-	putimage((3 + 12.0) * wh, 17 * wh, mario_coinmono, COPY_PUT);
-	putimage((3 + 13.5) * wh, 17 * wh, one_upmono, COPY_PUT);
-	putimage((3 + 15.0) * wh, 17 * wh, gombamono, COPY_PUT);
-	putimage((3 + 16.5) * wh, 17 * wh, mario_idle_rightmono, COPY_PUT);
-	putimage((3 + 18.0) * wh, 17 * wh, flagpolemapeditmono, COPY_PUT);
-
-	SelectorImage(iselec);
-}
-
-void InitialDrawing() {
 	cleardevice();
 
+	int lastColumnX = 0; // To track the x-coordinate of the last column
+
+	settextstyle(DEFAULT_FONT, HORIZ_DIR, 1);
+
+	// Draw the matrix
 	for (int i = 0; i < nl; i += 1) {
 		for (int j = (int)ncimap; j < ncfmap; j += 1) {
 			cout << i << " " << j << endl;
 			PutMovingImage(i, j);
+			lastColumnX = j - ncimap; // Keep updating to get the last column index
 		}
 	}
 
+	// Compute the x-coordinate of the last column's right edge
+	int blockWidth = nwh; // Assuming 'wh' is the width of a single block
+	int menuStartX = (lastColumnX + 4) * blockWidth + (blockWidth / 10); // One padding space to the right of the last column
+
+	// Place other game elements
 	putimage((1 + 0) * wh, 17 * wh, brickblockmono, COPY_PUT);
 	putimage((1 + 1.5) * wh, 17 * wh, skyblockmono, COPY_PUT);
 	putimage((1 + 3.0) * wh, 17 * wh, mario_vinemono, COPY_PUT);
@@ -173,36 +164,136 @@ void InitialDrawing() {
 	putimage((1 + 16.5) * wh, 17 * wh, mario_idle_rightmono, COPY_PUT);
 	putimage((1 + 18.0) * wh, 17 * wh, flagpolemapeditmono, COPY_PUT);
 
-	// Scalable menu on the right side of the window
-	int winWidth = getmaxx();
+	// Menu parameters
 	int winHeight = getmaxy();
+	int padding = blockWidth / 5;        // Padding between menu elements
+	int elementHeight = winHeight / 15; // Scalable element height
+	int rectWidth = elementHeight;      // Rectangle width matches height
+	int textSize = elementHeight / 12;  // Scalable font size
 
-	int padding = winWidth / 50;          // Padding between elements
-	int elementHeight = winHeight / 15;  // Height of each menu element
-	int rectWidth = elementHeight;       // Width of the key rectangle
-	int textSize = elementHeight / 3;    // Font size proportional to element height
+	int baseX = menuStartX;              // Base X position for menu
+	int baseY = padding * 6;             // Base Y position for menu
 
-	int baseX = winWidth - rectWidth - padding * 2;  // Base X position
-	int baseY = padding;                            // Base Y position
+	cout << "baseX" << ' ' << baseX << '\n';
+	// Menu items and their keys
+	char* menuItems[5] = { "SAVE MAP", "LOAD MAP", "PREV PANEL", "NEXT PANEL", "BACK" };
+	char keys[5] = { 'M', 'N', 'J', 'L','B' };
 
-	char* menuItems[3] = { "SAVE MAP", "LOAD MAP", "BACK" };
-	char keys[3] = { 'M', 'N', 'B' };
+	settextstyle(SANS_SERIF_FONT, HORIZ_DIR, textSize); // Set scalable font
 
-	settextstyle(SANS_SERIF_FONT, HORIZ_DIR, textSize);  // Scalable font style
+	// Draw the menu
+	for (int i = 0; i < 5; i++) {
+		int rectY = baseY + i * (elementHeight + 2 * padding); // Rectangle Y-coordinate
+		cout << 'a';
+		// Draw key rectangle
+		rectangle(baseX, rectY, baseX + rectWidth, rectY + elementHeight);
 
-	for (int i = 0; i < 3; i++) {
-		int textY = baseY + i * (elementHeight + padding);
+		// Center the key within the rectangle
+		settextjustify(CENTER_TEXT, CENTER_TEXT);
+		char key[2] = { keys[i], '\0' }; // Convert char to string
+		int keyCenterX = baseX + rectWidth / 2;
+		int keyCenterY = rectY + elementHeight / 1.5;
+		outtextxy(keyCenterX, keyCenterY, key);
+
+		// Align menu text vertically and horizontally with the key
+		settextjustify(LEFT_TEXT, CENTER_TEXT);
+		outtextxy(baseX + rectWidth + padding, keyCenterY, menuItems[i]);
+	}
+
+	// Draw panel controls below the matrix
+	int panelTextY = nl * (blockWidth + 2); // Y-coordinate for panel control text
+	int matrixEndX = (lastColumnX + 1) * blockWidth; // X-coordinate of the last column
+
+	// Current Panel
+	int currentCenterX = (matrixEndX - blockWidth) / 3; // Center for "CURRENT PANEL"
+	char currentPanelText[20];
+	sprintf(currentPanelText, "CURRENT PANEL: %d", panelnr); // Replace '1' with the current panel number
+	outtextxy(currentCenterX, panelTextY + elementHeight / 2, currentPanelText);
+
+}
+
+void InitialDrawing() {
+	cleardevice();
+	memset(hartaloader, 0, sizeof(hartaloader));
+	ncimap = 0;
+	ncfmap = ncf;
+	panelnr = 0;
+
+	int lastColumnX = 0; // To track the x-coordinate of the last column
+
+	// Draw the matrix
+	for (int i = 0; i < nl; i += 1) {
+		for (int j = (int)ncimap; j < ncfmap; j += 1) {
+			cout << i << " " << j << endl;
+			PutMovingImage(i, j);
+			lastColumnX = j; // Keep updating to get the last column index
+		}
+	}
+
+	// Compute the x-coordinate of the last column's right edge
+	int blockWidth = nwh; // Assuming 'wh' is the width of a single block
+	int menuStartX = (lastColumnX + 4) * blockWidth + (blockWidth / 10); // One padding space to the right of the last column
+
+	// Place other game elements
+	putimage((1 + 0) * wh, 17 * wh, brickblockmono, COPY_PUT);
+	putimage((1 + 1.5) * wh, 17 * wh, skyblockmono, COPY_PUT);
+	putimage((1 + 3.0) * wh, 17 * wh, mario_vinemono, COPY_PUT);
+	putimage((1 + 4.5) * wh, 17 * wh, mario_vine_topmono, COPY_PUT);
+	putimage((1 + 6.0) * wh, 17 * wh, pipebodymono, COPY_PUT);
+	putimage((1 + 7.5) * wh, 17 * wh, pipeheadpirmono, COPY_PUT);
+	putimage((1 + 9.0) * wh, 17 * wh, pipeheadmono, COPY_PUT);
+	putimage((1 + 10.5) * wh, 17 * wh, lucky_blockmono, COPY_PUT);
+	putimage((1 + 12.0) * wh, 17 * wh, mario_coinmono, COPY_PUT);
+	putimage((1 + 13.5) * wh, 17 * wh, one_upmono, COPY_PUT);
+	putimage((1 + 15.0) * wh, 17 * wh, gombamono, COPY_PUT);
+	putimage((1 + 16.5) * wh, 17 * wh, mario_idle_rightmono, COPY_PUT);
+	putimage((1 + 18.0) * wh, 17 * wh, flagpolemapeditmono, COPY_PUT);
+
+	// Menu parameters
+	int winHeight = getmaxy();
+	int padding = blockWidth / 5;        // Padding between menu elements
+	int elementHeight = winHeight / 15; // Scalable element height
+	int rectWidth = elementHeight;      // Rectangle width matches height
+	int textSize = elementHeight / 12;  // Scalable font size
+
+	int baseX = menuStartX;              // Base X position for menu
+	int baseY = padding * 6;             // Base Y position for menu
+	cout << "baseX" << ' ' << baseX << '\n';
+	// Menu items and their keys
+	char* menuItems[5] = { "SAVE MAP", "LOAD MAP", "PREV PANEL", "NEXT PANEL", "BACK"};
+	char keys[5] = { 'M', 'N', 'J', 'L','B'};
+
+	settextstyle(SANS_SERIF_FONT, HORIZ_DIR, textSize); // Set scalable font
+
+	// Draw the menu
+	for (int i = 0; i < 5; i++) {
+		int rectY = baseY + i * (elementHeight + 2 * padding); // Rectangle Y-coordinate
 
 		// Draw key rectangle
-		rectangle(baseX - rectWidth - padding, textY, baseX - padding, textY + elementHeight);
-		settextjustify(CENTER_TEXT, CENTER_TEXT);
-		char key[2] = { keys[i], '\0' };  // Convert char to string
-		outtextxy(baseX - rectWidth / 2 - padding, textY + elementHeight / 2, key);
+		rectangle(baseX, rectY, baseX + rectWidth, rectY + elementHeight);
 
-		// Draw menu text
+		// Center the key within the rectangle
+		settextjustify(CENTER_TEXT, CENTER_TEXT);
+		char key[2] = { keys[i], '\0' }; // Convert char to string
+		int keyCenterX = baseX + rectWidth / 2;
+		int keyCenterY = rectY + elementHeight / 1.5;
+		outtextxy(keyCenterX, keyCenterY, key);
+
+		// Align menu text vertically and horizontally with the key
 		settextjustify(LEFT_TEXT, CENTER_TEXT);
-		outtextxy(baseX, textY + elementHeight / 2, menuItems[i]);
+		outtextxy(baseX + rectWidth + padding, keyCenterY, menuItems[i]);
 	}
+
+	// Draw panel controls below the matrix
+	int panelTextY = nl*(blockWidth +2); // Y-coordinate for panel control text
+	int matrixEndX = (lastColumnX + 1) * blockWidth; // X-coordinate of the last column
+
+	// Current Panel
+	int currentCenterX = (matrixEndX - blockWidth)/3; // Center for "CURRENT PANEL"
+	char currentPanelText[20];
+	sprintf(currentPanelText, "CURRENT PANEL: %d", panelnr); // Replace '1' with the current panel number
+	outtextxy(currentCenterX, panelTextY + elementHeight / 2, currentPanelText);
+
 }
 
 void saveMap() {
@@ -213,6 +304,7 @@ void saveMap() {
 	// Prompt user to enter filename
 	setvisualpage(1);
 	setactivepage(1);
+	cleardevice();
 
 	setcolor(WHITE);
 	int fontSize = min(x / 20, y / 15); // Scale with window size
@@ -235,11 +327,6 @@ void saveMap() {
 				filename[pos] = '\0';
 				// Clear and redraw the filename input
 				setfillstyle(SOLID_FILL, BLACK);
-
-
-
-
-
 				bar(50, y / 2, x - 50, y / 2 + 50); // Clear area
 				outtextxy((x - textwidth(filename)) / 2, y / 2, filename);
 			}
@@ -255,6 +342,15 @@ void saveMap() {
 			outtextxy((x - textwidth(filename)) / 2, y / 2, filename);
 		}
 	}
+	if (CUSTOM_LEVEL_ITEMS ==8) {
+		CUSTOM_LEVEL_ITEMS == 8;
+	}
+	else {
+		CUSTOM_LEVEL_ITEMS++;
+		customLevelText[CUSTOM_LEVEL_ITEMS] = "BACK";
+		customLevelText[CUSTOM_LEVEL_ITEMS - 1] = filename;
+	}
+	
 
 	strcat(filename, ".txt"); // Append file extension
 
@@ -276,7 +372,6 @@ void saveMap() {
 		outtextxy((x - textwidth("Error saving file.")) / 2, y - 7 * nwh, "Error saving6 file.");
 	}
 	delay(2000);
-	cleardevice();
 	setvisualpage(0);
 	setactivepage(0);
 }
@@ -288,6 +383,7 @@ void loadMap() {
 	// Prompt user to enter filename
 	setvisualpage(1);
 	setactivepage(1);
+	cleardevice();
 
 	setcolor(WHITE);
 	int fontSize = min(x / 20, y / 15); // Scale with window size
@@ -397,29 +493,7 @@ void MapEditorLevels() {
 				PutMapEditor(mapi, mapj, bkselect);
 			}
 			if ((int)t == 32) {
-				if (bkselect == 6 && mapj < ncfmap - 1 && mapj> ncimap + 1) {
-					if ((spawn[panelnr].i1 == 0 && spawn[panelnr].j1 == 0)) {
-							hartaloader[mapi][mapj] = bkselect;
-							spawn[panelnr].i1 = mapi;
-							spawn[panelnr].j1 = mapj;
-					}
-					else {
-						if ((spawn[panelnr].i2 == 0 && spawn[panelnr].j2 == 0)) {
-							hartaloader[mapi][mapj] = bkselect;
-							spawn[panelnr].i2 = mapi;
-							spawn[panelnr].j2 = mapj;
-						}
-						else {
-							putimage((spawn[panelnr].j2 - ncimap + 1) * nwh, (spawn[panelnr].i2 + 1) * nwh, skyblockmap, COPY_PUT);
-							hartaloader[spawn[panelnr].i2][spawn[panelnr].j2] = 0;
-							hartaloader[mapi][mapj] = bkselect;
-							spawn[panelnr].i2 = mapi;
-							spawn[panelnr].j2 = mapj;
-						}
-					}
-					
-				}
-				if (bkselect == 11 && mapi > 7) {
+				if (bkselect == 11 && mapi > 7 && mapj < ncfmap-3) {
 					if (ipole == -1 && jpole == -1) {
 						hartaloader[mapi][mapj] = bkselect;
 						ipole = mapi;
@@ -479,8 +553,8 @@ void MapEditorLevels() {
 			}
 
 		}
-		if (GetKeyState(VK_ESCAPE) & 0x8000) {
-			MainMenu();
+		if (t == 'b') {
+			CustomMenu();
 		}
 	}
 	

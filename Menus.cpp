@@ -55,8 +55,8 @@ char* levelText[LEVEL_ITEMS] = { "LEVEL 1", "LEVEL 2", "LEVEL 3", "LEVEL 4", "LE
 const int CUSTOM_ITEMS = 3;
 char* customText[CUSTOM_ITEMS] = { "PLAY", "MAP EDITOR", "BACK" };
 
-int CUSTOM_LEVEL_ITEMS = 1;
-char* customLevelText[10] = { "BACK" };
+int CUSTOM_LEVEL_ITEMS;
+char* customLevelText[10];
 
 // Global variable
 int selectedOption = 0;
@@ -124,6 +124,8 @@ void drawMenu(int screenWidth, int screenHeight) {
 	int buttonHeight = screenHeight / 10;
 	int marginX = screenWidth / 7;
 	int marginY = screenHeight / 5;
+	
+	settextjustify(LEFT_TEXT, TOP_TEXT);
 
 	for (int i = 0; i < MENU_ITEMS; i++) {
 		int x = marginX;
@@ -150,7 +152,7 @@ void MainMenu() {
 		setvisualpage(1 - page);
 		setbkcolor(BLACK);
 		cleardevice();
-
+		settextstyle(DEFAULT_FONT, HORIZ_DIR, 1);
 		// Get mouse position
 		int mouseX = mousex();
 		int mouseY = mousey();
@@ -186,6 +188,7 @@ void MainMenu() {
 					delay(2000);
 					break;
 				case 3:
+					saveData(customLevelText, CUSTOM_LEVEL_ITEMS);
 					running = false;
 					break;
 				}
@@ -389,6 +392,8 @@ void drawCustomMenu(int screenWidth, int screenHeight) {
 	int marginX = screenWidth / 7;
 	int marginY = screenHeight / 3;
 
+	settextjustify(LEFT_TEXT, TOP_TEXT);
+
 	for (int i = 0; i < CUSTOM_ITEMS; i++) {
 		int x = marginX;
 		int y = marginY + i * (buttonHeight + screenHeight / 20);  // Vertical spacing as 5% of screen height
@@ -408,6 +413,8 @@ void CustomMenu() {
 	int screenHeight = y;
 	bool running = true;
 	int page = 0;
+
+	settextstyle(DEFAULT_FONT, HORIZ_DIR, 1);
 
 	while (running) {
 		setactivepage(page);
@@ -465,11 +472,11 @@ void drawCustomLevelsMenu(int screenWidth, int screenHeight) {
 	int cellHeight = screenHeight / 6; // Button height
 	int marginX = (screenWidth - (3 * cellWidth)) / 4; // Horizontal margin
 	int marginY = (screenHeight - (3 * cellHeight)) / 4; // Vertical margin
-
+	cout << CUSTOM_LEVEL_ITEMS;
 	for (int i = 0; i < CUSTOM_LEVEL_ITEMS; i++) {
 		int column = i % 3; // Column index
 		int row = i / 3;    // Row index
-
+		cout << customLevelText[i] << endl;
 		int x = marginX + column * (cellWidth + marginX);
 		int y = marginY + row * (cellHeight + marginY);
 
@@ -516,7 +523,10 @@ void CustomLevelsMenu() {
 					CustomMenu();
 				}
 				else {
-					cht = customLevelText[clickedButton];
+					char path[50];
+					strcpy(path, customLevelText[clickedButton]);
+					strcat(path, ".txt"); // Append file extension
+					cht = path;
 					MapLoader();
 					MarioGame();
 				}

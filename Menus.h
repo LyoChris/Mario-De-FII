@@ -6,3 +6,4 @@ void ScoreLevel();
 void SettingsMenu();
 void GameOverMenu();
 void PauseMenu();
+void CustomMenu();

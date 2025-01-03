@@ -537,6 +537,7 @@ void MarioMovement() {
         mover = 1;
         delay(MarioInterval);
     }
+
     if ((int)jmario - jmario != 0) {
         if (harta[(int)imario + 1][(int)jmario] == 0 && harta[(int)imario + 1][(int)jmario + 1] == 0 && ok == 0) {
             mover = 1;
@@ -822,9 +823,21 @@ void MarioMovement() {
             putimage((jmario - nci) * wh, imario * wh, mario_idle_left, COPY_PUT);
         }
     }
-    if (jmario >= (int)ncf) MapLoaderNextRight(); //randam urmatoarea parte din harta
-    if (jmario <= (int)nci && jmario > 0) MapLoaderPrevLeft(); //randam o parte anterioara a hartii
 
+    std::cout << "JMARIO" << " " << jmario << endl;
+    std::cout << "NCF" << " " << ncf << endl;
+	std::cout << "NCI" << " " << nci << endl;
+	std::cout << "NC" << " " << nc << endl;
+	std::cout << "DISTANTA :" << (jmario - nci +1)*wh << endl;
+    if (jmario >= (int)ncf || ((jmario- nci +1)*wh >= x)) {
+        MapLoaderNextRight(); //randam urmatoarea parte din harta
+        std::cout << "AM MUTAT LA DREAPTA" << '\n';
+        std::cout << ncf << '\n';
+    }
+    if (jmario < (int)nci && jmario > 0) {
+        MapLoaderPrevLeft(); //randam o parte anterioara a hartii
+        std::cout << "AM MUTAT LA STANGA" << '\n';
+    }
     mover = 0;
 	if (power != 0) power--;
     if(invincibilityframes!=0) invincibilityframes--;

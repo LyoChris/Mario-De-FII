@@ -308,3 +308,46 @@ void MapReseter() {
     coino = 0;
     lifo = 0;
 }
+
+void saveData(char* strArray[], int intValue) {
+    std::ofstream outfile("CUSTOMLEVELS.txt");
+
+    if (!outfile.is_open()) {
+        std::cerr << "Error opening file for saving!" << std::endl;
+        return;
+    }
+
+    outfile << intValue << '\n';
+
+    for (int i = 0; i < intValue; i++) {
+        outfile << strArray[i] << '\n';  // Write each string in the array
+    }
+
+    outfile.close();
+}
+
+// Function to load the int value and the char* array from a file
+void loadData(char* strArray[], int& intValue) {
+    std::ifstream infile("CUSTOMLEVELS.txt");
+    int x;
+    infile >> x;
+    intValue = x;
+	for (int i = 0;i < intValue;i++) {
+        char str[50];
+		infile >> str;
+		strArray[i] = new char[strlen(str) + 1];
+	}
+    for (int i = 0;i < intValue;i++) {
+        std::cout << strArray[i]<< " ";
+    }
+}
+
+// Function to clean up dynamically allocated memory
+void cleanup(char** strArray, int* intValue) {
+    // Free dynamically allocated strings
+    for (int i = 0; strArray[i] != nullptr; ++i) {
+        delete[] strArray[i];
+    }
+    delete[] strArray;
+    delete intValue;
+}
