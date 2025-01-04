@@ -19,6 +19,7 @@ struct pirhana {
 	int reset = 0;
 	int dead = 0;
 	int mapart;
+	int pause = 0;
 };
 
 void EnemiesMoving();

@@ -1,4 +1,4 @@
-#include "graphics.h"
+﻿#include "graphics.h"
 #include <math.h>
 #include <iostream>
 #include <fstream>
@@ -11,6 +11,7 @@
 #include "Enemies.h"
 #include "Colissions.h"
 #include "Colectibles.h"
+#include "Sounds.h"
 #include "Loader.h"
 #include "Menus.h"
 #include "miniaudio.h"
@@ -28,15 +29,20 @@ struct spawnpoint {
 extern int CUSTOM_LEVEL_ITEMS;
 extern char* customLevelText[10];
 
-int hartaloader[20][1000] = { 0 }, nr=0, edit = 1, mapi = 0, mapj = 1, selecpoz[14] = { 1,0,3,4,12,13,14,8,7,2,5,9,11,6 }, iselec = 0, bkselect = 1, panelnr = 0, ncmax = 0, jpole = -1, ipole = -1;
+extern ma_engine engine;
+extern ma_sound plinc, incplace, mapediRO, mapediEN, blselecRO, blselecEN, BackGroundMusic;
+
+int hartaloader[20][1000] = { 0 }, nr=0, edit = 1, mapi = 0, mapj = 1, selecpoz[15] = { 1,0,3,4,12,13,14,131,141,8,7,2,5,9,11}, iselec = 0, bkselect = 1, panelnr = 0, ncmax = 0, jpole = -1, ipole = -1;
 float nwh, ncimap=0, ncfmap;
+int SplitMenuItems = 1;
 
 extern void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goomba_walking_2, * mario_climbing_down_1, * mario_climbing_down_2, * mario_climbing_up_1,
 * mario_climbing_up_2, * mario_idle_left, * mario_idle_right, * mario_jump_1, * mario_left_run_1, * mario_left_run_2, * mario_left_run_3, * mario_right_run_1,
 * mario_right_run_2, * mario_right_run_3, * mario_vine, * mario_vine_top, * skyblock, * lucky_block_used, * one_up, * flagpolep, * flagpolemapedit, * pipehead, * pipebody, * pipeheadpir;
 void* brickblockmap, * skyblockmap, * mario_vinemap, * mario_vine_topmap, * lucky_blockmap, * mario_coinmap, * mario_idle_rightmap, * one_upmap, * flagpolepmap, * gombamap,
 * pipeheadmap, * pipebodymap, * pipeheadpirmap, * brickblockmono, * skyblockmono, * mario_vinemono, * mario_vine_topmono, * lucky_blockmono, * mario_coinmono,
-* mario_idle_rightmono, * one_upmono, * flagpolepmono, * gombamono, * pipeheadmono, * pipebodymono, * pipeheadpirmono, * flagpolemapeditmono, * flagpolemapeditp;
+* mario_idle_rightmono, * one_upmono, * flagpolepmono, * gombamono, * pipeheadmono, * pipebodymono, * pipeheadpirmono, * flagpolemapeditmono, * flagpolemapeditp,
+* Rpipeheadpirmono, * Rpipeheadmono, * Rpipeheadpir, * Rpipehead, * Rpipeheadpirmap, * Rpipeheadmap;
 
 
 void PutMovingImage(int i, int j) {
@@ -66,6 +72,10 @@ void PutMovingImage(int i, int j) {
 		putimage((j - ncimap + 1) * nwh, (i + 1) * nwh, one_upmap, COPY_PUT);
 	if (hartaloader[i][j] == 11)
 		putimage((j - ncimap + 1) * nwh, (i + 1) * nwh, flagpolemapeditp, COPY_PUT);
+	if (hartaloader[i][j] == 141)
+		putimage((j - ncimap + 1) * nwh, (i + 1) * nwh, Rpipeheadpirmap, COPY_PUT);
+	if (hartaloader[i][j] == 131)
+		putimage((j - ncimap + 1) * nwh, (i + 1) * nwh, Rpipeheadmap, COPY_PUT);
 }
 
 void PutMapEditor(int i, int j, int block) {
@@ -95,42 +105,56 @@ void PutMapEditor(int i, int j, int block) {
 		putimage((j - ncimap + 1) * nwh, (i + 1) * nwh, one_upmap, COPY_PUT);
 	if (block == 11)
 		putimage((j - ncimap + 1) * nwh, (i + 1) * nwh, flagpolemapeditp, COPY_PUT);
+	if (block == 141) 
+		putimage((j - ncimap + 1) * nwh, (i + 1) * nwh, Rpipeheadpirmap, COPY_PUT);
+	if(block == 131)
+		putimage((j - ncimap + 1) * nwh, (i + 1) * nwh, Rpipeheadmap, COPY_PUT);
 }
 
 void SelectorImageMono(int i){
-	if (iselec == 0) putimage((1 + 0) * wh, 17 * wh, brickblockmono, COPY_PUT);
-	if (iselec == 1) putimage((1 + 1.5) * wh, 17 * wh, skyblockmono, COPY_PUT);
-	if (iselec == 2)putimage((1 + 3.0) * wh, 17 * wh, mario_vinemono, COPY_PUT);
-	if (iselec == 3)putimage((1 + 4.5) * wh, 17 * wh, mario_vine_topmono, COPY_PUT);
-	if (iselec == 4)putimage((1 + 6.0) * wh, 17 * wh, pipebodymono, COPY_PUT); //placeholder pt pipe body
-	if (iselec == 5)putimage((1 + 7.5) * wh, 17 * wh, pipeheadpirmono, COPY_PUT); //placeholder pt pirhana
-	if (iselec == 6)putimage((1 + 9.0) * wh, 17 * wh, pipeheadmono, COPY_PUT); //placeholder pt pipe head
-	if (iselec == 7)putimage((1 + 10.5) * wh, 17 * wh, lucky_blockmono, COPY_PUT);
-	if (iselec == 8)putimage((1 + 12.0) * wh, 17 * wh, mario_coinmono, COPY_PUT);
-	if (iselec == 9)putimage((1 + 13.5) * wh, 17 * wh, one_upmono, COPY_PUT);
-	if (iselec == 10)putimage((1 + 15.0) * wh, 17 * wh, gombamono, COPY_PUT);
-	if (iselec == 11)putimage((1 + 16.5) * wh, 17 * wh, mario_idle_rightmono, COPY_PUT);
-	if (iselec == 12)putimage((1 + 18.0) * wh, 17 * wh, flagpolemapeditmono, COPY_PUT);
+	if (iselec == 0) putimage((1 + iselec * 1.5) * wh, 17 * wh, brickblockmono, COPY_PUT);
+	if (iselec == 1) putimage((1 + iselec * 1.5) * wh, 17 * wh, skyblockmono, COPY_PUT);
+	if (iselec == 2)putimage((1 + iselec * 1.5) * wh, 17 * wh, mario_vinemono, COPY_PUT);
+	if (iselec == 3)putimage((1 + iselec * 1.5) * wh, 17 * wh, mario_vine_topmono, COPY_PUT);
+	if (iselec == 4)putimage((1 + iselec * 1.5) * wh, 17 * wh, pipebodymono, COPY_PUT); //placeholder pt pipe body
+	if (iselec == 5)putimage((1 + iselec*1.5) * wh, 17 * wh, pipeheadpirmono, COPY_PUT); //placeholder pt pirhana
+	if (iselec == 6)putimage((1 + iselec*1.5) * wh, 17 * wh, pipeheadmono, COPY_PUT); //placeholder pt pipe head
+	if (iselec == 7)putimage((1 + iselec * 1.5) * wh, 17 * wh, Rpipeheadmono, COPY_PUT);
+	if (iselec == 8)putimage((1 + iselec * 1.5) * wh, 17 * wh, Rpipeheadpirmono, COPY_PUT);
+	if (iselec == 9)putimage((1 + iselec * 1.5) * wh, 17 * wh, lucky_blockmono, COPY_PUT);
+	if (iselec == 10)putimage((1 + iselec * 1.5) * wh, 17 * wh, mario_coinmono, COPY_PUT);
+	if (iselec == 11)putimage((1 + iselec * 1.5) * wh, 17 * wh, one_upmono, COPY_PUT);
+	if (iselec == 12)putimage((1 + iselec * 1.5) * wh, 17 * wh, gombamono, COPY_PUT);
+	if (iselec == 13)putimage((1 + iselec * 1.5) * wh, 17 * wh, mario_idle_rightmono, COPY_PUT);
+	if (iselec == 14)putimage((1 + iselec * 1.5) * wh, 17 * wh, flagpolemapeditmono, COPY_PUT);
 }
 
 void SelectorImage(int i) {
-	if (iselec == 0) putimage((1 + 0) * wh, 17 * wh, brickblock, COPY_PUT);
-	if (iselec == 1) putimage((1 + 1.5) * wh, 17 * wh, skyblock, COPY_PUT);
-	if (iselec == 2)putimage((1 + 3.0) * wh, 17 * wh, mario_vine, COPY_PUT);
-	if (iselec == 3)putimage((1 + 4.5) * wh, 17 * wh, mario_vine_top, COPY_PUT);
-	if (iselec == 4)putimage((1 + 6.0) * wh, 17 * wh, pipebody, COPY_PUT); //placeholder pt pipe body
-	if (iselec == 5)putimage((1 + 7.5) * wh, 17 * wh, pipeheadpir, COPY_PUT); //placeholder pt pirhana
-	if (iselec == 6)putimage((1 + 9.0) * wh, 17 * wh, pipehead, COPY_PUT); //placeholder pt pipe head
-	if (iselec == 7)putimage((1 + 10.5) * wh, 17 * wh, lucky_block, COPY_PUT);
-	if (iselec == 8)putimage((1 + 12.0) * wh, 17 * wh, mario_coin, COPY_PUT);
-	if (iselec == 9)putimage((1 + 13.5) * wh, 17 * wh, one_up, COPY_PUT);
-	if (iselec == 10)putimage((1 + 15.0) * wh, 17 * wh, goomba_walking_1, COPY_PUT);
-	if (iselec == 11)putimage((1 + 16.5) * wh, 17 * wh, mario_idle_right, COPY_PUT);
-	if (iselec == 11)putimage((1 + 18.0) * wh, 17 * wh, flagpolemapedit, COPY_PUT);
+	if (iselec == 0) putimage((1 + iselec * 1.5) * wh, 17 * wh, brickblock, COPY_PUT);
+	if (iselec == 1) putimage((1 + iselec*1.5) * wh, 17 * wh, skyblock, COPY_PUT);
+	if (iselec == 2)putimage((1 + iselec * 1.5) * wh, 17 * wh, mario_vine, COPY_PUT);
+	if (iselec == 3)putimage((1 + iselec * 1.5) * wh, 17 * wh, mario_vine_top, COPY_PUT);
+	if (iselec == 4)putimage((1 + iselec * 1.5) * wh, 17 * wh, pipebody, COPY_PUT); //placeholder pt pipe body
+	if (iselec == 5)putimage((1 + iselec * 1.5) * wh, 17 * wh, pipeheadpir, COPY_PUT); //placeholder pt pirhana
+	if (iselec == 6)putimage((1 + iselec * 1.5) * wh, 17 * wh, pipehead, COPY_PUT); //placeholder pt pipe head
+	if (iselec == 7)putimage((1 + iselec * 1.5) * wh, 17 * wh, Rpipehead, COPY_PUT);
+	if (iselec == 8)putimage((1 + iselec * 1.5) * wh, 17 * wh, Rpipeheadpir, COPY_PUT);
+
+
+	if (iselec == 9)putimage((1 + iselec * 1.5) * wh, 17 * wh, lucky_block, COPY_PUT);
+	if (iselec == 10)putimage((1 + iselec * 1.5) * wh, 17 * wh, mario_coin, COPY_PUT);
+	if (iselec == 11)putimage((1 + iselec * 1.5) * wh, 17 * wh, one_up, COPY_PUT);
+	if (iselec == 12)putimage((1 + iselec * 1.5) * wh, 17 * wh, goomba_walking_1, COPY_PUT);
+	if (iselec == 13)putimage((1 + iselec * 1.5) * wh, 17 * wh, mario_idle_right, COPY_PUT);
+	if (iselec == 14)putimage((1 + iselec * 1.5) * wh, 17 * wh, flagpolemapedit, COPY_PUT);
 }
 
 void MapPaneler() {
+	setvisualpage(0);
+	setactivepage(0);
+	setbkcolor(BLACK);
 	cleardevice();
+	setbkcolor(BLACK);
 
 	int lastColumnX = 0; // To track the x-coordinate of the last column
 
@@ -150,150 +174,192 @@ void MapPaneler() {
 	int menuStartX = (lastColumnX + 4) * blockWidth + (blockWidth / 10); // One padding space to the right of the last column
 
 	// Place other game elements
-	putimage((1 + 0) * wh, 17 * wh, brickblockmono, COPY_PUT);
-	putimage((1 + 1.5) * wh, 17 * wh, skyblockmono, COPY_PUT);
-	putimage((1 + 3.0) * wh, 17 * wh, mario_vinemono, COPY_PUT);
-	putimage((1 + 4.5) * wh, 17 * wh, mario_vine_topmono, COPY_PUT);
-	putimage((1 + 6.0) * wh, 17 * wh, pipebodymono, COPY_PUT);
-	putimage((1 + 7.5) * wh, 17 * wh, pipeheadpirmono, COPY_PUT);
-	putimage((1 + 9.0) * wh, 17 * wh, pipeheadmono, COPY_PUT);
-	putimage((1 + 10.5) * wh, 17 * wh, lucky_blockmono, COPY_PUT);
-	putimage((1 + 12.0) * wh, 17 * wh, mario_coinmono, COPY_PUT);
-	putimage((1 + 13.5) * wh, 17 * wh, one_upmono, COPY_PUT);
-	putimage((1 + 15.0) * wh, 17 * wh, gombamono, COPY_PUT);
-	putimage((1 + 16.5) * wh, 17 * wh, mario_idle_rightmono, COPY_PUT);
-	putimage((1 + 18.0) * wh, 17 * wh, flagpolemapeditmono, COPY_PUT);
+	putimage((1 + 0 * 1.5) * wh, 17 * wh, brickblockmono, COPY_PUT);
+	putimage((1 + 1 * 1.5) * wh, 17 * wh, skyblockmono, COPY_PUT);
+	putimage((1 + 2 * 1.5) * wh, 17 * wh, mario_vinemono, COPY_PUT);
+	putimage((1 + 3 * 1.5) * wh, 17 * wh, mario_vine_topmono, COPY_PUT);
+	putimage((1 + 4 * 1.5) * wh, 17 * wh, pipebodymono, COPY_PUT); //placeholder pt pipe body
+	putimage((1 + 5 * 1.5) * wh, 17 * wh, pipeheadpirmono, COPY_PUT); //placeholder pt pirhana
+	putimage((1 + 6 * 1.5) * wh, 17 * wh, pipeheadmono, COPY_PUT); //placeholder pt pipe head
+	putimage((1 + 7 * 1.5) * wh, 17 * wh, Rpipeheadmono, COPY_PUT);
+	putimage((1 + 8 * 1.5) * wh, 17 * wh, Rpipeheadpirmono, COPY_PUT);
+	putimage((1 + 9 * 1.5) * wh, 17 * wh, lucky_blockmono, COPY_PUT);
+	putimage((1 + 10 * 1.5) * wh, 17 * wh, mario_coinmono, COPY_PUT);
+	putimage((1 + 11 * 1.5) * wh, 17 * wh, one_upmono, COPY_PUT);
+	putimage((1 + 12 * 1.5) * wh, 17 * wh, gombamono, COPY_PUT);
+	putimage((1 + 13 * 1.5) * wh, 17 * wh, mario_idle_rightmono, COPY_PUT);
+	putimage((1 + 14 * 1.5) * wh, 17 * wh, flagpolemapeditmono, COPY_PUT);
 
+	SelectorImage(iselec);
 	// Menu parameters
 	int winHeight = getmaxy();
-	int padding = blockWidth / 5;        // Padding between menu elements
-	int elementHeight = winHeight / 15; // Scalable element height
-	int rectWidth = elementHeight;      // Rectangle width matches height
-	int textSize = elementHeight / 12;  // Scalable font size
+	int padding = blockWidth / 5;
+	int elementHeight = winHeight / 15;
+	int rectWidth = elementHeight;
+	int textSize = elementHeight / 12;
 
-	int baseX = menuStartX;              // Base X position for menu
-	int baseY = padding * 6;             // Base Y position for menu
+	int baseX = menuStartX;
+	int baseY = padding * 6;
 
-	cout << "baseX" << ' ' << baseX << '\n';
-	// Menu items and their keys
-	char* menuItems[5] = { "SAVE MAP", "LOAD MAP", "PREV PANEL", "NEXT PANEL", "BACK" };
-	char keys[5] = { 'M', 'N', 'J', 'L','B' };
+	char* menuItemsRO[5] = { "SALVEAZA HARTA", "INCARCA HARTA", "PANOUL ANTERIOR", "PANOUL URMATOR", "INAPOI" };
+	char* menuItemsEN[5] = { "SAVE MAP", "LOAD MAP", "PREV PANEL", "NEXT PANEL", "BACK" };
+	char keys[5] = { 'M', 'N', 'J', 'L', 'B' };
 
-	settextstyle(SANS_SERIF_FONT, HORIZ_DIR, textSize); // Set scalable font
+	settextstyle(SANS_SERIF_FONT, HORIZ_DIR, textSize);
 
 	// Draw the menu
 	for (int i = 0; i < 5; i++) {
-		int rectY = baseY + i * (elementHeight + 2 * padding); // Rectangle Y-coordinate
-		cout << 'a';
+		int rectY = baseY + i * (elementHeight + 2 * padding);
+
 		// Draw key rectangle
 		rectangle(baseX, rectY, baseX + rectWidth, rectY + elementHeight);
 
 		// Center the key within the rectangle
 		settextjustify(CENTER_TEXT, CENTER_TEXT);
-		char key[2] = { keys[i], '\0' }; // Convert char to string
+		char key[2] = { keys[i], '\0' };
 		int keyCenterX = baseX + rectWidth / 2;
 		int keyCenterY = rectY + elementHeight / 1.5;
 		outtextxy(keyCenterX, keyCenterY, key);
 
-		// Align menu text vertically and horizontally with the key
-		settextjustify(LEFT_TEXT, CENTER_TEXT);
-		outtextxy(baseX + rectWidth + padding, keyCenterY, menuItems[i]);
+		// Align menu text
+		if (SplitMenuItems == 1 && i < 4) { // Apply split layout for first 4 menu items
+			char temp[50];
+			strncpy(temp, menuItemsRO[i], sizeof(temp) - 1); // Copy the string to a writable buffer
+			temp[sizeof(temp) - 1] = '\0'; // Ensure null termination
+
+			// Adjust split text starting position to align with the top of the rectangle
+			int splitY = rectY; // Start just below the rectangle top edge
+			char* word = strtok(temp, " ");
+			while (word != nullptr) {
+				settextjustify(LEFT_TEXT, TOP_TEXT);
+				outtextxy(baseX + rectWidth + padding, splitY, word);
+				splitY += textSize * 3 + 3 * padding; // Adjust spacing for each word
+				word = strtok(nullptr, " ");
+			}
+		}
+		else {
+			settextjustify(LEFT_TEXT, CENTER_TEXT);
+			outtextxy(baseX + rectWidth + padding, keyCenterY, menuItemsEN[i]);
+		}
 	}
 
 	// Draw panel controls below the matrix
-	int panelTextY = nl * (blockWidth + 2); // Y-coordinate for panel control text
-	int matrixEndX = (lastColumnX + 1) * blockWidth; // X-coordinate of the last column
+	int panelTextY = nl * (blockWidth + 2);
+	int matrixEndX = (lastColumnX + 1) * blockWidth;
 
 	// Current Panel
-	int currentCenterX = (matrixEndX - blockWidth) / 3; // Center for "CURRENT PANEL"
+	int currentCenterX = (matrixEndX - blockWidth) / 3;
 	char currentPanelText[20];
-	sprintf(currentPanelText, "CURRENT PANEL: %d", panelnr); // Replace '1' with the current panel number
+	if (SplitMenuItems == 1)
+		sprintf(currentPanelText, "PANOUL CURENT: %d", panelnr);
+	else
+		sprintf(currentPanelText, "CURRENT PANEL: %d", panelnr);
 	outtextxy(currentCenterX, panelTextY + elementHeight / 2, currentPanelText);
 
 }
 
-void InitialDrawing() {
+void InitialDrawing() { // Add a parameter for enabling split menu items
 	cleardevice();
-	memset(hartaloader, 0, sizeof(hartaloader));
 	ncimap = 0;
 	ncfmap = ncf;
 	panelnr = 0;
 
-	int lastColumnX = 0; // To track the x-coordinate of the last column
+	int lastColumnX = 0;
 
 	// Draw the matrix
 	for (int i = 0; i < nl; i += 1) {
 		for (int j = (int)ncimap; j < ncfmap; j += 1) {
 			cout << i << " " << j << endl;
 			PutMovingImage(i, j);
-			lastColumnX = j; // Keep updating to get the last column index
+			lastColumnX = j;
 		}
 	}
 
 	// Compute the x-coordinate of the last column's right edge
-	int blockWidth = nwh; // Assuming 'wh' is the width of a single block
-	int menuStartX = (lastColumnX + 4) * blockWidth + (blockWidth / 10); // One padding space to the right of the last column
+	int blockWidth = nwh;
+	int menuStartX = (lastColumnX + 4) * blockWidth + (blockWidth / 10);
 
 	// Place other game elements
-	putimage((1 + 0) * wh, 17 * wh, brickblockmono, COPY_PUT);
-	putimage((1 + 1.5) * wh, 17 * wh, skyblockmono, COPY_PUT);
-	putimage((1 + 3.0) * wh, 17 * wh, mario_vinemono, COPY_PUT);
-	putimage((1 + 4.5) * wh, 17 * wh, mario_vine_topmono, COPY_PUT);
-	putimage((1 + 6.0) * wh, 17 * wh, pipebodymono, COPY_PUT);
-	putimage((1 + 7.5) * wh, 17 * wh, pipeheadpirmono, COPY_PUT);
-	putimage((1 + 9.0) * wh, 17 * wh, pipeheadmono, COPY_PUT);
-	putimage((1 + 10.5) * wh, 17 * wh, lucky_blockmono, COPY_PUT);
-	putimage((1 + 12.0) * wh, 17 * wh, mario_coinmono, COPY_PUT);
-	putimage((1 + 13.5) * wh, 17 * wh, one_upmono, COPY_PUT);
-	putimage((1 + 15.0) * wh, 17 * wh, gombamono, COPY_PUT);
-	putimage((1 + 16.5) * wh, 17 * wh, mario_idle_rightmono, COPY_PUT);
-	putimage((1 + 18.0) * wh, 17 * wh, flagpolemapeditmono, COPY_PUT);
+	putimage((1 + 0 * 1.5) * wh, 17 * wh, brickblock, COPY_PUT);
+	putimage((1 + 1 * 1.5) * wh, 17 * wh, skyblockmono, COPY_PUT);
+	putimage((1 + 2 * 1.5) * wh, 17 * wh, mario_vinemono, COPY_PUT);
+	putimage((1 + 3 * 1.5) * wh, 17 * wh, mario_vine_topmono, COPY_PUT);
+	putimage((1 + 4 * 1.5) * wh, 17 * wh, pipebodymono, COPY_PUT); //placeholder pt pipe body
+	putimage((1 + 5 * 1.5) * wh, 17 * wh, pipeheadpirmono, COPY_PUT); //placeholder pt pirhana
+	putimage((1 + 6 * 1.5) * wh, 17 * wh, pipeheadmono, COPY_PUT); //placeholder pt pipe head
+	putimage((1 + 7 * 1.5) * wh, 17 * wh, Rpipeheadmono, COPY_PUT);
+	putimage((1 + 8 * 1.5) * wh, 17 * wh, Rpipeheadpirmono, COPY_PUT);
+	putimage((1 + 9 * 1.5) * wh, 17 * wh, lucky_blockmono, COPY_PUT);
+	putimage((1 + 10 * 1.5) * wh, 17 * wh, mario_coinmono, COPY_PUT);
+	putimage((1 + 11 * 1.5) * wh, 17 * wh, one_upmono, COPY_PUT);
+	putimage((1 + 12 * 1.5) * wh, 17 * wh, gombamono, COPY_PUT);
+	putimage((1 + 13 * 1.5) * wh, 17 * wh, mario_idle_rightmono, COPY_PUT);
+	putimage((1 + 14 * 1.5) * wh, 17 * wh, flagpolemapeditmono, COPY_PUT);
 
 	// Menu parameters
 	int winHeight = getmaxy();
-	int padding = blockWidth / 5;        // Padding between menu elements
-	int elementHeight = winHeight / 15; // Scalable element height
-	int rectWidth = elementHeight;      // Rectangle width matches height
-	int textSize = elementHeight / 12;  // Scalable font size
+	int padding = blockWidth / 5;
+	int elementHeight = winHeight / 15;
+	int rectWidth = elementHeight;
+	int textSize = elementHeight / 12;
 
-	int baseX = menuStartX;              // Base X position for menu
-	int baseY = padding * 6;             // Base Y position for menu
-	cout << "baseX" << ' ' << baseX << '\n';
-	// Menu items and their keys
-	char* menuItems[5] = { "SAVE MAP", "LOAD MAP", "PREV PANEL", "NEXT PANEL", "BACK"};
-	char keys[5] = { 'M', 'N', 'J', 'L','B'};
+	int baseX = menuStartX;
+	int baseY = padding * 6;
 
-	settextstyle(SANS_SERIF_FONT, HORIZ_DIR, textSize); // Set scalable font
+	char* menuItemsRO[5] = { "SALVEAZA HARTA", "INCARCA HARTA", "PANOUL ANTERIOR", "PANOUL URMATOR", "INAPOI" };
+	char* menuItemsEN[5] = { "SAVE MAP", "LOAD MAP", "PREV PANEL", "NEXT PANEL", "BACK" };
+	char keys[5] = { 'M', 'N', 'J', 'L', 'B' };
+
+	settextstyle(SANS_SERIF_FONT, HORIZ_DIR, textSize);
 
 	// Draw the menu
 	for (int i = 0; i < 5; i++) {
-		int rectY = baseY + i * (elementHeight + 2 * padding); // Rectangle Y-coordinate
+		int rectY = baseY + i * (elementHeight + 2 * padding);
 
 		// Draw key rectangle
 		rectangle(baseX, rectY, baseX + rectWidth, rectY + elementHeight);
 
 		// Center the key within the rectangle
 		settextjustify(CENTER_TEXT, CENTER_TEXT);
-		char key[2] = { keys[i], '\0' }; // Convert char to string
+		char key[2] = { keys[i], '\0' };
 		int keyCenterX = baseX + rectWidth / 2;
 		int keyCenterY = rectY + elementHeight / 1.5;
 		outtextxy(keyCenterX, keyCenterY, key);
 
-		// Align menu text vertically and horizontally with the key
-		settextjustify(LEFT_TEXT, CENTER_TEXT);
-		outtextxy(baseX + rectWidth + padding, keyCenterY, menuItems[i]);
+		// Align menu text
+		if (SplitMenuItems == 1&& i < 4) { // Apply split layout for first 4 menu items
+			char temp[50];
+			strncpy(temp, menuItemsRO[i], sizeof(temp) - 1); // Copy the string to a writable buffer
+			temp[sizeof(temp) - 1] = '\0'; // Ensure null termination
+
+			// Adjust split text starting position to align with the top of the rectangle
+			int splitY = rectY; // Start just below the rectangle top edge
+			char* word = strtok(temp, " ");
+			while (word != nullptr) {
+				settextjustify(LEFT_TEXT, TOP_TEXT);
+				outtextxy(baseX + rectWidth + padding, splitY, word);
+				splitY += textSize * 3 + 3 * padding; // Adjust spacing for each word
+				word = strtok(nullptr, " ");
+			}
+		}
+		else {
+			settextjustify(LEFT_TEXT, CENTER_TEXT);
+			outtextxy(baseX + rectWidth + padding, keyCenterY, menuItemsEN[i]);
+		}
 	}
 
 	// Draw panel controls below the matrix
-	int panelTextY = nl*(blockWidth +2); // Y-coordinate for panel control text
-	int matrixEndX = (lastColumnX + 1) * blockWidth; // X-coordinate of the last column
+	int panelTextY = nl * (blockWidth + 2);
+	int matrixEndX = (lastColumnX + 1) * blockWidth;
 
 	// Current Panel
-	int currentCenterX = (matrixEndX - blockWidth)/3; // Center for "CURRENT PANEL"
+	int currentCenterX = (matrixEndX - blockWidth) / 3;
 	char currentPanelText[20];
-	sprintf(currentPanelText, "CURRENT PANEL: %d", panelnr); // Replace '1' with the current panel number
+	if (SplitMenuItems == 1)
+		sprintf(currentPanelText, "PANOUL CURENT: %d", panelnr);
+	else
+		sprintf(currentPanelText, "CURRENT PANEL: %d", panelnr);
 	outtextxy(currentCenterX, panelTextY + elementHeight / 2, currentPanelText);
-
 }
 
 void saveMap() {
@@ -310,11 +376,22 @@ void saveMap() {
 	int fontSize = min(x / 20, y / 15); // Scale with window size
 	settextstyle(SIMPLEX_FONT, HORIZ_DIR, fontSize / 10); // Adjust text style
 
-	char prompt[] = "Enter filename to save (without externsion):";
-	int textWidth = textwidth(prompt);
-	int textHeight = textheight(prompt);
-	outtextxy((x - textWidth) / 2, (y - textHeight) / 2 - 20, prompt);
+	int textWidth, textHeight;
 
+	char promptEN[] = "Enter filename to save (without extension):";
+	char promptRO[] = "Introduceti numele fisierului de salvat (fara extensie)";
+	if (SplitMenuItems == 1) {
+		textWidth = textwidth(promptRO);
+		textHeight = textheight(promptRO);
+		outtextxy((x - textWidth) / 2, (y - textHeight) / 2 - 20, promptRO);
+	}
+	else {
+		textWidth = textwidth(promptEN);
+		textHeight = textheight(promptEN);
+		outtextxy((x - textWidth) / 2, (y - textHeight) / 2 - 20, promptEN);
+	}
+
+	// Loop to capture user input
 	while (true) {
 		ch = getch();
 
@@ -324,34 +401,66 @@ void saveMap() {
 		else if (ch == 8) { // If BACKSPACE is pressed
 			if (pos > 0) {
 				pos--;
-				filename[pos] = '\0';
-				// Clear and redraw the filename input
+				filename[pos] = '\0'; // Remove the last character
+
+				// Clear the input area before redrawing
+				int inputWidth = textwidth("W") * 50; // Approximate width for 50 characters
 				setfillstyle(SOLID_FILL, BLACK);
-				bar(50, y / 2, x - 50, y / 2 + 50); // Clear area
+				bar((x - inputWidth) / 2, y / 2 - textHeight / 2, (x + inputWidth) / 2, y / 2 + textHeight / 2);
+
+				// Redraw the updated filename
 				outtextxy((x - textwidth(filename)) / 2, y / 2, filename);
 			}
 		}
 		else if (pos < 49 && (isalnum(ch) || ch == '_')) { // Allow alphanumeric and underscore
 			filename[pos] = ch;
-			filename[pos + 1] = '\0';
 			pos++;
+			filename[pos] = '\0'; // Null-terminate the string
 
-			// Display typed filename
+			// Clear the input area before redrawing
+			int inputWidth = textwidth("W") * 50; // Approximate width for 50 characters
 			setfillstyle(SOLID_FILL, BLACK);
-			bar(50, y / 2, x - 50, y / 2 + 50); // Clear area
+			bar((x - inputWidth) / 2, y / 2 - textHeight / 2, (x + inputWidth) / 2, y / 2 + textHeight / 2);
+
+			// Redraw the updated filename
 			outtextxy((x - textwidth(filename)) / 2, y / 2, filename);
 		}
 	}
-	if (CUSTOM_LEVEL_ITEMS ==8) {
-		CUSTOM_LEVEL_ITEMS == 8;
+
+	if (CUSTOM_LEVEL_ITEMS ==9) {
+		CustomLevelsMenuReplacer(filename);
+		strcat(filename, ".txt"); // Append file extension
+
+		// Save the grid to the file
+		ofstream outfile(filename);
+		outfile << ncmax << '\n';
+		if (outfile) {
+			for (int i = 0; i < nl; i++) {
+				for (int j = 0; j < ncmax; j++) {
+					outfile << hartaloader[i][j] << " ";
+				}
+				outfile << endl;
+			}
+			outfile.close();
+		}
+		return;
 	}
 	else {
+		customLevelText[CUSTOM_LEVEL_ITEMS -1] = new char[strlen(filename) + 1];  // Allocate memory for the string
+		strcpy(customLevelText[CUSTOM_LEVEL_ITEMS - 1], filename);  // Copy the string into the allocated memory
+		if (SplitMenuItems) {
+			customLevelText[CUSTOM_LEVEL_ITEMS] = new char[strlen("INAPOI") + 1];
+			strcpy(customLevelText[CUSTOM_LEVEL_ITEMS], "INAPOI");
+		}
+		else {
+			customLevelText[CUSTOM_LEVEL_ITEMS] = new char[strlen("BACK") + 1];
+			strcpy(customLevelText[CUSTOM_LEVEL_ITEMS], "BACK");
+		}
 		CUSTOM_LEVEL_ITEMS++;
-		customLevelText[CUSTOM_LEVEL_ITEMS] = "BACK";
-		customLevelText[CUSTOM_LEVEL_ITEMS - 1] = filename;
 	}
-	
-
+	for (int i = 0;i < CUSTOM_LEVEL_ITEMS;i++) {
+		cout << customLevelText[i] << '\n';
+	}
 	strcat(filename, ".txt"); // Append file extension
 
 	// Save the grid to the file
@@ -372,8 +481,10 @@ void saveMap() {
 		outtextxy((x - textwidth("Error saving file.")) / 2, y - 7 * nwh, "Error saving6 file.");
 	}
 	delay(2000);
+	cleardevice();
 	setvisualpage(0);
 	setactivepage(0);
+	return;
 }
 
 void loadMap() {
@@ -389,11 +500,23 @@ void loadMap() {
 	int fontSize = min(x / 20, y / 15); // Scale with window size
 	settextstyle(SIMPLEX_FONT, HORIZ_DIR, fontSize / 10); // Adjust text style
 	
-	char prompt[] = "Enter filename to load (without externsion):";
-	int textWidth = textwidth(prompt);
-	int textHeight = textheight(prompt);
-	outtextxy((x - textWidth) / 2, (y - textHeight) / 2 - 20, prompt);
+	int textWidth, textHeight;
 
+	char promptEN[] = "Enter filename to load (without extension):";
+	char promptRO[] = "Introduceti numele fisierului de încarcat(fara extensie) :";
+	if (SplitMenuItems == 1) {
+		textWidth = textwidth(promptRO);
+		textHeight = textheight(promptRO);
+		outtextxy((x - textWidth) / 2, (y - textHeight) / 2 - 20, promptRO);
+	}
+	else {
+		textWidth = textwidth(promptEN);
+		textHeight = textheight(promptEN);
+		outtextxy((x - textWidth) / 2, (y - textHeight) / 2 - 20, promptEN);
+	}
+	
+
+	// Loop to capture user input
 	while (true) {
 		ch = getch();
 
@@ -403,22 +526,28 @@ void loadMap() {
 		else if (ch == 8) { // If BACKSPACE is pressed
 			if (pos > 0) {
 				pos--;
-				filename[pos] = '\0';
+				filename[pos] = '\0'; // Remove the last character
 
-				// Clear and redraw the filename input
+				// Clear the input area before redrawing
+				int inputWidth = textwidth("W") * 50; // Approximate width for 50 characters
 				setfillstyle(SOLID_FILL, BLACK);
-				bar(50, y / 2, x - 50, y / 2 + 50); // Clear area
+				bar((x - inputWidth) / 2, y / 2 - textHeight / 2, (x + inputWidth) / 2, y / 2 + textHeight / 2);
+
+				// Redraw the updated filename
 				outtextxy((x - textwidth(filename)) / 2, y / 2, filename);
 			}
 		}
 		else if (pos < 49 && (isalnum(ch) || ch == '_')) { // Allow alphanumeric and underscore
 			filename[pos] = ch;
-			filename[pos + 1] = '\0';
 			pos++;
+			filename[pos] = '\0'; // Null-terminate the string
 
-			// Display typed filename
+			// Clear the input area before redrawing
+			int inputWidth = textwidth("W") * 50; // Approximate width for 50 characters
 			setfillstyle(SOLID_FILL, BLACK);
-			bar(50, y / 2, x - 50, y / 2 + 50); // Clear area
+			bar((x - inputWidth) / 2, y / 2 - textHeight / 2, (x + inputWidth) / 2, y / 2 + textHeight / 2);
+
+			// Redraw the updated filename
 			outtextxy((x - textwidth(filename)) / 2, y / 2, filename);
 		}
 	}
@@ -427,6 +556,7 @@ void loadMap() {
 
 	// Save the grid to the file
 	ifstream infile(filename);
+	memset(hartaloader, 0, sizeof(hartaloader));
 	infile >> ncmax;
 	if (infile) {
 		for (int i = 0; i < nl; i++) {
@@ -441,6 +571,7 @@ void loadMap() {
 		setcolor(RED);
 		outtextxy((x - textwidth("Error loading file.")) / 2, y - 7*nwh, "Error loading file.");
 	}
+	setcolor(WHITE);
 	delay(2000);
 	cleardevice();
 	setactivepage(0);
@@ -449,23 +580,67 @@ void loadMap() {
 }
 
 void MapEditorLevels() {
+	if (!ma_sound_is_playing(&BackGroundMusic)) ma_sound_start(&BackGroundMusic);
+	setvisualpage(0);
+	setactivepage(0);
 	nwh = 0.7 * wh;
 	ncfmap = nc1;
+	memset(hartaloader, 0, sizeof(hartaloader));
 	InitialDrawing();
 	cout << nc1 << endl;
 	cout << ncimap << " " << ncfmap << endl;
 	cout << mapi << " " << mapj << endl;
+
 	while (true) {
+		if (!ma_sound_is_playing(&BackGroundMusic)) ma_sound_start(&BackGroundMusic);
 		PutMovingImage(mapi, mapj);
 		PutMapEditor(mapi, mapj, bkselect);
 		SelectorImage(iselec);
 		cout << mapi << mapj << '\n';
 		char t = getch();
-		if (t == 'm') saveMap();
+		if (t == 'm') {
+			saveMap();
+		}
 		if (t == 'n') loadMap();
-		if (t == 'c' && edit == 0) edit = 1;
+		if (t == 'c' && edit == 0) {
+			edit = 1;
+			if (SplitMenuItems == 1) {
+				ma_sound_stop(&blselecRO);
+				ma_sound_seek_to_pcm_frame(&blselecRO, 0);
+				ma_sound_stop(&mapediRO);
+				ma_sound_seek_to_pcm_frame(&mapediRO, 0);
+				ma_sound_start(&mapediRO);
+				delay(10);
+			}
+			else {
+				ma_sound_stop(&blselecEN);
+				ma_sound_seek_to_pcm_frame(&blselecEN, 0);
+				ma_sound_stop(&mapediEN);
+				ma_sound_seek_to_pcm_frame(&mapediEN, 0);
+				ma_sound_start(&mapediEN);
+				delay(10);
+			}
+		}
 		else {
-			if(t=='c') edit = 0;
+			if (t == 'c') {
+				edit = 0;
+				if (SplitMenuItems == 1) {
+					ma_sound_stop(&mapediRO);
+					ma_sound_seek_to_pcm_frame(&mapediRO, 0);
+					ma_sound_stop(&blselecRO);
+					ma_sound_seek_to_pcm_frame(&blselecRO, 0);
+					ma_sound_start(&blselecRO);
+					delay(10);
+				}
+				else {
+					ma_sound_stop(&mapediEN);
+					ma_sound_seek_to_pcm_frame(&mapediEN, 0);
+					ma_sound_stop(&blselecEN);
+					ma_sound_seek_to_pcm_frame(&blselecEN, 0);
+					ma_sound_start(&blselecEN);
+					delay(10);
+				}
+			}
 		}
 		if (edit == 1) {
 			cout << "Mapa este selectata pentru editare" << '\n';
@@ -506,9 +681,26 @@ void MapEditorLevels() {
 						ipole = mapi;
 						jpole = mapj;
 					}
-					
 				}
-				if (bkselect != 6 && bkselect != 11) {
+				else {
+					if (bkselect == 11) {
+						if (SplitMenuItems == 1) {
+							ma_sound_stop(&mapediRO);
+							ma_sound_seek_to_pcm_frame(&mapediRO, 0);
+							ma_sound_stop(&plinc);
+							ma_sound_seek_to_pcm_frame(&plinc, 0);
+							ma_sound_start(&plinc);
+						}
+						else {
+							ma_sound_stop(&mapediEN);
+							ma_sound_seek_to_pcm_frame(&mapediEN, 0);
+							ma_sound_stop(&incplace);
+							ma_sound_seek_to_pcm_frame(&incplace, 0);
+							ma_sound_start(&incplace);
+						}
+					}
+				}
+				if (bkselect != 11) {
 					hartaloader[mapi][mapj] = bkselect;
 				}
 			}
@@ -541,7 +733,7 @@ void MapEditorLevels() {
 				iselec--;
 				SelectorImage(iselec);
 			}
-			if (t == 'd' && iselec < 13) {
+			if (t == 'd' && iselec < 16) {
 				SelectorImageMono(iselec);
 				iselec++;
 				SelectorImage(iselec);
@@ -549,11 +741,23 @@ void MapEditorLevels() {
 			if ((int)t == 32) {
 				bkselect = selecpoz[iselec];
 				cout << bkselect << '\n';
+				if (SplitMenuItems == 0) {
+					ma_sound_start(&mapediEN);
+				}
+				else {
+					ma_sound_start(&mapediRO);
+				}
 				edit = 1;
 			}
 
 		}
 		if (t == 'b') {
+			ma_sound_stop(&mapediRO);
+			ma_sound_stop(&mapediEN);
+			ma_sound_stop(&blselecRO);
+			ma_sound_stop(&blselecEN);
+			ma_sound_stop(&plinc);
+			ma_sound_stop(&incplace);
 			CustomMenu();
 		}
 	}

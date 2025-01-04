@@ -19,11 +19,13 @@ using namespace std;
 
 extern int CUSTOM_LEVEL_ITEMS;
 extern char* customLevelText[10];
+extern int x, y;
 
 
 int main() {
 	MapReaderandSetter();
 	SoundInitialisation();
+	drawLanguage(x, y);
 	loadData(customLevelText, CUSTOM_LEVEL_ITEMS);
 	//MapEditorLevels();
 	//LevelLoader();

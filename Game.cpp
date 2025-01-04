@@ -10,35 +10,38 @@
 #include "Enemies.h"
 #include "Game.h"
 #include "Sounds.h"
+#include "Loader.h"
 #include "miniaudio.h"
 #include "MapEditor.h"
 using namespace std;
 
 #define MARIO_TIME 0.05 // 80 ms
-#define ENEMY_TIME 0.2  // 200 ms
-#define FRAME_TIME 0.08 // 16 ms
+#define ENEMY_TIME 0.175  // 200 ms
+#define FRAME_TIME 0.06 // 16 ms
 
 void* playerImg1;
 
 extern ma_engine engine;
 extern ma_sound BackGroundMusic, StarTheme, DeathEffect;
 extern float wh, nc1, imario, jmario;
-extern int x, y, nl, nc, harta[30][1000], mv2, map, power;
+extern int x, y, nl, nc, harta[30][1000], mv2, map, power, timespent;
 string direction, direction1;
 int time1, okesc = 1, ok1 = 0;
-clock_t start;
+clock_t start, initpause;
 double MarioInterval = MARIO_TIME;
 double enemyInterval = ENEMY_TIME;
 double FrameInterval = FRAME_TIME;
 
 void MarioGame() {
+    MapReseter();
     MapLoader();
     clock_t lastMarioMove = clock(); //facem cate un ceas pentru inamici si Mario
     clock_t lastEnemyMove = clock();
     clock_t lastFrame = clock();
     start = clock();
-
-    int page = 0;
+    timespent = 0;
+	ma_sound_stop(&BackGroundMusic);
+	ma_sound_seek_to_pcm_frame(&BackGroundMusic, 0);
 
     do {
         setbkcolor(RGB(126, 132, 246));
@@ -46,10 +49,12 @@ void MarioGame() {
         if (power == 0) {
             if (!ma_sound_is_playing(&BackGroundMusic)) {
                 ma_sound_stop(&StarTheme);
+				ma_sound_seek_to_pcm_frame(&StarTheme, 0);
                 ma_sound_start(&BackGroundMusic);
             }
         }
         else {
+            MarioInterval = MarioInterval / 2;
             ma_sound_stop(&BackGroundMusic);
             if (!ma_sound_is_playing(&StarTheme)) {
                 ma_sound_start(&StarTheme);
@@ -58,23 +63,8 @@ void MarioGame() {
 
         clock_t now = clock();
         if ((now - lastFrame) / (double)CLOCKS_PER_SEC >= FrameInterval) {
-            /*if (tasta == 'd') {
-                mv2++;
-                cleardevice();
-                MapLoader();
-            }
-            if (tasta == 'a') {
-                mv2--;
-                cleardevice();
-                MapLoader();
-            }*/
-            // Set active page for drawing
-            //setactivepage(page);
-            //cleardevice();
-
-
             if (harta[(int)imario + 1][(int)jmario] == 0) {
-                MarioInterval = MarioInterval * 1.5;
+                MarioInterval = MarioInterval / 1.07;
                 ok1 = 1;
             }
             if ((now - lastMarioMove) / (double)CLOCKS_PER_SEC >= MarioInterval) {
@@ -86,8 +76,11 @@ void MarioGame() {
                 lastEnemyMove = now;
             }
             if (ok1 == 1) {
-                MarioInterval = MarioInterval / 1.5;
+                MarioInterval = MarioInterval / 1.07;
                 ok1 = 0;
+            }
+            if (power != 0) {
+                MarioInterval = MarioInterval * 2;
             }
             lastFrame = now;
         }

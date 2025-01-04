@@ -24,8 +24,9 @@ extern void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goom
 * mario_right_run_2, * mario_right_run_3, * mario_vine, * mario_vine_top, * skyblock, * lucky_block_used, * one_up, * flagpolep, * pipehead, * pipebody, * pirana_1, * pirana_2, * pipeheadpir,
 * brickblockmap, * skyblockmap, * mario_vinemap, * mario_vine_topmap, * mario_star, * lucky_blockmap, * mario_coinmap, * mario_idle_rightmap, * one_upmap, * flagpolepmap, * flagpolemapedit,
 * gombamap, * pipeheadmap, * pipebodymap, * pipeheadpirmap, * brickblockmono, * skyblockmono, * mario_vinemono, * mario_vine_topmono, * lucky_blockmono, * mario_coinmono,
-* mario_idle_rightmono, * one_upmono, * flagpolepmono, * gombamono, * pipeheadmono, * pipebodymono, * pipeheadpirmono, * flagpolemapeditmono, * flagpolemapeditp, 
-* mario_main_screen, * mario_levels_menu;
+* mario_idle_rightmono, * one_upmono, * flagpolepmono, * gombamono, * pipeheadmono, * pipebodymono, * pipeheadpirmono, * flagpolemapeditmono, * flagpolemapeditp,
+* mario_main_screen, * mario_levels_menu, * mario_jump_2, * Rpipeheadpirmono, * Rpipeheadmono, * Rpipeheadpir, * Rpipehead, * Rpipeheadpirmap, * Rpipeheadmap,
+* Rpirana_1, * Rpirana_2;
 
 void preloadImage(const char* filename, int width, int height, void*& buffer) {
     readimagefile(filename, 0, 0, width, height);
@@ -165,10 +166,31 @@ void AssetLoader() {
     preloadImage("pipe_head_piranaMono.gif", wh, wh, pipeheadpirmono);
     cleardevice();
     setbkcolor(RGB(126, 132, 246));
+    preloadImage("Rpipe_headMono.gif", wh, wh, Rpipeheadmono);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Rpipe_head_piranaMono.gif", wh, wh, Rpipeheadpirmono);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Rpipe_head.gif", wh, wh, Rpipehead);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Rpipe_head_pirana.gif", wh, wh, Rpipeheadpir);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
     preloadImage("FlagpolecutMono.gif", wh, wh, flagpolemapeditmono);
     cleardevice();
     setbkcolor(RGB(126, 132, 246));
     preloadImage("mario_star.gif", wh, wh, mario_star);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("mario_jump_2.gif", wh, wh, mario_jump_2);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Rpirana_1.gif", wh, wh, Rpirana_1);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Rpirana_2.gif", wh, wh, Rpirana_2);
     cleardevice();
     setbkcolor(RGB(0, 0, 0));
     preloadImage("mario_main.gif", x/3, (x / 3 * 612)/x, mario_main_screen);
@@ -222,6 +244,12 @@ void AssetLoaderMap() {
     cleardevice();
     setbkcolor(RGB(126, 132, 246));
     preloadImage("pipe_head_pirana.gif", 0.7 * wh, 0.7 * wh, pipeheadpirmap);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Rpipe_head_pirana.gif", 0.7 * wh, 0.7 * wh, Rpipeheadpirmap);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Rpipe_head.gif", 0.7 * wh, 0.7 * wh, Rpipeheadmap);
     closegraph();
 }
 
@@ -256,6 +284,7 @@ void LevelLoader() {
 }
 
 void MapReseter() {
+    memset(harta, 0, sizeof(harta));
     coinono = 0;
     lifes = 3;
     ok = 0;
@@ -290,7 +319,7 @@ void MapReseter() {
 		coins[i].icolec = 0;
 		coins[i].jcolec = 0;
 		coins[i].mapart = 0;
-		life[i].colected = 0;
+		coins[i].colected = 0;
 	}
 	for (int i = 1;i <= lifo;i++) {
 		life[i].icolec = 0;
@@ -329,18 +358,28 @@ void saveData(char* strArray[], int intValue) {
 // Function to load the int value and the char* array from a file
 void loadData(char* strArray[], int& intValue) {
     std::ifstream infile("CUSTOMLEVELS.txt");
-    int x;
-    infile >> x;
-    intValue = x;
-	for (int i = 0;i < intValue;i++) {
+
+    infile >> intValue;  // Read the integer value (number of strings)
+    infile.ignore();  // To ignore the newline character after the integer
+
+    for (int i = 0; i < intValue; i++) {
         char str[50];
-		infile >> str;
-		strArray[i] = new char[strlen(str) + 1];
-	}
-    for (int i = 0;i < intValue;i++) {
-        std::cout << strArray[i]<< " ";
+        infile.getline(str, 50);  // Read an entire line (not just one word)
+
+        strArray[i] = new char[strlen(str) + 1];  // Allocate memory for the string
+        strcpy(strArray[i], str);  // Copy the string into the allocated memory
     }
+
+	std::cout << intValue << '\n';
+    // Print the loaded data
+    for (int i = 0; i < intValue; i++) {
+        std::cout << strArray[i] << " ";
+    }
+    std::cout << std::endl;
+
+    infile.close();
 }
+
 
 // Function to clean up dynamically allocated memory
 void cleanup(char** strArray, int* intValue) {

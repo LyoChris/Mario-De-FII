@@ -25,7 +25,10 @@ void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goomba_walk
 * mario_right_run_2, * mario_right_run_3, * mario_vine, * mario_vine_top, * skyblock, * lucky_block_used, * one_up, * flagpolep, * flagpolemapedit, * pipebody,
 * mario_star, * pipehead, * pirana_1, * pirana_2, * pipeheadpir, * mariostar, * mario_climbing_down_1_star, * mario_climbing_down_2_star, * mario_climbing_up_1_star,
 * mario_climbing_up_2_star, * mario_idle_left_star, * mario_idle_right_star, * mario_jump_1_star, * mario_left_run_1_star, * mario_left_run_2_star,
-* mario_left_run_3_star, * mario_right_run_1_star, * mario_right_run_2_star, * mario_right_run_3_star, * mario_main_screen, * mario_levels_menu;
+* mario_left_run_3_star, * mario_right_run_1_star, * mario_right_run_2_star, * mario_right_run_3_star, * mario_main_screen, * mario_levels_menu, * mario_jump_2,
+* Rpirana_1, * Rpirana_2;
+
+extern void* Rpipeheadpir, * Rpipehead;
 
 extern pirhana piranav[100];
 extern colectible coins[100], life[100], starpow[100];
@@ -57,6 +60,7 @@ void MapLoader() {
             f >> harta[i][j];
         }
     }
+    f.close();
     cout << "Dimensiuni harta: " << nl << " " << nc << '\n';
     cout << "Dimensiuni tile: " << wh << " " << nc1 <<  '\n';
     levelselect = cht;
@@ -66,6 +70,7 @@ void MapLoader() {
 	cleardevice();
     setbkcolor(RGB(126, 132, 246));
 	cleardevice();
+	cout << "COINO " << coino << '\n';
     for (int i = 0; i < nl;i += 1) {
         for (int j = nci;j < ncf; j += 1) {
             if (harta[i][j] == 1)
@@ -80,25 +85,15 @@ void MapLoader() {
                 imario = i, jmario = j;
                 harta[i][j] = 0;
             }
-            if (harta[i][j] == 6) {
-                if (spawn[(int)(nci / nc1)].ibegin == 0 && spawn[(int)(nci / nc1)].jbegin == 0) {
-                    spawn[(int)(nci / nc1)].ibegin = i;
-                    spawn[(int)(nci / nc1)].jbegin = j;
-                }
-                else {
-                    spawn[(int)(nci / nc1)].jfinal = j;
-                    spawn[(int)(nci / nc1)].ifinal = i;
-
-                }
-                harta[i][j] = 0;
-            }
             if (harta[i][j] == 7) {
 					putimage(j * wh, i * wh, mario_coin, COPY_PUT);   
                     coino++;
                     coins[coino].icolec = i;
                     coins[coino].jcolec = j;
                     coins[coino].mapart = (int)(nci - nc1);
+					coins[coino].colected = 0;
                     harta[i][j] = 0;
+					cout << coins[coino].icolec << " " << coins[coino].jcolec << " " << coins[coino].mapart << '\n';
             }
             if (harta[i][j] == 15) {
 				putimage(j * wh, i * wh, mario_star, COPY_PUT);
@@ -132,18 +127,29 @@ void MapLoader() {
                 putimage(j * wh, i * wh, pipebody, COPY_PUT);
                 //bar(j * wh, i * wh, (j + 1) * wh, (i + 1) * wh); // placeholder pentru pipe body
             }
-            if(harta[i][j] == 14) {
-                putimage(j * wh, i * wh, pipehead, COPY_PUT);
-                //bar(j * wh, i * wh, (j + 1) * wh, (i + 1) * wh); // placeholder pentru pipe head without pirhana
+            if (harta[i][j] == 14) {
+                if (harta[i - 1][j] == 1) {
+                    putimage(j * wh, i * wh, Rpipehead, COPY_PUT);
+                    //bar(j * wh, i * wh, (j + 1) * wh, (i + 1) * wh); // placeholder pentru pipe head without pirhana
+                }
+                else {
+                    putimage(j * wh, i * wh, pipehead, COPY_PUT);
+                }
             }
             if (harta[i][j] == 13) {
-                putimage(j * wh, i * wh, pipehead, COPY_PUT);
-                //bar(j * wh, i * wh, (j + 0.5) * wh, (i + 1) * wh); // placeholder pentru pipe head with pirhana
                 p++;
 				piranav[p].ipinit = i;
 				piranav[p].jpinit = j;
                 piranav[p].ipirana = i;
                 piranav[p].jpirana = j;
+				if (harta[i - 1][j] == 1) {
+					piranav[p].orientation = -1;
+                    putimage(j * wh, i * wh, Rpipehead, COPY_PUT);
+				}
+                else {
+					piranav[p].orientation = 1;
+                    putimage(j * wh, i * wh, pipehead, COPY_PUT);
+                }
 				piranav[p].mapart = (int)(nci - nc1);
             }
             if (harta[i][j] == 5) {
@@ -159,6 +165,7 @@ void MapLoader() {
         }
 		putimage(0, 0, skyblock, COPY_PUT);
     }
+    cout << "COINO " << coino<<'\n';
 	setvisualpage(0);
 }
 
@@ -212,18 +219,26 @@ void MapLoaderNextRight() {
                 harta[i][j] = 0;
             }
             if (harta[i][j] == 12) {
-                bar((j - nci) * wh, i * wh, (j - nci + 1) * wh, (i + 1) * wh); // placeholder pentru pipe body
+                putimage((j - nci) * wh, i * wh, pipebody, COPY_PUT);
+                //bar(j * wh, i * wh, (j + 1) * wh, (i + 1) * wh); // placeholder pentru pipe body
             }
             if (harta[i][j] == 14) {
-                bar((j - nci) * wh, i * wh, (j - nci + 1) * wh, (i + 1) * wh); // placeholder pentru pipe head without pirhana
+                putimage((j - nci) * wh, i * wh, pipehead, COPY_PUT);
+                //bar(j * wh, i * wh, (j + 1) * wh, (i + 1) * wh); // placeholder pentru pipe head without pirhana
             }
             if (harta[i][j] == 13) {
-                bar((j - nci) * wh, i * wh, (j - nci + 1) * wh, (i + 1) * wh); // placeholder pentru pipe head with pirhana
+                putimage((j - nci) * wh, i * wh, pipehead, COPY_PUT);
                 p++;
                 piranav[p].ipinit = i;
                 piranav[p].jpinit = j;
                 piranav[p].ipirana = i;
                 piranav[p].jpirana = j;
+                if (harta[i - 1][j] == 1) {
+                    piranav[p].orientation = -1;
+                }
+                else {
+                    piranav[p].orientation = 1;
+                }
                 piranav[p].mapart = (int)(nci - nc1);
             }
             if (harta[i][j] == 7) {
@@ -233,6 +248,15 @@ void MapLoaderNextRight() {
                 coins[coino].jcolec = j;
                 coins[coino].mapart = (int)(nci - nc1);
                 harta[i][j] = 0;
+            }
+            if (harta[i][j] == 2) {
+                putimage((j - nci) * wh, i * wh, one_up, COPY_PUT);
+                lifo++;
+                life[lifo].icolec = i;
+                life[lifo].jcolec = j;
+                life[lifo].mapart = (int)(nci - nc1);
+                harta[i][j] = 0;
+
             }
             if (harta[i][j] == 15) {
 				setcolor(YELLOW);
@@ -244,11 +268,26 @@ void MapLoaderNextRight() {
                 harta[i][j] = 0;
             }
         }
+        for (int i = 1;i <= coino;i++) {
+            if (coins[i].mapart == (int)(nci - nc1) && coins[i].colected == 0) {
+                putimage((coins[i].jcolec - nci) * wh, coins[i].icolec * wh, mario_coin, COPY_PUT);
+            }
+        }
+        for (int i = 1;i <= staro;i++) {
+            if (starpow[i].mapart == (int)(nci - nc1) && starpow[i].colected == 0) {
+                putimage((starpow[i].jcolec - nci) * wh, starpow[i].icolec * wh, mario_star, COPY_PUT);
+            }
+        }
+        for (int i = 1;i <= lifo;i++) {
+            if (life[i].mapart == (int)(nci - nc1) && life[i].colected == 0) {
+                putimage((life[i].jcolec - nci) * wh, life[i].icolec * wh, one_up, COPY_PUT);
+            }
+        }
         for (int i = nl; i >imario - 1;--i) {
             for (int j = (int)jmario+1;j < ncf;++j) {
                 if (harta[i + 1][j] == 1 && harta[i][j]!=1 && okmap==1) {
                     imario = i;
-                    jmario = j;
+                    jmario = j +1;
                     okmap = 0;
                 }
 				if (okmap == 0)
@@ -266,8 +305,15 @@ void MapLoaderNextRight() {
 }
 
 void MapLoaderPrevLeft() {
-    nci = nci - nc1;
-    ncf = ncf - nc1;
+    if (ncf == nc) {
+        ncf = nci;
+        nci = nci - nc1;
+    }
+    else {
+        nci = nci - nc1;
+        ncf = ncf - nc1;
+    }
+    
     okmap = 1;
     setvisualpage(1);
     setactivepage(0);
@@ -296,6 +342,33 @@ void MapLoaderPrevLeft() {
             }
             if (harta[i][j] == 10) {
                 putimage((j-nci) * wh, i * wh, lucky_block_used, COPY_PUT);
+            }
+            if (harta[i][j] == 12) {
+                putimage((j - nci) * wh, i * wh, pipebody, COPY_PUT);
+                //bar(j * wh, i * wh, (j + 1) * wh, (i + 1) * wh); // placeholder pentru pipe body
+            }
+            if (harta[i][j] == 14) {
+                putimage((j - nci) * wh, i * wh, pipehead, COPY_PUT);
+                //bar(j * wh, i * wh, (j + 1) * wh, (i + 1) * wh); // placeholder pentru pipe head without pirhana
+            }
+            if (harta[i][j] == 13) {
+                putimage((j - nci) * wh, i * wh, pipehead, COPY_PUT);
+            }
+            
+        }
+        for (int i = 1;i <= coino;i++) {
+            if (coins[i].mapart == (int)(nci - nc1) && coins[i].colected == 0) {
+                putimage((coins[i].jcolec - nci) * wh, coins[i].icolec * wh, mario_coin, COPY_PUT);
+            }
+        }
+        for (int i = 1;i <= staro;i++) {
+            if (starpow[i].mapart == (int)(nci - nc1) && starpow[i].colected == 0) {
+                putimage((starpow[i].jcolec - nci) * wh, starpow[i].icolec * wh, mario_star, COPY_PUT);
+            }
+        }
+        for (int i = 1;i <= lifo;i++) {
+            if (life[i].mapart == (int)(nci - nc1) && life[i].colected == 0) {
+                putimage((life[i].jcolec - nci) * wh, life[i].icolec * wh, one_up, COPY_PUT);
             }
         }
         for (int i = nl; i > imario - 1;--i) {

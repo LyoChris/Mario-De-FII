@@ -14,7 +14,8 @@
 using namespace std;
 
 ma_engine engine;
-ma_sound JumpEffect, CoinEffect, ColideEffect, GombaDeadEffect, BackGroundMusic, DeathEffect, StageClear, StarTheme;
+ma_sound JumpEffect, CoinEffect, ColideEffect, GombaDeadEffect, BackGroundMusic, DeathEffect, StageClear, StarTheme, plinc, incplace, mapediRO, mapediEN, blselecRO,
+blselecEN, OneUpEffect, PauseEffect;
 
 
 void SoundInitialisation() {
@@ -70,6 +71,54 @@ void SoundInitialisation() {
     if (ma_sound_init_from_file(&engine, "StarTheme.wav", 0, NULL, NULL, &StarTheme) != MA_SUCCESS) {
         printf("Failed to load sound effect 2.\n");
         ma_sound_uninit(&StageClear);
+        ma_engine_uninit(&engine);
+        exit(0);
+    }
+    if (ma_sound_init_from_file(&engine, "plasareincorecta.wav", 0, NULL, NULL, &plinc) != MA_SUCCESS) {
+        printf("Failed to load sound effect 2.\n");
+        ma_sound_uninit(&plinc);
+        ma_engine_uninit(&engine);
+        exit(0);
+    }
+    if (ma_sound_init_from_file(&engine, "incorecplace.wav", 0, NULL, NULL, &incplace) != MA_SUCCESS) {
+        printf("Failed to load sound effect 2.\n");
+        ma_sound_uninit(&incplace);
+        ma_engine_uninit(&engine);
+        exit(0);
+    }
+    if (ma_sound_init_from_file(&engine, "mapeditRO.wav", 0, NULL, NULL, &mapediRO) != MA_SUCCESS) {
+        printf("Failed to load sound effect 2.\n");
+        ma_sound_uninit(&mapediRO);
+        ma_engine_uninit(&engine);
+        exit(0);
+    }
+    if (ma_sound_init_from_file(&engine, "mapeditEN.wav", 0, NULL, NULL, &mapediEN) != MA_SUCCESS) {
+        printf("Failed to load sound effect 2.\n");
+        ma_sound_uninit(&mapediEN);
+        ma_engine_uninit(&engine);
+        exit(0);
+    }
+    if (ma_sound_init_from_file(&engine, "blselecRO.wav", 0, NULL, NULL, &blselecRO) != MA_SUCCESS) {
+        printf("Failed to load sound effect 2.\n");
+        ma_sound_uninit(&blselecRO);
+        ma_engine_uninit(&engine);
+        exit(0);
+    }
+    if (ma_sound_init_from_file(&engine, "blselecEN.wav", 0, NULL, NULL, &blselecEN) != MA_SUCCESS) {
+        printf("Failed to load sound effect 2.\n");
+        ma_sound_uninit(&blselecEN);
+        ma_engine_uninit(&engine);
+        exit(0);
+    }
+    if (ma_sound_init_from_file(&engine, "one_up.wav", 0, NULL, NULL, &OneUpEffect) != MA_SUCCESS) {
+        printf("Failed to load sound effect 2.\n");
+        ma_sound_uninit(&OneUpEffect);
+        ma_engine_uninit(&engine);
+        exit(0);
+    }
+    if (ma_sound_init_from_file(&engine, "pause.wav", 0, NULL, NULL, &PauseEffect) != MA_SUCCESS) {
+        printf("Failed to load sound effect 2.\n");
+        ma_sound_uninit(&PauseEffect);
         ma_engine_uninit(&engine);
         exit(0);
     }
