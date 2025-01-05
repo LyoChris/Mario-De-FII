@@ -6,6 +6,7 @@ struct goompa {
 	int gstage = 1;
 	int dead = 0;
 	int hit=0;
+	int hoverg = 0;
 	int mapart;
 };
 

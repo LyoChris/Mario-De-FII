@@ -10,13 +10,15 @@
 #include "Map.h"
 #include "MapEditor.h"
 #include "Colectibles.h"
+#include "Loader.h"
 
 
 extern int coinono, lifes, ok, gdead, power, pdead, lifo, staro, coino;
-extern colectible coins[100], life[100], starpow[100];
+extern firebll fireb[9];
+extern colectible coins[100], life[100], starpow[100], fflower[100];
 extern goompa gompav[100];
 extern pirhana piranav[100];
-extern int harta[30][1000], n, p, x, y;
+extern int harta[30][1000], n, p, x, y, firo;
 extern std::string cht;
 extern float wh;
 extern void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goomba_walking_2, * mario_climbing_down_1, * mario_climbing_down_2, * mario_climbing_up_1,
@@ -26,10 +28,22 @@ extern void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goom
 * gombamap, * pipeheadmap, * pipebodymap, * pipeheadpirmap, * brickblockmono, * skyblockmono, * mario_vinemono, * mario_vine_topmono, * lucky_blockmono, * mario_coinmono,
 * mario_idle_rightmono, * one_upmono, * flagpolepmono, * gombamono, * pipeheadmono, * pipebodymono, * pipeheadpirmono, * flagpolemapeditmono, * flagpolemapeditp,
 * mario_main_screen, * mario_levels_menu, * mario_jump_2, * Rpipeheadpirmono, * Rpipeheadmono, * Rpipeheadpir, * Rpipehead, * Rpipeheadpirmap, * Rpipeheadmap,
-* Rpirana_1, * Rpirana_2;
+* Rpirana_1, * Rpirana_2, * Mmario_climbing_down_1, * Mmario_climbing_down_2, * Mmario_climbing_up_1,
+* Mmario_climbing_up_2, * Mmario_idle_left, * Mmario_idle_right, * Mmario_jump_1, * Mmario_left_run_1, * Mmario_left_run_2, * Mmario_left_run_3, * Mmario_right_run_1,
+* Mmario_right_run_2, * Mmario_right_run_3, * Mmario_jump_2, * MFmario_climbing_down_1, * MFmario_climbing_down_2, * MFmario_climbing_up_1,
+* MFmario_climbing_up_2, * MFmario_idle_left, * MFmario_idle_right, * MFmario_jump_1, * MFmario_left_run_1, * MFmario_left_run_2, * MFmario_left_run_3, * MFmario_right_run_1,
+* MFmario_right_run_2, * MFmario_right_run_3, * MFmario_jump_2, * Fmario_climbing_down_1, * Fmario_climbing_down_2, * Fmario_climbing_up_1,
+* Fmario_climbing_up_2, * Fmario_idle_left, * Fmario_idle_right, * Fmario_jump_1, * Fmario_left_run_1, * Fmario_left_run_2, * Fmario_left_run_3, * Fmario_right_run_1,
+* Fmario_right_run_2, * Fmario_right_run_3, * Fmario_jump_2, * fireball_1, * fireball_2, * fire_flower;
 
 void preloadImage(const char* filename, int width, int height, void*& buffer) {
     readimagefile(filename, 0, 0, width, height);
+    buffer = malloc(imagesize(0, 0, width, height));
+    getimage(0, 0, width, height, buffer);
+}
+
+void preloadImage2(const char* filename, int width, int height, void*& buffer) {
+    readimagefile(filename, 0.30*wh, 0.30*wh, 0.70*width, 0.70*height);
     buffer = malloc(imagesize(0, 0, width, height));
     getimage(0, 0, width, height, buffer);
 }
@@ -101,6 +115,134 @@ void AssetLoader() {
     cleardevice();
     setbkcolor(RGB(126, 132, 246));
     preloadImage("mario_right_run_3.gif", wh, wh, mario_right_run_3);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Mmario_climbing_down_1.gif", wh, wh, Mmario_climbing_down_1);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Mmario_climbing_down_2.gif", wh, wh, Mmario_climbing_down_2);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Mmario_climbing_up_1.gif", wh, wh, Mmario_climbing_up_1);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Mmario_climbing_up_2.gif", wh, wh, Mmario_climbing_up_2);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Mmario_idle_left.gif", wh, wh, Mmario_idle_left);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Mmario_idle_right.gif", wh, wh, Mmario_idle_right);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Mmario_jump_1.gif", wh, wh, Mmario_jump_1);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Mmario_jump_2.gif", wh, wh, Mmario_jump_2);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Mmario_left_run_1.gif", wh, wh, Mmario_left_run_1);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Mmario_left_run_2.gif", wh, wh, Mmario_left_run_2);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Mmario_left_run_3.gif", wh, wh, Mmario_left_run_3);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Mmario_right_run_1.gif", wh, wh, Mmario_right_run_1);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Mmario_right_run_2.gif", wh, wh, Mmario_right_run_2);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Mmario_right_run_3.gif", wh, wh, Mmario_right_run_3);
+
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("MFmario_climbing_down_1.gif", wh, wh, MFmario_climbing_down_1);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("MFmario_climbing_down_2.gif", wh, wh, MFmario_climbing_down_2);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("MFmario_climbing_up_1.gif", wh, wh, MFmario_climbing_up_1);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("MFmario_climbing_up_2.gif", wh, wh, MFmario_climbing_up_2);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("MFmario_idle_left.gif", wh, wh, MFmario_idle_left);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("MFmario_idle_right.gif", wh, wh, MFmario_idle_right);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("MFmario_jump_1.gif", wh, wh, MFmario_jump_1);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("MFmario_jump_2.gif", wh, wh, MFmario_jump_2);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("MFmario_left_run_1.gif", wh, wh, MFmario_left_run_1);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("MFmario_left_run_2.gif", wh, wh, MFmario_left_run_2);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("MFmario_left_run_3.gif", wh, wh, MFmario_left_run_3);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("MFmario_right_run_1.gif", wh, wh, MFmario_right_run_1);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("MFmario_right_run_2.gif", wh, wh, MFmario_right_run_2);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("MFmario_right_run_3.gif", wh, wh, MFmario_right_run_3);
+
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Fmario_climbing_down_1.gif", wh, wh, Fmario_climbing_down_1);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Fmario_climbing_down_2.gif", wh, wh, Fmario_climbing_down_2);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Fmario_climbing_up_1.gif", wh, wh, Fmario_climbing_up_1);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Fmario_climbing_up_2.gif", wh, wh, Fmario_climbing_up_2);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Fmario_idle_left.gif", wh, wh, Fmario_idle_left);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Fmario_idle_right.gif", wh, wh, Fmario_idle_right);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Fmario_jump_1.gif", wh, wh, Fmario_jump_1);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Fmario_jump_2.gif", wh, wh, Fmario_jump_2);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Fmario_left_run_1.gif", wh, wh, Fmario_left_run_1);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Fmario_left_run_2.gif", wh, wh, Fmario_left_run_2);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Fmario_left_run_3.gif", wh, wh, Fmario_left_run_3);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Fmario_right_run_1.gif", wh, wh, Fmario_right_run_1);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Fmario_right_run_2.gif", wh, wh, Fmario_right_run_2);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("Fmario_right_run_3.gif", wh, wh, Fmario_right_run_3);
+
     cleardevice();
     setbkcolor(RGB(126, 132, 246));
     preloadImage("lucky_block_used.jpg", wh, wh, lucky_block_used);
@@ -191,6 +333,16 @@ void AssetLoader() {
     cleardevice();
     setbkcolor(RGB(126, 132, 246));
     preloadImage("Rpirana_2.gif", wh, wh, Rpirana_2);
+
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage("fire.gif", wh, wh, fire_flower);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage2("fireball_1.gif", wh, wh, fireball_1);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage2("fireball_2.gif", wh, wh, fireball_2);
     cleardevice();
     setbkcolor(RGB(0, 0, 0));
     preloadImage("mario_main.gif", x/3, (x / 3 * 612)/x, mario_main_screen);
@@ -263,26 +415,6 @@ int randnumb(int a, int b) {
     return randomInt;
 }
 
-void LevelLoader() {
-    int arg;
-	std::cout << "Choose a level: ";
-    std::cin >> arg;
-    switch (arg) {
-    case 1:
-        cht = "level1.txt"; break;
-	case 2:
-		cht = "level2.txt"; break;
-	case 3:
-		cht = "level3.txt"; break;
-	case 4:
-		cht = "level4.txt"; break;
-	case 5:
-		cht = "level5.txt"; break;
-	case 6:
-		cht = "level6.txt"; break;
-    }
-}
-
 void MapReseter() {
     memset(harta, 0, sizeof(harta));
     coinono = 0;
@@ -333,6 +465,22 @@ void MapReseter() {
         starpow[i].mapart = 0;
 		starpow[i].colected = 0;
     }
+	for (int i = 1;i <= firo;i++) {
+		fflower[i].icolec = 0;
+		fflower[i].jcolec = 0;
+		fflower[i].mapart = 0;
+		fflower[i].colected = 0;
+	}
+	for (int i = 0;i <= 8;i++) {
+        fireb[i].exist = 0;
+        fireb[i].ifireb = 0; 
+        fireb[i].jfireb = 0;
+        fireb[i].fbdirection = 1;
+        fireb[i].fbstage = 1;
+        fireb[i].hoverf = 0;
+        fireb[i].mapart = 0;
+	}
+	firo = 0;
     staro = 0;
     coino = 0;
     lifo = 0;
@@ -349,44 +497,92 @@ void saveData(char* strArray[], int intValue) {
     outfile << intValue << '\n';
 
     for (int i = 0; i < intValue; i++) {
-        outfile << strArray[i] << '\n';  // Write each string in the array
+        outfile << strArray[i] << '\n';
     }
 
     outfile.close();
 }
 
-// Function to load the int value and the char* array from a file
+
 void loadData(char* strArray[], int& intValue) {
     std::ifstream infile("CUSTOMLEVELS.txt");
 
-    infile >> intValue;  // Read the integer value (number of strings)
-    infile.ignore();  // To ignore the newline character after the integer
+    infile >> intValue;
+    infile.ignore();
 
     for (int i = 0; i < intValue; i++) {
         char str[50];
-        infile.getline(str, 50);  // Read an entire line (not just one word)
+        infile.getline(str, 50);
 
-        strArray[i] = new char[strlen(str) + 1];  // Allocate memory for the string
-        strcpy(strArray[i], str);  // Copy the string into the allocated memory
+        strArray[i] = new char[strlen(str) + 1];
+        strcpy(strArray[i], str);
     }
-
-	std::cout << intValue << '\n';
-    // Print the loaded data
-    for (int i = 0; i < intValue; i++) {
-        std::cout << strArray[i] << " ";
-    }
-    std::cout << std::endl;
 
     infile.close();
 }
 
+void saveStats(LevelStats LvlSts[]) {
+    std::ofstream outfile("LEVELSTATS.txt");
 
-// Function to clean up dynamically allocated memory
-void cleanup(char** strArray, int* intValue) {
-    // Free dynamically allocated strings
-    for (int i = 0; strArray[i] != nullptr; ++i) {
-        delete[] strArray[i];
+    if (!outfile.is_open()) {
+        std::cerr << "Error opening file for saving!" << std::endl;
+        return;
     }
-    delete[] strArray;
-    delete intValue;
+    for (int i = 0; i < 9; i++) {
+        std::cout << LvlSts[i].name << " " << LvlSts[i].coins << " " << LvlSts[i].enemies << " " << LvlSts[i].time << " " << LvlSts[i].score << '\n';
+        outfile << LvlSts[i].name << " " << LvlSts[i].coins << " " << LvlSts[i].enemies << " " << LvlSts[i].time << " " << LvlSts[i].score << '\n';
+    }
+
+    outfile.close();
 }
+
+void loadStats(LevelStats LvlSts[]) {
+    std::ifstream infile("LEVELSTATS.txt");
+
+    for (int i = 0; i < 9; i++) {
+        char str[50];
+        infile.getline(str, 50, ' ');
+        std::cout << str<<'\n';
+        LvlSts[i].name = new char[strlen(str) + 1];
+        strcpy(LvlSts[i].name, str);
+        infile >> LvlSts[i].coins >> LvlSts[i].enemies >> LvlSts[i].time >> LvlSts[i].score;
+        //infile.ignore();
+
+    }
+    for (int i = 0; i < 9; i++) {
+        std::cout << LvlSts[i].name << " " << LvlSts[i].coins << " " << LvlSts[i].enemies << " " << LvlSts[i].time << " " << LvlSts[i].score << '\n';
+    }
+
+    infile.close();
+}
+/*
+void saveStatsCustom(LevelStats LvlSts[]) {
+    std::ofstream outfile("CustomSTATS.txt");
+
+    if (!outfile.is_open()) {
+        std::cerr << "Error opening file for saving!" << std::endl;
+        return;
+    }
+    for (int i = 0; i < 9; i++) {
+        outfile << LvlSts[i].name << " " << LvlSts[i].coins << " " << LvlSts[i].enemies << " " << LvlSts[i].time << " " << LvlSts[i].score << '\n';
+    }
+
+    outfile.close();
+}
+
+void loadStatsCustom(LevelStats LvlSts[]) {
+    std::ifstream infile("CustomSTATS.txt");
+    
+
+    for (int i = 0; i < 9; i++) {
+        char str[50];
+        infile.getline(str, 50);
+
+        LvlSts[i].name = new char[strlen(str) + 1];
+        strcpy(LvlSts[i].name, str);
+		infile >> LvlSts[i].coins >> LvlSts[i].lives >> LvlSts[i].time >> LvlSts[i].score;
+        infile.ignore();
+    }
+
+    infile.close();
+}*/

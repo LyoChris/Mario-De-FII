@@ -13,6 +13,7 @@
 #include "Loader.h"
 #include "miniaudio.h"
 #include "MapEditor.h"
+#include "Colectibles.h"
 using namespace std;
 
 #define MARIO_TIME 0.05 // 80 ms
@@ -31,6 +32,7 @@ clock_t start, initpause;
 double MarioInterval = MARIO_TIME;
 double enemyInterval = ENEMY_TIME;
 double FrameInterval = FRAME_TIME;
+double fireBallinterval = ENEMY_TIME / 1.75;
 
 void MarioGame() {
     MapReseter();
@@ -38,6 +40,7 @@ void MarioGame() {
     clock_t lastMarioMove = clock(); //facem cate un ceas pentru inamici si Mario
     clock_t lastEnemyMove = clock();
     clock_t lastFrame = clock();
+	clock_t lastFireball = clock();
     start = clock();
     timespent = 0;
 	ma_sound_stop(&BackGroundMusic);
@@ -71,6 +74,11 @@ void MarioGame() {
                 MarioMovement();
                 lastMarioMove = now;
             }
+			if ((now - lastFireball) / (double)CLOCKS_PER_SEC >= fireBallinterval) {
+				fireballsmov();
+				lastFireball = now;
+			}
+            fireballsmov();
             if ((now - lastEnemyMove) / (double)CLOCKS_PER_SEC >= enemyInterval) {
                 EnemiesMoving();
                 lastEnemyMove = now;

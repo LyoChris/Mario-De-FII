@@ -26,23 +26,30 @@ void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goomba_walk
 * mario_star, * pipehead, * pirana_1, * pirana_2, * pipeheadpir, * mariostar, * mario_climbing_down_1_star, * mario_climbing_down_2_star, * mario_climbing_up_1_star,
 * mario_climbing_up_2_star, * mario_idle_left_star, * mario_idle_right_star, * mario_jump_1_star, * mario_left_run_1_star, * mario_left_run_2_star,
 * mario_left_run_3_star, * mario_right_run_1_star, * mario_right_run_2_star, * mario_right_run_3_star, * mario_main_screen, * mario_levels_menu, * mario_jump_2,
-* Rpirana_1, * Rpirana_2;
+* Rpirana_1, * Rpirana_2, * Mmario_climbing_down_1, * Mmario_climbing_down_2, * Mmario_climbing_up_1,
+* Mmario_climbing_up_2, * Mmario_idle_left, * Mmario_idle_right, * Mmario_jump_1, * Mmario_left_run_1, * Mmario_left_run_2, * Mmario_left_run_3, * Mmario_right_run_1,
+* Mmario_right_run_2, * Mmario_right_run_3, * Mmario_jump_2, * MFmario_climbing_down_1, * MFmario_climbing_down_2, * MFmario_climbing_up_1,
+* MFmario_climbing_up_2, * MFmario_idle_left, * MFmario_idle_right, * MFmario_jump_1, * MFmario_left_run_1, * MFmario_left_run_2, * MFmario_left_run_3, * MFmario_right_run_1,
+* MFmario_right_run_2, * MFmario_right_run_3, * MFmario_jump_2, * Fmario_climbing_down_1, * Fmario_climbing_down_2, * Fmario_climbing_up_1,
+* Fmario_climbing_up_2, * Fmario_idle_left, * Fmario_idle_right, * Fmario_jump_1, * Fmario_left_run_1, * Fmario_left_run_2, * Fmario_left_run_3, * Fmario_right_run_1,
+* Fmario_right_run_2, * Fmario_right_run_3, * Fmario_jump_2, * fireball_1, * fireball_2, * fire_flower;
 
 extern void* Rpipeheadpir, * Rpipehead;
 
 extern pirhana piranav[100];
-extern colectible coins[100], life[100], starpow[100];
+extern colectible coins[100], life[100], starpow[100], fflower[100];
+extern firebll fireb[100];
 pozitii spawn[100];
 float wh, ncf, nci = 0, nc1, imario, jmario;
 int  x, y, nl = 20, nc, harta[30][1000], mv2, map, mappart, spawncount = 1, vizc[100], vize[100], buffersize, flagpole = 0, okmap = 1;
 extern goompa gompav[100];
-extern int n, coino, lifo, p, staro;
+extern int n, coino, lifo, p, staro, firo;
 
 
 
 void MapReaderandSetter() {
-    x = 800;//GetSystemMetrics(SM_CXSCREEN); //1536 864
-    y = 600;//GetSystemMetrics(SM_CYSCREEN);
+    x = GetSystemMetrics(SM_CXSCREEN); //1536 864
+    y = GetSystemMetrics(SM_CYSCREEN);
     wh = (float)y / (float)nl;
     nc1 = (float)x / wh;
     ncf = nc1;
@@ -95,6 +102,14 @@ void MapLoader() {
                     harta[i][j] = 0;
 					cout << coins[coino].icolec << " " << coins[coino].jcolec << " " << coins[coino].mapart << '\n';
             }
+            if (harta[i][j] == 16) {
+                putimage(j * wh, i * wh, fire_flower, COPY_PUT);
+				firo++;
+				fflower[firo].icolec = i;
+				fflower[firo].jcolec = j;
+				fflower[firo].mapart = (int)(nci - nc1);
+				harta[i][j] = 0;
+            }
             if (harta[i][j] == 15) {
 				putimage(j * wh, i * wh, mario_star, COPY_PUT);
                 staro++;
@@ -104,7 +119,7 @@ void MapLoader() {
                 harta[i][j] = 0;
             }
             if (harta[i][j] == 8) {
-				putimage(j * wh, i * wh, lucky_block, COPY_PUT); 
+				putimage(j * wh, i * wh, lucky_block, COPY_PUT);
             }
             if (harta[i][j] == 10) {
 				putimage(j * wh, i * wh, lucky_block_used, COPY_PUT);
@@ -125,12 +140,10 @@ void MapLoader() {
             }
             if (harta[i][j] == 12) {
                 putimage(j * wh, i * wh, pipebody, COPY_PUT);
-                //bar(j * wh, i * wh, (j + 1) * wh, (i + 1) * wh); // placeholder pentru pipe body
             }
             if (harta[i][j] == 14) {
                 if (harta[i - 1][j] == 1) {
                     putimage(j * wh, i * wh, Rpipehead, COPY_PUT);
-                    //bar(j * wh, i * wh, (j + 1) * wh, (i + 1) * wh); // placeholder pentru pipe head without pirhana
                 }
                 else {
                     putimage(j * wh, i * wh, pipehead, COPY_PUT);

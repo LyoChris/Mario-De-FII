@@ -3,6 +3,7 @@
 #include <iostream>
 #include <dos.h>
 #include <windows.h>
+#include <string>
 #include <time.h>
 #include "Map.h"
 #include "Enemies.h"
@@ -17,21 +18,32 @@ using namespace std;
 #define MAX1 30
 #define MAX2 1000
 
+extern string cht;
+LevelStats levelstats[9], customstats[9];
 extern ma_engine engine;
-extern ma_sound JumpEffect, CoinEffect, ColideEffect, GombaDeadEffect, DeathEffect, BackGroundMusic, StageClear, OneUpEffect;
+extern ma_sound JumpEffect, CoinEffect, ColideEffect, GombaDeadEffect, DeathEffect, BackGroundMusic, StageClear, OneUpEffect, FireBallEffect, PowerUpAppearEffect, PowerUpEffect;
 extern clock_t start, initpause;
-extern colectible coins[100], life[100], starpow[100];
+extern colectible coins[100], life[100], starpow[100], fflower[100];
+extern firebll fireb[9];
 extern goompa gompav[100];
 extern pirhana piranav[100];
 extern void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goomba_walking_2, * mario_climbing_down_1, * mario_climbing_down_2, * mario_climbing_up_1,
 * mario_climbing_up_2, * mario_idle_left, * mario_idle_right, * mario_jump_1, * mario_left_run_1, * mario_left_run_2, * mario_left_run_3, * mario_right_run_1,
-* mario_right_run_2, * mario_right_run_3, * mario_vine, * mario_vine_top, * skyblock, * lucky_block_used, *one_up, *flagpolep, *flagpolemapedit, * mario_jump_2, * mario_star;
+* mario_right_run_2, * mario_right_run_3, * mario_vine, * mario_vine_top, * skyblock, * lucky_block_used, * one_up, * flagpolep, * flagpolemapedit, * mario_jump_2, * mario_star,
+* Mmario_climbing_down_1, * Mmario_climbing_down_2, * Mmario_climbing_up_1,
+* Mmario_climbing_up_2, * Mmario_idle_left, * Mmario_idle_right, * Mmario_jump_1, * Mmario_left_run_1, * Mmario_left_run_2, * Mmario_left_run_3, * Mmario_right_run_1,
+* Mmario_right_run_2, * Mmario_right_run_3, * Mmario_jump_2, * MFmario_climbing_down_1, * MFmario_climbing_down_2, * MFmario_climbing_up_1,
+* MFmario_climbing_up_2, * MFmario_idle_left, * MFmario_idle_right, * MFmario_jump_1, * MFmario_left_run_1, * MFmario_left_run_2, * MFmario_left_run_3, * MFmario_right_run_1,
+* MFmario_right_run_2, * MFmario_right_run_3, * MFmario_jump_2, * Fmario_climbing_down_1, * Fmario_climbing_down_2, * Fmario_climbing_up_1,
+* Fmario_climbing_up_2, * Fmario_idle_left, * Fmario_idle_right, * Fmario_jump_1, * Fmario_left_run_1, * Fmario_left_run_2, * Fmario_left_run_3, * Fmario_right_run_1,
+* Fmario_right_run_2, * Fmario_right_run_3, * Fmario_jump_2, * fireball_1, * fireball_2, * fire_flower, * pipehead, * Rpipehead;
+
 extern double MarioInterval;
 extern float wh, ncf, nci, nc1, imario, jmario;
-extern int x, y, nl, nc, harta[30][1000], mv2, map, stage=-7, mappart, coino, lifo, flagpole, staro, SplitMenuItems;
-extern int time1, okesc, n, selectedOption, p;
+extern int x, y, nl, nc, harta[30][1000], mv2, map, stage=-7, mappart, coino, lifo, flagpole, staro, SplitMenuItems, fpow;
+extern int time1, okesc, n, selectedOption, p, firo;
 string direct;
-int lifes = 3, safeimario, safejmario, mover = 0, coinono = 0, invincibilityframes = 0, ok = 0, hoverm = 0, play = 0, gdead = 0, hit, power = 0, pdead = 0, timespent=0;
+int lifes = 3, shoot=0, safeimario, safejmario, mover = 0, coinono = 0, invincibilityframes = 0, ok = 0, hoverm = 0, play = 0, gdead = 0, hit, power = 0, pdead = 0, timespent=0;
 
 void MarioStageput() {
     switch (stage) {
@@ -96,6 +108,204 @@ void MarioStageread() {
         readimagefile("mario_jump_1.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
     case 6:
 		readimagefile("mario_jump_2.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    }
+}
+
+void MarioStageputM() {
+    switch (stage) {
+    case -10:
+        putimage((jmario - nci) * wh, imario * wh, Mmario_climbing_up_1, COPY_PUT); break;
+    case 10:
+        putimage((jmario - nci) * wh, imario * wh, Mmario_climbing_up_2, COPY_PUT); break;
+    case -9:
+        putimage((jmario - nci) * wh, imario * wh, Mmario_climbing_down_1, COPY_PUT); break;
+    case 9:
+        putimage((jmario - nci) * wh, imario * wh, Mmario_climbing_down_2, COPY_PUT); break;
+    case -7:
+        putimage((jmario - nci) * wh, imario * wh, Mmario_idle_right, COPY_PUT); break;
+    case 7:
+        putimage((jmario - nci) * wh, imario * wh, Mmario_idle_left, COPY_PUT); break;
+    case 1:
+        putimage((jmario - nci) * wh, imario * wh, Mmario_left_run_1, COPY_PUT); break;
+    case 2:
+        putimage((jmario - nci) * wh, imario * wh, Mmario_left_run_2, COPY_PUT); break;
+    case 3:
+        putimage((jmario - nci) * wh, imario * wh, Mmario_left_run_3, COPY_PUT); break;
+    case -1:
+        putimage((jmario - nci) * wh, imario * wh, Mmario_right_run_1, COPY_PUT); break;
+    case -2:
+        putimage((jmario - nci) * wh, imario * wh, Mmario_right_run_2, COPY_PUT); break;
+    case -3:
+        putimage((jmario - nci) * wh, imario * wh, Mmario_right_run_3, COPY_PUT); break;
+    case -6:
+        putimage((jmario - nci) * wh, imario * wh, Mmario_jump_1, COPY_PUT); break;
+    case 6:
+        putimage((jmario - nci) * wh, imario * wh, Mmario_jump_2, COPY_PUT); break;
+    }
+}
+
+void MarioStagereadM() {
+    switch (stage) {
+    case -10:
+        readimagefile("Mmario_climbing_up_1.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case 10:
+        readimagefile("Mmario_climbing_up_2.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case -9:
+        readimagefile("Mmario_climbing_down_1.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case 9:
+        readimagefile("Mmario_climbing_down_2.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case -7:
+        readimagefile("Mmario_idle_right.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case 7:
+        readimagefile("Mmario_idle_left.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case 1:
+        readimagefile("Mmario_left_run_1.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case 2:
+        readimagefile("Mmario_left_run_2.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case 3:
+        readimagefile("Mmario_left_run_3.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case -1:
+        readimagefile("Mmario_right_run_1.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case -2:
+        readimagefile("Mmario_right_run_2.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case -3:
+        readimagefile("Mmario_right_run_3.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case -6:
+        readimagefile("Mmario_jump_1.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case 6:
+        readimagefile("Mmario_jump_2.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    }
+}
+
+void MarioStageputF() {
+    switch (stage) {
+    case -10:
+        putimage((jmario - nci) * wh, imario * wh, Fmario_climbing_up_1, COPY_PUT); break;
+    case 10:
+        putimage((jmario - nci) * wh, imario * wh, Fmario_climbing_up_2, COPY_PUT); break;
+    case -9:
+        putimage((jmario - nci) * wh, imario * wh, Fmario_climbing_down_1, COPY_PUT); break;
+    case 9:
+        putimage((jmario - nci) * wh, imario * wh, Fmario_climbing_down_2, COPY_PUT); break;
+    case -7:
+        putimage((jmario - nci) * wh, imario * wh, Fmario_idle_right, COPY_PUT); break;
+    case 7:
+        putimage((jmario - nci) * wh, imario * wh, Fmario_idle_left, COPY_PUT); break;
+    case 1:
+        putimage((jmario - nci) * wh, imario * wh, Fmario_left_run_1, COPY_PUT); break;
+    case 2:
+        putimage((jmario - nci) * wh, imario * wh, Fmario_left_run_2, COPY_PUT); break;
+    case 3:
+        putimage((jmario - nci) * wh, imario * wh, Fmario_left_run_3, COPY_PUT); break;
+    case -1:
+        putimage((jmario - nci) * wh, imario * wh, Fmario_right_run_1, COPY_PUT); break;
+    case -2:
+        putimage((jmario - nci) * wh, imario * wh, Fmario_right_run_2, COPY_PUT); break;
+    case -3:
+        putimage((jmario - nci) * wh, imario * wh, Fmario_right_run_3, COPY_PUT); break;
+    case -6:
+        putimage((jmario - nci) * wh, imario * wh, Fmario_jump_1, COPY_PUT); break;
+    case 6:
+        putimage((jmario - nci) * wh, imario * wh, Fmario_jump_2, COPY_PUT); break;
+    }
+}
+
+void MarioStagereadF() {
+    switch (stage) {
+    case -10:
+        readimagefile("Fmario_climbing_up_1.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case 10:
+        readimagefile("Fmario_climbing_up_2.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case -9:
+        readimagefile("Fmario_climbing_down_1.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case 9:
+        readimagefile("Fmario_climbing_down_2.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case -7:
+        readimagefile("Fmario_idle_right.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case 7:
+        readimagefile("Fmario_idle_left.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case 1:
+        readimagefile("Fmario_left_run_1.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case 2:
+        readimagefile("Fmario_left_run_2.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case 3:
+        readimagefile("Fmario_left_run_3.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case -1:
+        readimagefile("Fmario_right_run_1.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case -2:
+        readimagefile("Fmario_right_run_2.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case -3:
+        readimagefile("Fmario_right_run_3.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case -6:
+        readimagefile("Fmario_jump_1.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case 6:
+        readimagefile("Fmario_jump_2.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    }
+}
+
+void MarioStageputMF() {
+    switch (stage) {
+    case -10:
+        putimage((jmario - nci) * wh, imario * wh, MFmario_climbing_up_1, COPY_PUT); break;
+    case 10:
+        putimage((jmario - nci) * wh, imario * wh, MFmario_climbing_up_2, COPY_PUT); break;
+    case -9:
+        putimage((jmario - nci) * wh, imario * wh, MFmario_climbing_down_1, COPY_PUT); break;
+    case 9:
+        putimage((jmario - nci) * wh, imario * wh, MFmario_climbing_down_2, COPY_PUT); break;
+    case -7:
+        putimage((jmario - nci) * wh, imario * wh, MFmario_idle_right, COPY_PUT); break;
+    case 7:
+        putimage((jmario - nci) * wh, imario * wh, MFmario_idle_left, COPY_PUT); break;
+    case 1:
+        putimage((jmario - nci) * wh, imario * wh, MFmario_left_run_1, COPY_PUT); break;
+    case 2:
+        putimage((jmario - nci) * wh, imario * wh, MFmario_left_run_2, COPY_PUT); break;
+    case 3:
+        putimage((jmario - nci) * wh, imario * wh, MFmario_left_run_3, COPY_PUT); break;
+    case -1:
+        putimage((jmario - nci) * wh, imario * wh, MFmario_right_run_1, COPY_PUT); break;
+    case -2:
+        putimage((jmario - nci) * wh, imario * wh, MFmario_right_run_2, COPY_PUT); break;
+    case -3:
+        putimage((jmario - nci) * wh, imario * wh, MFmario_right_run_3, COPY_PUT); break;
+    case -6:
+        putimage((jmario - nci) * wh, imario * wh, MFmario_jump_1, COPY_PUT); break;
+    case 6:
+        putimage((jmario - nci) * wh, imario * wh, MFmario_jump_2, COPY_PUT); break;
+    }
+}
+
+void MarioStagereadMF() {
+    switch (stage) {
+    case -10:
+        readimagefile("MFmario_climbing_up_1.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case 10:
+        readimagefile("MFmario_climbing_up_2.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case -9:
+        readimagefile("MFmario_climbing_down_1.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case 9:
+        readimagefile("MFmario_climbing_down_2.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case -7:
+        readimagefile("MFmario_idle_right.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case 7:
+        readimagefile("MFmario_idle_left.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case 1:
+        readimagefile("MFmario_left_run_1.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case 2:
+        readimagefile("MFmario_left_run_2.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case 3:
+        readimagefile("MFmario_left_run_3.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case -1:
+        readimagefile("MFmario_right_run_1.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case -2:
+        readimagefile("MFmario_right_run_2.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case -3:
+        readimagefile("MFmario_right_run_3.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case -6:
+        readimagefile("MFmario_jump_1.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
+    case 6:
+        readimagefile("MFmario_jump_2.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh); break;
     }
 }
 
@@ -172,10 +382,37 @@ void NextState(string direction1) {
 					ma_sound_stop(&ColideEffect);
 					ma_sound_seek_to_pcm_frame(&ColideEffect, 0);
 					ma_sound_start(&ColideEffect);
-                    MarioStageread();
+                    if (power != 0 && fpow != 0) {
+                        MarioStagereadMF();
+                    }
+                    else {
+                        if (power != 0)
+                            MarioStagereadM();
+                        else {
+                            if (fpow != 0)
+                                MarioStagereadF();
+                            else {
+                                MarioStageread();
+                            }
+                        }
+                    }
+                    
                 }
                 else {
-                    MarioStageread();
+                    if (power != 0 && fpow != 0) {
+                        MarioStagereadMF();
+                    }
+                    else {
+                        if (power != 0)
+                            MarioStagereadM();
+                        else {
+                            if (fpow != 0)
+                                MarioStagereadF();
+                            else {
+                                MarioStageread();
+                            }
+                        }
+                    }
                 }
             }
             else {
@@ -189,10 +426,36 @@ void NextState(string direction1) {
                     ma_sound_stop(&ColideEffect);
                     ma_sound_seek_to_pcm_frame(&ColideEffect, 0);
                     ma_sound_start(&ColideEffect);
-					MarioStageread();
+                    if (power != 0 && fpow != 0) {
+                        MarioStagereadMF();
+                    }
+                    else {
+                        if (power != 0)
+                            MarioStagereadM();
+                        else {
+                            if (fpow != 0)
+                                MarioStagereadF();
+                            else {
+                                MarioStageread();
+                            }
+                        }
+                    }
                 }
                 else {
-                    MarioStageread();
+                    if (power != 0 && fpow != 0) {
+                        MarioStagereadMF();
+                    }
+                    else {
+                        if (power != 0)
+                            MarioStagereadM();
+                        else {
+                            if (fpow != 0)
+                                MarioStagereadF();
+                            else {
+                                MarioStageread();
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -209,10 +472,36 @@ void NextState(string direction1) {
                     ma_sound_stop(&ColideEffect);
                     ma_sound_seek_to_pcm_frame(&ColideEffect, 0);
                     ma_sound_start(&ColideEffect);
-                    MarioStageput();
+                    if (power != 0 && fpow != 0) {
+                        MarioStageputMF();
+                    }
+                    else {
+                        if (power != 0)
+                            MarioStageputM();
+                        else {
+                            if (fpow != 0)
+                                MarioStageputF();
+                            else {
+                                MarioStageput();
+                            }
+                        }
+                    }
                 }
                 else {
-                    MarioStageput();
+                    if (power != 0 && fpow != 0) {
+                        MarioStageputMF();
+                    }
+                    else {
+                        if (power != 0)
+                            MarioStageputM();
+                        else {
+                            if (fpow != 0)
+                                MarioStageputF();
+                            else {
+                                MarioStageput();
+                            }
+                        }
+                    }
                 }
             }
             else {
@@ -226,10 +515,36 @@ void NextState(string direction1) {
                     ma_sound_stop(&ColideEffect);
                     ma_sound_seek_to_pcm_frame(&ColideEffect, 0);
                     ma_sound_start(&ColideEffect);
-                    MarioStageput();
+                    if (power != 0 && fpow != 0) {
+                        MarioStageputMF();
+                    }
+                    else {
+                        if (power != 0)
+                            MarioStageputM();
+                        else {
+                            if (fpow != 0)
+                                MarioStageputF();
+                            else {
+                                MarioStageput();
+                            }
+                        }
+                    }
                 }
                 else {
-                    MarioStageput();
+                    if (power != 0 && fpow != 0) {
+                        MarioStageputMF();
+                    }
+                    else {
+                        if (power != 0)
+                            MarioStageputM();
+                        else {
+                            if (fpow != 0)
+                                MarioStageputF();
+                            else {
+                                MarioStageput();
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -272,10 +587,36 @@ void NextState(string direction1) {
                         ma_sound_stop(&ColideEffect);
                         ma_sound_seek_to_pcm_frame(&ColideEffect, 0);
                         ma_sound_start(&ColideEffect);
-                        MarioStageread();
+                        if (power != 0 && fpow != 0) {
+                            MarioStagereadMF();
+                        }
+                        else {
+                            if (power != 0)
+                                MarioStagereadM();
+                            else {
+                                if (fpow != 0)
+                                    MarioStagereadF();
+                                else {
+                                    MarioStageread();
+                                }
+                            }
+                        }
                     }
                     else {
-                        MarioStageread();
+                        if (power != 0 && fpow != 0) {
+                            MarioStagereadMF();
+                        }
+                        else {
+                            if (power != 0)
+                                MarioStagereadM();
+                            else {
+                                if (fpow != 0)
+                                    MarioStagereadF();
+                                else {
+                                    MarioStageread();
+                                }
+                            }
+                        }
                     }
                 }
                 else {
@@ -289,10 +630,36 @@ void NextState(string direction1) {
                         ma_sound_stop(&ColideEffect);
                         ma_sound_seek_to_pcm_frame(&ColideEffect, 0);
                         ma_sound_start(&ColideEffect);
-                        MarioStageread();
+                        if (power != 0 && fpow != 0) {
+                            MarioStagereadMF();
+                        }
+                        else {
+                            if (power != 0)
+                                MarioStagereadM();
+                            else {
+                                if (fpow != 0)
+                                    MarioStagereadF();
+                                else {
+                                    MarioStageread();
+                                }
+                            }
+                        }
                     }
                     else {
-                        MarioStageread();
+                        if (power != 0 && fpow != 0) {
+                            MarioStagereadMF();
+                        }
+                        else {
+                            if (power != 0)
+                                MarioStagereadM();
+                            else {
+                                if (fpow != 0)
+                                    MarioStagereadF();
+                                else {
+                                    MarioStageread();
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -309,10 +676,36 @@ void NextState(string direction1) {
                         ma_sound_stop(&ColideEffect);
                         ma_sound_seek_to_pcm_frame(&ColideEffect, 0);
                         ma_sound_start(&ColideEffect);
-                        MarioStageput();
+                        if (power != 0 && fpow != 0) {
+                            MarioStageputMF();
+                        }
+                        else {
+                            if (power != 0)
+                                MarioStageputM();
+                            else {
+                                if (fpow != 0)
+                                    MarioStageputF();
+                                else {
+                                    MarioStageput();
+                                }
+                            }
+                        }
                     }
                     else {
-                        MarioStageput();
+                        if (power != 0 && fpow != 0) {
+                            MarioStageputMF();
+                        }
+                        else {
+                            if (power != 0)
+                                MarioStageputM();
+                            else {
+                                if (fpow != 0)
+                                    MarioStageputF();
+                                else {
+                                    MarioStageput();
+                                }
+                            }
+                        }
                     }
                 }
                 else {
@@ -326,10 +719,36 @@ void NextState(string direction1) {
                         ma_sound_stop(&ColideEffect);
                         ma_sound_seek_to_pcm_frame(&ColideEffect, 0);
                         ma_sound_start(&ColideEffect);
-                        MarioStageput();
+                        if (power != 0 && fpow != 0) {
+                            MarioStageputMF();
+                        }
+                        else {
+                            if (power != 0)
+                                MarioStageputM();
+                            else {
+                                if (fpow != 0)
+                                    MarioStageputF();
+                                else {
+                                    MarioStageput();
+                                }
+                            }
+                        }
                     }
                     else {
-                        MarioStageput();
+                        if (power != 0 && fpow != 0) {
+                            MarioStageputMF();
+                        }
+                        else {
+                            if (power != 0)
+                                MarioStageputM();
+                            else {
+                                if (fpow != 0)
+                                    MarioStageputF();
+                                else {
+                                    MarioStageput();
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -355,10 +774,36 @@ void NextState(string direction1) {
         if (CheckBlock(imario, jmario, wh, (float)(imario), (float)(jmario)) && !((harta[(int)imario][(int)jmario] == 3) || harta[(int)imario][(int)jmario] == 4) && (jmario - (int)jmario == 0)) {
             imario += 0.5;
             stage = 10;
-            MarioStageread();
+            if (power != 0 && fpow != 0) {
+                MarioStagereadMF();
+            }
+            else {
+                if (power != 0)
+                    MarioStagereadM();
+                else {
+                    if (fpow != 0)
+                        MarioStagereadF();
+                    else {
+                        MarioStageread();
+                    }
+                }
+            }
         }
         else
-            MarioStageread();
+            if (power != 0 && fpow != 0) {
+                MarioStagereadMF();
+            }
+            else {
+                if (power != 0)
+                    MarioStagereadM();
+                else {
+                    if (fpow != 0)
+                        MarioStagereadF();
+                    else {
+                        MarioStageread();
+                    }
+                }
+            }
     }
 
     if (direction1 == "down")
@@ -381,10 +826,36 @@ void NextState(string direction1) {
         if (CheckBlock(imario, jmario, wh, (float)(imario), (float)(jmario)) && !(harta[(int)imario][(int)jmario] == 3 || harta[(int)imario][(int)jmario] == 4) && harta[(int)imario][(int)jmario] == 1) {
             imario -= 0.5;
             stage = 9;
-            MarioStageread();
+            if (power != 0 && fpow != 0) {
+                MarioStagereadMF();
+            }
+            else {
+                if (power != 0)
+                    MarioStagereadM();
+                else {
+                    if (fpow != 0)
+                        MarioStagereadF();
+                    else {
+                        MarioStageread();
+                    }
+                }
+            }
         }
         else
-            MarioStageread();
+            if (power != 0 && fpow != 0) {
+                MarioStagereadMF();
+            }
+            else {
+                if (power != 0)
+                    MarioStagereadM();
+                else {
+                    if (fpow != 0)
+                        MarioStagereadF();
+                    else {
+                        MarioStageread();
+                    }
+                }
+            }
     }
 
     if (direction1 == "space" || ok>0) {
@@ -414,9 +885,20 @@ void NextState(string direction1) {
                     if ((imario > 0 && ((harta[(int)imario][(int)jmario] != 1 && (harta[(int)imario][(int)jmario + 1] != 1)) && (harta[(int)imario][(int)jmario] != 8 && (harta[(int)imario][(int)jmario + 1] != 8) && (harta[(int)imario][(int)jmario] != 10 && (harta[(int)imario][(int)jmario + 1] != 10)))))
                         && (harta[(int)imario][(int)jmario] != 12 && (harta[(int)imario][(int)jmario + 1] != 12)) && (harta[(int)imario][(int)jmario] != 14 && (harta[(int)imario][(int)jmario + 1] != 14))
                         && (harta[(int)imario][(int)jmario] != 13 && (harta[(int)imario][(int)jmario + 1] != 13))) {
-                        if (ok == 6) {
+                        if (power != 0 && fpow != 0) {
+                            MarioStagereadMF();
                         }
-                        MarioStageread();
+                        else {
+                            if (power != 0)
+                                MarioStagereadM();
+                            else {
+                                if (fpow != 0)
+                                    MarioStagereadF();
+                                else {
+                                    MarioStageread();
+                                }
+                            }
+                        }
                         ok--;
                     }
                     else {
@@ -428,38 +910,61 @@ void NextState(string direction1) {
                     if (CheckBlock(imario, jmario, wh, (float)(imario - 1), (float)(jmario)) && (imario > 0 && (harta[(int)imario][(int)jmario] != 1)
                         && (harta[(int)imario][(int)jmario] != 12) && (harta[(int)imario][(int)jmario] != 8) && (harta[(int)imario][(int)jmario] != 10)
                         && (harta[(int)imario][(int)jmario] != 13) && (harta[(int)imario][(int)jmario] != 14))) {
-                        if (ok == 6) {
+                        if (power != 0 && fpow != 0) {
+                            MarioStagereadMF();
                         }
-                        MarioStageread();
+                        else {
+                            if (power != 0)
+                                MarioStagereadM();
+                            else {
+                                if (fpow != 0)
+                                    MarioStagereadF();
+                                else {
+                                    MarioStageread();
+                                }
+                            }
+                        }
                         ok--;
                     }
                     else {
                         if (harta[(int)imario][(int)jmario] == 8) {
-							putimage(((int)jmario - nci)* wh, ((int)imario)* wh, lucky_block_used, COPY_PUT);
-                            int ranblock = randnumb(0, 2);
-							cout << "ranblock" << ranblock<<'\n';
+                            putimage(((int)jmario - nci) * wh, ((int)imario) * wh, lucky_block_used, COPY_PUT);
+                            int ranblock = randnumb(0, 3);
+                            cout << "ranblock" << ranblock << '\n';
                             if (ranblock == 1) {
                                 lifo++;
-                                life[lifo].icolec = (int)imario-1;
-								life[lifo].jcolec = (int)jmario;
-								life[lifo].mapart = (int)(nci - nc1);
-                                putimage(((int)jmario - nci)* wh, ((int)imario -1)* wh, one_up, COPY_PUT);
+                                life[lifo].icolec = (int)imario - 1;
+                                life[lifo].jcolec = (int)jmario;
+                                life[lifo].mapart = (int)(nci - nc1);
+                                putimage(((int)jmario - nci) * wh, ((int)imario - 1) * wh, one_up, COPY_PUT);
                             }
                             else {
                                 if (ranblock == 0)
                                 {
                                     coino++;
-                                    coins[coino].icolec = (int)imario-1;
+                                    coins[coino].icolec = (int)imario - 1;
                                     coins[coino].jcolec = (int)jmario;
                                     coins[coino].mapart = (int)(nci - nc1);
                                     putimage(((int)jmario - nci) * wh, ((int)imario - 1) * wh, mario_coin, COPY_PUT);
                                 }
                                 else {
-                                    staro++;
-									starpow[staro].icolec = (int)imario-1;
-									starpow[staro].jcolec = (int)jmario;
-									starpow[staro].mapart = (int)(nci - nc1);
-									putimage(((int)jmario - nci)* wh, ((int)imario - 1)* wh, mario_star, COPY_PUT);
+                                    if (ranblock == 3) {
+                                        staro++;
+                                        starpow[staro].icolec = (int)imario - 1;
+                                        starpow[staro].jcolec = (int)jmario;
+                                        starpow[staro].mapart = (int)(nci - nc1);
+                                        putimage(((int)jmario - nci) * wh, ((int)imario - 1) * wh, mario_star, COPY_PUT);
+                                    }
+                                    else {
+                                        ma_sound_stop(&PowerUpAppearEffect);
+                                        ma_sound_seek_to_pcm_frame(&PowerUpAppearEffect, 0);
+                                        ma_sound_start(&PowerUpAppearEffect);
+                                        firo++;
+                                        fflower[firo].icolec = (int)imario - 1;
+                                        fflower[firo].jcolec = (int)jmario;
+                                        fflower[firo].mapart = (int)(nci - nc1);
+                                        putimage(((int)jmario - nci) * wh, ((int)imario - 1) * wh, fire_flower, COPY_PUT);
+                                    }
                                 }
                             }
                             harta[(int)imario][(int)jmario] = 10;
@@ -476,7 +981,20 @@ void NextState(string direction1) {
                         && (harta[(int)imario][(int)jmario] != 12 && (harta[(int)imario][(int)jmario + 1] != 12)) && (harta[(int)imario][(int)jmario] != 14 && (harta[(int)imario][(int)jmario + 1] != 14))
                         && (harta[(int)imario][(int)jmario] != 13 && (harta[(int)imario][(int)jmario + 1] != 13))) {
                         
-                        MarioStageput();
+                        if (power != 0 && fpow != 0) {
+                            MarioStageputMF();
+                        }
+                        else {
+                            if (power != 0)
+                                MarioStageputM();
+                            else {
+                                if (fpow != 0)
+                                    MarioStageputF();
+                                else {
+                                    MarioStageput();
+                                }
+                            }
+                        }
                         ok--;
                     }
                     else {
@@ -486,16 +1004,28 @@ void NextState(string direction1) {
                 }
                 else {
                     if (CheckBlock(imario, jmario, wh, (float)(imario - 1), (float)(jmario)) && (imario > 0 && (harta[(int)imario][(int)jmario] != 1) 
-                        && (harta[(int)imario][(int)jmario] != 12) && (harta[(int)imario][(int)jmario] != 8) && (harta[(int)imario][(int)jmario] != 10)
-                        && (harta[(int)imario][(int)jmario] != 13) && (harta[(int)imario][(int)jmario] != 14))) {
-                       
-                        MarioStageput();
+                    && (harta[(int)imario][(int)jmario] != 12) && (harta[(int)imario][(int)jmario] != 8) && (harta[(int)imario][(int)jmario] != 10)
+                    && (harta[(int)imario][(int)jmario] != 13) && (harta[(int)imario][(int)jmario] != 14))) {
+                        if (power != 0 && fpow != 0) {
+                            MarioStageputMF();
+                        }
+                        else {
+                            if (power != 0)
+                                MarioStageputM();
+                            else {
+                                if (fpow != 0)
+                                    MarioStageputF();
+                                else {
+                                    MarioStageput();
+                                }
+                            }
+                        }
                         ok--;
                     }
                     else {
                         if (harta[(int)imario][(int)jmario] == 8) {
                             putimage(((int)jmario - nci) * wh, ((int)imario) * wh, lucky_block_used, COPY_PUT);
-                            int ranblock = randnumb(0, 2);
+                            int ranblock = randnumb(0, 3);
                             cout << "ranblock" << ranblock << '\n';
                             if (ranblock == 1) {
                                 lifo++;
@@ -514,11 +1044,23 @@ void NextState(string direction1) {
                                     putimage(((int)jmario - nci) * wh, ((int)imario - 1) * wh, mario_coin, COPY_PUT);
                                 }
                                 else {
-                                    staro++;
-                                    starpow[staro].icolec = (int)imario-1;
-                                    starpow[staro].jcolec = (int)jmario;
-                                    starpow[staro].mapart = (int)(nci - nc1);
-                                    putimage(((int)jmario - nci) * wh, ((int)imario - 1) * wh, mario_star, COPY_PUT);
+                                    if (ranblock == 3) {
+                                        staro++;
+                                        starpow[staro].icolec = (int)imario - 1;
+                                        starpow[staro].jcolec = (int)jmario;
+                                        starpow[staro].mapart = (int)(nci - nc1);
+                                        putimage(((int)jmario - nci) * wh, ((int)imario - 1) * wh, mario_star, COPY_PUT);
+                                    }
+                                    else {
+                                        ma_sound_stop(&PowerUpAppearEffect);
+                                        ma_sound_seek_to_pcm_frame(&PowerUpAppearEffect, 0);
+                                        ma_sound_start(&PowerUpAppearEffect);
+                                        firo++;
+                                        fflower[firo].icolec = (int)imario - 1;
+                                        fflower[firo].jcolec = (int)jmario;
+                                        fflower[firo].mapart = (int)(nci - nc1);
+                                        putimage(((int)jmario - nci) * wh, ((int)imario - 1) * wh, fire_flower, COPY_PUT);
+                                    }
                                 }
                             }
                             harta[(int)imario][(int)jmario] = 10;
@@ -563,6 +1105,7 @@ void MarioMovement() {
         mover = 1;
         direct = "left";
     }
+
     if (((GetKeyState(0x44) < 0 || (GetKeyState(VK_RIGHT) < 0))) && jmario < ncf - 1) {
         NextState("right");
         mover = 1;
@@ -573,13 +1116,17 @@ void MarioMovement() {
         mover = 1;
         direct = "up";
     }
+
     if (((GetKeyState(0x53) < 0 || (GetKeyState(VK_DOWN) < 0))) && (harta[(int)imario][(int)jmario] == 3 || harta[(int)imario][(int)jmario] == 4) && jmario-(int)jmario==0) {
         NextState("down");
         mover = 1;
         direct = "down";
     }
+
     if (((GetKeyState(VK_SPACE) < 0)) && (harta[(int)imario + 1][(int)jmario] == 1 || harta[(int)imario + 1][(int)jmario] == 8 || harta[(int)imario + 1][(int)jmario] == 10
         || harta[(int)imario + 1][(int)jmario] == 14 || harta[(int)imario + 1][(int)jmario] == 13)) {
+		ma_sound_stop(&JumpEffect);
+		ma_sound_seek_to_pcm_frame(&JumpEffect, 0);
 		ma_sound_start(&JumpEffect);
         ok = 6;
         NextState("space");
@@ -587,10 +1134,52 @@ void MarioMovement() {
         //direct = "space";
         //k = 1;
     }
+
     if (ok > 0) {
         NextState("space");
         mover = 1;
         delay(MarioInterval);
+    }
+
+    if (fpow != 0 && (GetKeyState(0x43) < 0) && (int)imario-imario==0 && shoot>5) {
+        ma_sound_stop(&FireBallEffect);
+		ma_sound_seek_to_pcm_frame(&FireBallEffect, 0);
+		ma_sound_start(&FireBallEffect);
+		shoot = 0;
+        int put = 0;
+        for (int i = 0;i < 6;i++) {
+            if (fireb[i].exist == 0) {
+				cout << "EXITA" << '\n';
+                fireb[i].exist = 1;
+                if (direct == "right") {
+					fireb[i].fbdirection = 0;
+                    fireb[i].ifireb = imario;
+                    fireb[i].jfireb = jmario + 1;
+                }
+                else {
+                    fireb[i].fbdirection = 1;
+                    fireb[i].ifireb = imario;
+                    fireb[i].jfireb = jmario - 1;
+                }
+				fireb[i].mapart = (int)(nci - nc1);
+                put = 1;
+                break;
+            }
+        }
+        if (put == 0) {
+            fireb[8].exist = 1;
+            if (direct == "right") {
+                fireb[5].fbdirection = 0;
+                fireb[5].ifireb = imario;
+                fireb[5].jfireb = jmario + 1;
+            }
+            else {
+                fireb[5].fbdirection = 1;
+                fireb[5].ifireb = imario;
+                fireb[5].jfireb = jmario - 1;
+            }
+            fireb[8].mapart = (int)(nci - nc1);
+        }
     }
 
     if ((int)jmario - jmario != 0) {
@@ -599,14 +1188,61 @@ void MarioMovement() {
             if (harta[(int)imario + 1][(int)jmario] == 0) {
 				putimage((jmario - nci) * wh, imario * wh, skyblock, COPY_PUT);
                 imario += 0.5;
-				if (direct == "right")
-					putimage((jmario - nci) * wh, (imario)*wh, mario_jump_1, COPY_PUT);
-				else
-					putimage((jmario - nci) * wh, (imario)*wh, mario_jump_2, COPY_PUT);
+                if (direct == "right") {
+                    if (power != 0 && fpow != 0) {
+						putimage((jmario - nci) * wh, (imario)*wh, MFmario_jump_1, COPY_PUT);
+                    }
+                    else {
+                        if (power != 0) {
+                            putimage((jmario - nci) * wh, (imario)*wh, Mmario_jump_1, COPY_PUT);
+                        }
+                        else {
+                            if (fpow != 0) {
+								putimage((jmario - nci) * wh, (imario)*wh, Fmario_jump_1, COPY_PUT);
+                            }
+                            else {
+                                putimage((jmario - nci) * wh, (imario)*wh, mario_jump_1, COPY_PUT);
+                            }
+                        }
+                    }
+                }
+                else {
+                    if (power != 0 && fpow != 0) {
+                        putimage((jmario - nci) * wh, (imario)*wh, MFmario_jump_2, COPY_PUT);
+                    }
+                    else {
+                        if (power != 0) {
+                            putimage((jmario - nci) * wh, (imario)*wh, Mmario_jump_2, COPY_PUT);
+                        }
+                        else {
+                            if (fpow != 0) {
+                                putimage((jmario - nci) * wh, (imario)*wh, Fmario_jump_2, COPY_PUT);
+                            }
+                            else {
+                                putimage((jmario - nci) * wh, (imario)*wh, mario_jump_2, COPY_PUT);
+                            }
+                        }
+                    }
+                }
             }
             if (imario > nl) {
                 putimage((jmario - nci) * wh, imario * wh, skyblock, COPY_PUT);
-				putimage((safejmario - nci) * wh, (safeimario) * wh, mario_idle_left, COPY_PUT);
+                if (power != 0 && fpow != 0) {
+					putimage((safejmario - nci) * wh, (safeimario)*wh, MFmario_idle_left, COPY_PUT);
+                }
+                else {
+                    if (power != 0) {
+                        putimage((safejmario - nci) * wh, (safeimario)*wh, Mmario_idle_left, COPY_PUT);
+                    }
+                    else {
+                        if (fpow != 0) {
+							putimage((safejmario - nci)* wh, (safeimario)*wh, Fmario_idle_left, COPY_PUT);
+                        }
+                        else {
+                            putimage((safejmario - nci)* wh, (safeimario)*wh, mario_idle_left, COPY_PUT);
+                        }
+                    }
+                }
                 lifes--;
                 imario = safeimario;
                 jmario = safejmario;
@@ -619,14 +1255,61 @@ void MarioMovement() {
             if (harta[(int)imario + 1][(int)jmario] == 0) {
                 putimage((jmario - nci) * wh, imario * wh, skyblock, COPY_PUT);
                 imario += 0.5;
-                if (direct == "right")
-                    putimage((jmario - nci) * wh, (imario)*wh, mario_jump_1, COPY_PUT);
-                else
-                    putimage((jmario - nci) * wh, (imario)*wh, mario_jump_2, COPY_PUT);
+                if (direct == "right") {
+                    if (power != 0 && fpow != 0) {
+						putimage((jmario - nci)* wh, (imario)*wh, MFmario_jump_1, COPY_PUT);
+                    }
+                    else {
+                        if (power != 0) {
+                            putimage((jmario - nci) * wh, (imario)*wh, Mmario_jump_1, COPY_PUT);
+                        }
+                        else {
+                            if (fpow != 0) {
+								putimage((jmario - nci) * wh, (imario)*wh, Fmario_jump_1, COPY_PUT);
+                            }
+                            else {
+                                putimage((jmario - nci) * wh, (imario)*wh, mario_jump_1, COPY_PUT);
+                            }
+                        }
+                    }
+                }
+                else {
+                    if (power != 0 && fpow != 0) {
+						putimage((jmario - nci)* wh, (imario)*wh, MFmario_jump_2, COPY_PUT);
+                    }
+                    else {
+                        if (power != 0) {
+                            putimage((jmario - nci) * wh, (imario)*wh, Mmario_jump_2, COPY_PUT);
+                        }
+                        else {
+                            if (fpow != 0) {
+								putimage((jmario - nci)* wh, (imario)*wh, Fmario_jump_2, COPY_PUT);
+                            }
+                            else {
+                                putimage((jmario - nci) * wh, (imario)*wh, mario_jump_2, COPY_PUT);
+                            }
+                        }
+                    }
+                }
             }
             if (imario > nl) {
                 putimage((jmario - nci) * wh, imario * wh, skyblock, COPY_PUT);
-                putimage((safejmario - nci) * wh, (safeimario) * wh, mario_idle_left, COPY_PUT);
+                if (power != 0 && fpow != 0) {
+                    putimage((safejmario - nci) * wh, (safeimario)*wh, MFmario_idle_left, COPY_PUT);
+                }
+                else {
+                    if (power != 0) {
+                        putimage((safejmario - nci) * wh, (safeimario)*wh, Mmario_idle_left, COPY_PUT);
+                    }
+                    else {
+                        if (fpow != 0) {
+                            putimage((safejmario - nci) * wh, (safeimario)*wh, Fmario_idle_left, COPY_PUT);
+                        }
+                        else {
+                            putimage((safejmario - nci) * wh, (safeimario)*wh, mario_idle_left, COPY_PUT);
+                        }
+                    }
+                }
                 lifes--;
                 imario = safeimario;
                 jmario = safejmario;
@@ -780,12 +1463,24 @@ void MarioMovement() {
                     piranav[i].dead = 1;
                     pdead++;
                     putimage((piranav[i].jpirana - nci) * wh, piranav[i].ipirana * wh, skyblock, COPY_PUT);
+                    if (piranav[p].orientation == -1) {
+                        putimage((piranav[i].jpirana - nci) * wh, (piranav[i].ipinit) * wh, Rpipehead, COPY_PUT);
+                    }
+                    else {
+                        putimage((piranav[i].jpinit - nci) * wh, (piranav[i].ipinit) * wh, pipehead, COPY_PUT);
+                    }
                 }
                 else {
                     if (CheckBlock(imario * wh, jmario * wh, wh, (float)(piranav[i].ipirana) * wh, (float)(piranav[i].jpirana) * wh) == 1 && direct == "right") {
                         piranav[i].dead = 1;
                         pdead++;
                         putimage((piranav[i].jpirana - nci) * wh, piranav[i].ipirana * wh, skyblock, COPY_PUT);
+                        if (piranav[p].orientation == -1) {
+                            putimage((piranav[i].jpirana - nci) * wh, (piranav[i].ipinit) * wh, Rpipehead, COPY_PUT);
+                        }
+                        else {
+                            putimage((piranav[i].jpinit - nci) * wh, (piranav[i].ipinit) * wh, pipehead, COPY_PUT);
+                        }
                     }
                 }
             }
@@ -818,6 +1513,44 @@ void MarioMovement() {
                 ma_sound_seek_to_pcm_frame(&CoinEffect, 0);
                 ma_sound_start(&CoinEffect);
                 putimage((coins[i].jcolec - nci)* wh, coins[i].icolec* wh, skyblock, COPY_PUT);
+                if (direct == "right") {
+                    putimage((jmario - nci) * wh, imario * wh, mario_idle_right, COPY_PUT);
+                }
+                else {
+                    putimage((jmario - nci) * wh, imario * wh, mario_idle_left, COPY_PUT);
+                }
+                continue;
+            }
+        }
+    }
+
+    for (int i = 1;i <= firo;i++) { //checker pentru coliziuni cu fire flowers
+        if (fflower[i].mapart == (int)(nci - nc1) && fflower[i].colected == 0) {
+            if (CheckBlock(imario * wh, jmario * wh, wh, (float)(fflower[i].icolec) * wh, (float)(fflower[i].jcolec) * wh) == 1 && direct == "right" && fflower[i].colected == 0) {
+                fpow += 80;
+				ma_sound_stop(&PowerUpEffect);
+				ma_sound_seek_to_pcm_frame(&PowerUpEffect, 0);
+				ma_sound_start(&PowerUpEffect);
+                fflower[i].colected = 1;
+                ma_sound_stop(&CoinEffect);
+                ma_sound_seek_to_pcm_frame(&CoinEffect, 0);
+                ma_sound_start(&CoinEffect);
+                putimage((fflower[i].jcolec - nci) * wh, fflower[i].icolec * wh, skyblock, COPY_PUT);
+                if (direct == "right") {
+                    putimage((jmario - nci) * wh, imario * wh, mario_idle_right, COPY_PUT);
+                }
+                else {
+                    putimage((jmario - nci) * wh, imario * wh, mario_idle_left, COPY_PUT);
+                }
+                continue;
+            }
+            if (CheckBlock(imario * wh, jmario * wh, wh, (float)(fflower[i].icolec) * wh, (float)(fflower[i].jcolec) * wh) == 1 && direct == "left" && fflower[i].colected == 0) {
+                fpow += 80;
+                ma_sound_stop(&PowerUpEffect);
+                ma_sound_seek_to_pcm_frame(&PowerUpEffect, 0);
+                ma_sound_start(&PowerUpEffect);
+                fflower[i].colected = 1;
+                putimage((fflower[i].jcolec - nci) * wh, fflower[i].icolec * wh, skyblock, COPY_PUT);
                 if (direct == "right") {
                     putimage((jmario - nci) * wh, imario * wh, mario_idle_right, COPY_PUT);
                 }
@@ -870,25 +1603,87 @@ void MarioMovement() {
     if (mover == 0) {
         if ((int)jmario - jmario == 0) {
             if (direct == "right" && harta[(int)imario][(int)jmario] != 3 && harta[(int)imario][(int)jmario] != 4) {
-                putimage((jmario - nci) * wh, imario * wh, mario_idle_right, COPY_PUT);
+                if (fpow != 0 && power != 0) {
+                    putimage((jmario - nci) * wh, imario * wh, MFmario_idle_right, COPY_PUT);
+                }
+                else {
+                    if (power != 0) {
+						putimage((jmario - nci)* wh, imario* wh, Mmario_idle_right, COPY_PUT);
+					}
+                    else {
+                        if (fpow != 0) {
+                            putimage((jmario - nci) * wh, imario * wh, Fmario_idle_right, COPY_PUT);
+                        }
+                        else {
+                            putimage((jmario - nci) * wh, imario * wh, mario_idle_right, COPY_PUT);
+                        }
+                    }
+                }
             }
             else {
                 if (harta[(int)imario][(int)jmario] != 3 && harta[(int)imario][(int)jmario] != 4) {
-                    putimage((jmario - nci) * wh, imario * wh, mario_idle_left, COPY_PUT);
+                    if (fpow != 0 && power != 0) {
+                        putimage((jmario - nci) * wh, imario * wh, MFmario_idle_left, COPY_PUT);
+                    }
+                    else {
+                        if (power != 0) {
+                            putimage((jmario - nci) * wh, imario * wh, Mmario_idle_left, COPY_PUT);
+                        }
+                        else {
+                            if (fpow != 0) {
+                                putimage((jmario - nci) * wh, imario * wh, Fmario_idle_left, COPY_PUT);
+                            }
+                            else {
+                                putimage((jmario - nci) * wh, imario * wh, mario_idle_left, COPY_PUT);
+                            }
+                        }
+                    }
                 }
             }
         }
         else {
             if (direct == "right") {
                 if (harta[(int)imario][(int)jmario + 1] != 3 && harta[(int)imario][(int)jmario + 1] != 4 && harta[(int)imario][(int)jmario - 1] != 3
-                    && harta[(int)imario][(int)jmario - 1] != 4) {
-                    putimage((jmario - nci) * wh, imario * wh, mario_idle_right, COPY_PUT);
+                && harta[(int)imario][(int)jmario - 1] != 4) {
+                    if (fpow != 0 && power != 0) {
+                        putimage((jmario - nci) * wh, imario * wh, MFmario_idle_right, COPY_PUT);
+                    }
+                    else {
+                        if (power != 0) {
+                            putimage((jmario - nci) * wh, imario * wh, Mmario_idle_right, COPY_PUT);
+                        }
+                        else {
+                            if (fpow != 0) {
+                                putimage((jmario - nci) * wh, imario * wh, Fmario_idle_right, COPY_PUT);
+                            }
+                            else {
+                                putimage((jmario - nci) * wh, imario * wh, mario_idle_right, COPY_PUT);
+                            }
+                        }
+                    }
                 }
             }
             else {
                 if (harta[(int)imario][(int)jmario + 1] != 3 && harta[(int)imario][(int)jmario + 1] != 4 && harta[(int)imario][(int)jmario - 1] != 3
-                    && harta[(int)imario][(int)jmario - 1] != 4) {
-                    putimage((jmario - nci) * wh, imario * wh, mario_idle_left, COPY_PUT);
+                && harta[(int)imario][(int)jmario - 1] != 4) {
+                    if (harta[(int)imario][(int)jmario] != 3 && harta[(int)imario][(int)jmario] != 4) {
+                        if (fpow != 0 && power != 0) {
+                            putimage((jmario - nci) * wh, imario * wh, MFmario_idle_left, COPY_PUT);
+                        }
+                        else {
+                            if (power != 0) {
+                                putimage((jmario - nci) * wh, imario * wh, Mmario_idle_left, COPY_PUT);
+                            }
+                            else {
+                                if (fpow != 0) {
+                                    putimage((jmario - nci) * wh, imario * wh, Fmario_idle_left, COPY_PUT);
+                                }
+                                else {
+                                    putimage((jmario - nci) * wh, imario * wh, mario_idle_left, COPY_PUT);
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -904,7 +1699,9 @@ void MarioMovement() {
     }
 
 	if (power != 0) power--;
+	//if (fpow != 0) fpow--;
     if(invincibilityframes!=0) invincibilityframes--;
+    if (shoot < 20) shoot++;
 
     settextstyle(SANS_SERIF_FONT, HORIZ_DIR, wh/9);
     char CoinsText[10], LifesText[10];
@@ -938,23 +1735,37 @@ void MarioMovement() {
 		//PlaySound(TEXT("stage_clear.wav"), NULL, SND_FILENAME | SND_ASYNC);
         clock_t end = clock();
         double time_spent = ((double)(end - start) / CLOCKS_PER_SEC) - timespent;
-        itoa((int)time_spent, ts, 10);
+
 		int score1 = 1000 - (int)time_spent * 10 + gdead * 100 + coinono * 100;
-        itoa(score1, SCORE, 10);
-        settextstyle(SANS_SERIF_FONT, HORIZ_DIR, 3);
+
+		char charArray[50];
+        strcpy(charArray, cht.c_str());
+		cout << charArray << '\n';
+		cout << levelstats[0].name << '\n';
+        cout << strcmp(levelstats[0].name, charArray);
+        for (int i = 0;i < 9;i++) {
+            if (strcmp(levelstats[i].name, charArray) == 0) {
+                if (levelstats[i].score < score1) {
+                    levelstats[i].score = score1;
+                }
+                levelstats[i].coins = coinono;
+                levelstats[i].enemies = gdead;
+                levelstats[i].time = (int)time_spent;
+            }
+        }
+		cout << levelstats[0].score << '\n';
+		cout << levelstats[0].coins << '\n';
+		cout << levelstats[0].enemies << '\n';
+		cout << levelstats[0].time << '\n';
+
+
 		setvisualpage(1);
 		setactivepage(1);
         cleardevice();
-        outtextxy(x/2+75, y/2, score);
-		outtextxy(x / 2, y / 2 + 50, text3);
-        outtextxy(x / 2 + 200, y / 2 + 50, enemkill);
-		outtextxy(x / 2, y / 2 + 100, text4);
-		outtextxy(x / 2 + 150, y / 2 + 100, ts);
-        line(x / 2, y / 2 + 130, x / 2 + 200, y / 2 + 130);
-		outtextxy(x / 2, y / 2 + 160, text5);
-		outtextxy(x / 2 + 100, y / 2 + 160, SCORE);
+        delay(2000);
 		ma_sound_stop(&BackGroundMusic);
 		ma_sound_start(&StageClear);
+        MainMenu();
         while (okesc!=0) {
             if (GetKeyState(VK_ESCAPE) & 0x8000) okesc = 0;
         }

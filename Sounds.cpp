@@ -15,7 +15,7 @@ using namespace std;
 
 ma_engine engine;
 ma_sound JumpEffect, CoinEffect, ColideEffect, GombaDeadEffect, BackGroundMusic, DeathEffect, StageClear, StarTheme, plinc, incplace, mapediRO, mapediEN, blselecRO,
-blselecEN, OneUpEffect, PauseEffect;
+blselecEN, OneUpEffect, PauseEffect, FireBallEffect, PowerUpAppearEffect, PowerUpEffect;
 
 
 void SoundInitialisation() {
@@ -119,6 +119,24 @@ void SoundInitialisation() {
     if (ma_sound_init_from_file(&engine, "pause.wav", 0, NULL, NULL, &PauseEffect) != MA_SUCCESS) {
         printf("Failed to load sound effect 2.\n");
         ma_sound_uninit(&PauseEffect);
+        ma_engine_uninit(&engine);
+        exit(0);
+    }
+    if (ma_sound_init_from_file(&engine, "mario_fireball.wav", 0, NULL, NULL, &FireBallEffect) != MA_SUCCESS) {
+        printf("Failed to load sound effect 2.\n");
+        ma_sound_uninit(&FireBallEffect);
+        ma_engine_uninit(&engine);
+        exit(0);
+    }
+    if (ma_sound_init_from_file(&engine, "mario_powerup_appear.wav", 0, NULL, NULL, &PowerUpAppearEffect) != MA_SUCCESS) {
+        printf("Failed to load sound effect 2.\n");
+        ma_sound_uninit(&PowerUpAppearEffect);
+        ma_engine_uninit(&engine);
+        exit(0);
+    }
+    if (ma_sound_init_from_file(&engine, "mario_powerup.wav", 0, NULL, NULL, &PowerUpEffect) != MA_SUCCESS) {
+        printf("Failed to load sound effect 2.\n");
+        ma_sound_uninit(&PowerUpEffect);
         ma_engine_uninit(&engine);
         exit(0);
     }

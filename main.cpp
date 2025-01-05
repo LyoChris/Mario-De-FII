@@ -17,6 +17,7 @@
 #include "miniaudio.h"
 using namespace std;
 
+extern LevelStats levelstats[9], customstats[9];
 extern int CUSTOM_LEVEL_ITEMS;
 extern char* customLevelText[10];
 extern int x, y;
@@ -26,6 +27,7 @@ int main() {
 	MapReaderandSetter();
 	SoundInitialisation();
 	drawLanguage(x, y);
+	loadStats(levelstats);
 	loadData(customLevelText, CUSTOM_LEVEL_ITEMS);
 	//MapEditorLevels();
 	//LevelLoader();

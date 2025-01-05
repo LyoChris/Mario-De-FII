@@ -1,5 +1,13 @@
 #pragma once
 
+struct LevelStats {
+	char* name;
+	int score;
+	int coins;
+	int enemies;
+	int time;
+};
+
 void AssetLoader();
 int randnumb(int a, int b);
 
@@ -8,3 +16,5 @@ void AssetLoaderMap();
 void MapReseter();
 void saveData(char* strArray[], int intValue);
 void loadData(char* strArray[], int& intValue);
+void saveStats(LevelStats LvlSts[]);
+void loadStats(LevelStats LvlSts[]);

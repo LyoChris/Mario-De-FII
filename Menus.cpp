@@ -18,6 +18,7 @@ using namespace std;
 #define MAX1 30
 #define MAX2 1000
 
+extern LevelStats levelstats[9], customstats[9];
 extern ma_sound JumpEffect, CoinEffect, ColideEffect, GombaDeadEffect, DeathEffect, BackGroundMusic, StageClear, PauseEffect, StarTheme;
 extern clock_t start;
 extern colectible coins[100], life[100];
@@ -270,6 +271,7 @@ void MainMenu() {
 					delay(2000);
 					break;
 				case 3:
+					saveStats(levelstats);
 					saveData(customLevelText, CUSTOM_LEVEL_ITEMS);
 					running = false;
 					break;
@@ -1076,7 +1078,6 @@ void ScoreLevel() {
 	cleardevice();
 	char t = getch();
 	if (t == 'a') {
-		LevelLoader();
 		MarioGame();
 	}
 	else {
