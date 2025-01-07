@@ -11,16 +11,17 @@
 #include "MapEditor.h"
 #include "Colectibles.h"
 #include "Loader.h"
+#include "Mario.h"
 
 
-extern int coinono, lifes, ok, gdead, power, pdead, lifo, staro, coino;
+extern int coinono, lifes, ok, gdead, power, pdead, lifo, staro, coino, timespent;
 extern firebll fireb[9];
 extern colectible coins[100], life[100], starpow[100], fflower[100];
 extern goompa gompav[100];
 extern pirhana piranav[100];
 extern int harta[30][1000], n, p, x, y, firo;
 extern std::string cht;
-extern float wh;
+extern float wh, nci, ncf, nc1;
 extern void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goomba_walking_2, * mario_climbing_down_1, * mario_climbing_down_2, * mario_climbing_up_1,
 * mario_climbing_up_2, * mario_idle_left, * mario_idle_right, * mario_jump_1, * mario_left_run_1, * mario_left_run_2, * mario_left_run_3, * mario_right_run_1,
 * mario_right_run_2, * mario_right_run_3, * mario_vine, * mario_vine_top, * skyblock, * lucky_block_used, * one_up, * flagpolep, * pipehead, * pipebody, * pirana_1, * pirana_2, * pipeheadpir,
@@ -484,6 +485,9 @@ void MapReseter() {
     staro = 0;
     coino = 0;
     lifo = 0;
+    ncf = nc1;
+    nci = 0;
+    timespent = 0;
 }
 
 void saveData(char* strArray[], int intValue) {
@@ -529,8 +533,7 @@ void saveStats(LevelStats LvlSts[]) {
         return;
     }
     for (int i = 0; i < 9; i++) {
-        std::cout << LvlSts[i].name << " " << LvlSts[i].coins << " " << LvlSts[i].enemies << " " << LvlSts[i].time << " " << LvlSts[i].score << '\n';
-        outfile << LvlSts[i].name << " " << LvlSts[i].coins << " " << LvlSts[i].enemies << " " << LvlSts[i].time << " " << LvlSts[i].score << '\n';
+        outfile << LvlSts[i].name << " " << LvlSts[i].disname << "% "<< LvlSts[i].coins << " " << LvlSts[i].enemies << " " << LvlSts[i].time << " " << LvlSts[i].score << '\n';
     }
 
     outfile.close();
@@ -540,17 +543,20 @@ void loadStats(LevelStats LvlSts[]) {
     std::ifstream infile("LEVELSTATS.txt");
 
     for (int i = 0; i < 9; i++) {
-        char str[50];
+        char str[50], str1[50];
         infile.getline(str, 50, ' ');
-        std::cout << str<<'\n';
         LvlSts[i].name = new char[strlen(str) + 1];
         strcpy(LvlSts[i].name, str);
+        infile.getline(str1, 50, '%');
+        LvlSts[i].disname = new char[strlen(str1) + 1];
+        strcpy(LvlSts[i].disname, str1);
+
         infile >> LvlSts[i].coins >> LvlSts[i].enemies >> LvlSts[i].time >> LvlSts[i].score;
-        //infile.ignore();
+        infile.ignore();
 
     }
     for (int i = 0; i < 9; i++) {
-        std::cout << LvlSts[i].name << " " << LvlSts[i].coins << " " << LvlSts[i].enemies << " " << LvlSts[i].time << " " << LvlSts[i].score << '\n';
+        std::cout << LvlSts[i].name << " " << LvlSts[i].disname << " " << LvlSts[i].coins << " " << LvlSts[i].enemies << " " << LvlSts[i].time << " " << LvlSts[i].score << '\n';
     }
 
     infile.close();

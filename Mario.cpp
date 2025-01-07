@@ -21,7 +21,8 @@ using namespace std;
 extern string cht;
 LevelStats levelstats[9], customstats[9];
 extern ma_engine engine;
-extern ma_sound JumpEffect, CoinEffect, ColideEffect, GombaDeadEffect, DeathEffect, BackGroundMusic, StageClear, OneUpEffect, FireBallEffect, PowerUpAppearEffect, PowerUpEffect;
+extern ma_sound JumpEffect, CoinEffect, ColideEffect, GombaDeadEffect, DeathEffect, BackGroundMusic, StageClear, OneUpEffect, FireBallEffect, PowerUpAppearEffect, 
+PowerUpEffect, DmgEffect;
 extern clock_t start, initpause;
 extern colectible coins[100], life[100], starpow[100], fflower[100];
 extern firebll fireb[9];
@@ -43,7 +44,7 @@ extern float wh, ncf, nci, nc1, imario, jmario;
 extern int x, y, nl, nc, harta[30][1000], mv2, map, stage=-7, mappart, coino, lifo, flagpole, staro, SplitMenuItems, fpow;
 extern int time1, okesc, n, selectedOption, p, firo;
 string direct;
-int lifes = 3, shoot=0, safeimario, safejmario, mover = 0, coinono = 0, invincibilityframes = 0, ok = 0, hoverm = 0, play = 0, gdead = 0, hit, power = 0, pdead = 0, timespent=0;
+int lifes = 3, okmov = 0, shoot = 0, safeimario, safejmario, mover = 0, coinono = 0, invincibilityframes = 0, ok = 0, hoverm = 0, play = 0, gdead = 0, hit, power = 0, pdead = 0, timespent = 0;
 
 void MarioStageput() {
     switch (stage) {
@@ -1026,7 +1027,6 @@ void NextState(string direction1) {
                         if (harta[(int)imario][(int)jmario] == 8) {
                             putimage(((int)jmario - nci) * wh, ((int)imario) * wh, lucky_block_used, COPY_PUT);
                             int ranblock = randnumb(0, 3);
-                            cout << "ranblock" << ranblock << '\n';
                             if (ranblock == 1) {
                                 lifo++;
                                 life[lifo].icolec = (int)imario-1;
@@ -1083,9 +1083,9 @@ void MarioMovement() {
         safejmario = jmario;
     }
     int vine = 0;
-
+    /*
 	cout << '\n';
-    if ((direct =="left" || direct == "right")) {
+    if ((direct == "left" || direct == "right")) {
         // if (harta[(int)imario][(int)jmario] == 3) { cout << "M "; putimage(((int)jmario - nci) * wh, (int)imario * wh, mario_vine, COPY_PUT); }
         if (harta[(int)imario - 1][(int)jmario] == 3) { cout << "U "; putimage(((int)jmario - nci) * wh, ((int)imario - 1) * wh, mario_vine, COPY_PUT); vine = 1; }
         if (harta[(int)imario + 1][(int)jmario] == 3) { cout << "D "; putimage(((int)jmario - nci) * wh, ((int)imario + 1) * wh, mario_vine, COPY_PUT);  vine = 1; }
@@ -1094,97 +1094,160 @@ void MarioMovement() {
         if (harta[(int)imario - 1][(int)jmario + 1] == 3) { cout << "UR "; putimage(((int)jmario + 1 - nci) * wh, ((int)imario - 1) * wh, mario_vine, COPY_PUT); vine = 1; }
         if (harta[(int)imario - 1][(int)jmario - 1] == 3) { cout << "UL "; putimage(((int)jmario - 1 - nci) * wh, ((int)imario - 1) * wh, mario_vine, COPY_PUT); vine = 1; }
         if (harta[(int)imario + 1][(int)jmario + 1] == 3) { cout << "DR "; putimage(((int)jmario + 1 - nci) * wh, ((int)imario + 1) * wh, mario_vine, COPY_PUT); vine = 1; }
-        if (harta[(int)imario + 1][(int)jmario - 1] == 3) { cout << "DL "; putimage(((int)jmario - 1 - nci) * wh, ((int)imario + 1) * wh, mario_vine, COPY_PUT); vine = 1; }  
-    }
-    cout << '\n';
+        if (harta[(int)imario + 1][(int)jmario - 1] == 3) { cout << "DL "; putimage(((int)jmario - 1 - nci) * wh, ((int)imario + 1) * wh, mario_vine, COPY_PUT); vine = 1; }
+    }*/
 
     mover = 0;
 
     if (((GetKeyState(0x41) < 0 || (GetKeyState(VK_LEFT) < 0))) && jmario > 0) {
         NextState("left");
         mover = 1;
+        okmov = 0;
         direct = "left";
     }
 
     if (((GetKeyState(0x44) < 0 || (GetKeyState(VK_RIGHT) < 0))) && jmario < ncf - 1) {
         NextState("right");
         mover = 1;
+        okmov = 0;
         direct = "right";
     }
     if (((GetKeyState(0x57) < 0 || (GetKeyState(VK_UP) < 0))) && (harta[(int)imario][(int)jmario] == 3 || harta[(int)imario][(int)jmario] == 4) && jmario - (int)jmario == 0) {
         NextState("up");
         mover = 1;
+        okmov = 0;
         direct = "up";
     }
 
     if (((GetKeyState(0x53) < 0 || (GetKeyState(VK_DOWN) < 0))) && (harta[(int)imario][(int)jmario] == 3 || harta[(int)imario][(int)jmario] == 4) && jmario-(int)jmario==0) {
         NextState("down");
         mover = 1;
+        okmov = 0;
         direct = "down";
     }
 
-    if (((GetKeyState(VK_SPACE) < 0)) && (harta[(int)imario + 1][(int)jmario] == 1 || harta[(int)imario + 1][(int)jmario] == 8 || harta[(int)imario + 1][(int)jmario] == 10
-        || harta[(int)imario + 1][(int)jmario] == 14 || harta[(int)imario + 1][(int)jmario] == 13)) {
-		ma_sound_stop(&JumpEffect);
-		ma_sound_seek_to_pcm_frame(&JumpEffect, 0);
-		ma_sound_start(&JumpEffect);
-        ok = 6;
-        NextState("space");
-        mover = 1;
-        //direct = "space";
-        //k = 1;
+    if (((GetKeyState(VK_SPACE) < 0))) {
+        if ((harta[(int)imario + 1][(int)jmario] == 1 || harta[(int)imario + 1][(int)jmario] == 8 || harta[(int)imario + 1][(int)jmario] == 10
+            || harta[(int)imario + 1][(int)jmario] == 14 || harta[(int)imario + 1][(int)jmario] == 13) && harta[(int)imario - 1][(int)jmario] != 1 && harta[(int)imario - 1][(int)jmario + 1] != 1) {
+            ma_sound_stop(&JumpEffect);
+            ma_sound_seek_to_pcm_frame(&JumpEffect, 0);
+            ma_sound_start(&JumpEffect);
+            ok = 6;
+            NextState("space");
+            mover = 1;
+            okmov = 0;
+            //direct = "space";
+            //k = 1;
+        }
+        else {
+            if (ok == 0 && harta[(int)imario][(int)jmario]==1) {
+                ma_sound_stop(&ColideEffect);
+                ma_sound_seek_to_pcm_frame(&ColideEffect, 0);
+                ma_sound_start(&ColideEffect);
+            }
+        }
     }
+    
 
     if (ok > 0) {
         NextState("space");
         mover = 1;
+        okmov = 0;
         delay(MarioInterval);
     }
 
-    if (fpow != 0 && (GetKeyState(0x43) < 0) && (int)imario-imario==0 && shoot>5) {
-        ma_sound_stop(&FireBallEffect);
-		ma_sound_seek_to_pcm_frame(&FireBallEffect, 0);
-		ma_sound_start(&FireBallEffect);
-		shoot = 0;
-        int put = 0;
-        for (int i = 0;i < 6;i++) {
-            if (fireb[i].exist == 0) {
-				cout << "EXITA" << '\n';
-                fireb[i].exist = 1;
+    if (fpow != 0 && (GetKeyState(0x43) < 0) && (int)imario - imario == 0 && shoot > 5) {
+        cout << "BLOCK: " << harta[(int)imario][(int)jmario + 2];
+        if ((int)jmario - jmario != 0 && harta[(int)imario][(int)jmario + 2] != 1 && harta[(int)imario][(int)jmario + 2] != 12 && harta[(int)imario][(int)jmario + 2] != 13 
+            && harta[(int)imario][(int)jmario + 2] != 14 && harta[(int)imario][(int)jmario - 1] != 1 && harta[(int)imario][(int)jmario - 1] != 12 
+            && harta[(int)imario][(int)jmario - 1] != 13 && harta[(int)imario][(int)jmario - 1] != 14) {
+            ma_sound_stop(&FireBallEffect);
+            ma_sound_seek_to_pcm_frame(&FireBallEffect, 0);
+            ma_sound_start(&FireBallEffect);
+            shoot = 0;
+            int put = 0;
+            for (int i = 0;i < 6;i++) {
+                if (fireb[i].exist == 0) {
+                    fireb[i].exist = 1;
+                    if (direct == "right") {
+                        fireb[i].fbdirection = 0;
+                        fireb[i].ifireb = imario;
+                        fireb[i].jfireb = jmario + 1;
+                    }
+                    else {
+                        fireb[i].fbdirection = 1;
+                        fireb[i].ifireb = imario;
+                        fireb[i].jfireb = jmario - 1;
+                    }
+                    fireb[i].mapart = (int)(nci - nc1);
+                    put = 1;
+                    break;
+                }
+            }
+            if (put == 0) {
+                fireb[8].exist = 1;
                 if (direct == "right") {
-					fireb[i].fbdirection = 0;
-                    fireb[i].ifireb = imario;
-                    fireb[i].jfireb = jmario + 1;
+                    fireb[5].fbdirection = 0;
+                    fireb[5].ifireb = imario;
+                    fireb[5].jfireb = jmario + 1;
                 }
                 else {
-                    fireb[i].fbdirection = 1;
-                    fireb[i].ifireb = imario;
-                    fireb[i].jfireb = jmario - 1;
+                    fireb[5].fbdirection = 1;
+                    fireb[5].ifireb = imario;
+                    fireb[5].jfireb = jmario - 1;
                 }
-				fireb[i].mapart = (int)(nci - nc1);
-                put = 1;
-                break;
+                fireb[8].mapart = (int)(nci - nc1);
             }
         }
-        if (put == 0) {
-            fireb[8].exist = 1;
-            if (direct == "right") {
-                fireb[5].fbdirection = 0;
-                fireb[5].ifireb = imario;
-                fireb[5].jfireb = jmario + 1;
+        else {
+            if (harta[(int)imario][(int)jmario - 1] != 1 && harta[(int)imario][(int)jmario - 1] != 12 && harta[(int)imario][(int)jmario - 1] != 13 && harta[(int)imario][(int)jmario - 1] != 14
+                && harta[(int)imario][(int)jmario + 1] != 1 && harta[(int)imario][(int)jmario + 1] != 12 && harta[(int)imario][(int)jmario + 1] != 13 && harta[(int)imario][(int)jmario + 1] != 14) {
+                ma_sound_stop(&FireBallEffect);
+                ma_sound_seek_to_pcm_frame(&FireBallEffect, 0);
+                ma_sound_start(&FireBallEffect);
+                shoot = 0;
+                int put = 0;
+                for (int i = 0;i < 6;i++) {
+                    if (fireb[i].exist == 0) {
+                        fireb[i].exist = 1;
+                        if (direct == "right") {
+                            fireb[i].fbdirection = 0;
+                            fireb[i].ifireb = imario;
+                            fireb[i].jfireb = jmario + 1;
+                        }
+                        else {
+                            fireb[i].fbdirection = 1;
+                            fireb[i].ifireb = imario;
+                            fireb[i].jfireb = jmario - 1;
+                        }
+                        fireb[i].mapart = (int)(nci - nc1);
+                        put = 1;
+                        break;
+                    }
+                }
+                if (put == 0) {
+                    fireb[8].exist = 1;
+                    if (direct == "right") {
+                        fireb[5].fbdirection = 0;
+                        fireb[5].ifireb = imario;
+                        fireb[5].jfireb = jmario + 1;
+                    }
+                    else {
+                        fireb[5].fbdirection = 1;
+                        fireb[5].ifireb = imario;
+                        fireb[5].jfireb = jmario - 1;
+                    }
+                    fireb[8].mapart = (int)(nci - nc1);
+                }
             }
-            else {
-                fireb[5].fbdirection = 1;
-                fireb[5].ifireb = imario;
-                fireb[5].jfireb = jmario - 1;
-            }
-            fireb[8].mapart = (int)(nci - nc1);
         }
+        
     }
 
     if ((int)jmario - jmario != 0) {
         if (harta[(int)imario + 1][(int)jmario] == 0 && harta[(int)imario + 1][(int)jmario + 1] == 0 && ok == 0) {
             mover = 1;
+            okmov = 0;
             if (harta[(int)imario + 1][(int)jmario] == 0) {
 				putimage((jmario - nci) * wh, imario * wh, skyblock, COPY_PUT);
                 imario += 0.5;
@@ -1252,6 +1315,7 @@ void MarioMovement() {
     else {
         if (harta[(int)imario + 1][(int)jmario] == 0 && ok == 0) {
             mover = 1;
+            okmov = 0;
             if (harta[(int)imario + 1][(int)jmario] == 0) {
                 putimage((jmario - nci) * wh, imario * wh, skyblock, COPY_PUT);
                 imario += 0.5;
@@ -1357,6 +1421,7 @@ void MarioMovement() {
                         gompav[i].dead = 1;
                         gdead++;
                         ok += 4;
+
                         ma_sound_stop(&GombaDeadEffect);
                         ma_sound_seek_to_pcm_frame(&GombaDeadEffect, 0);
                         ma_sound_start(&GombaDeadEffect);
@@ -1368,11 +1433,12 @@ void MarioMovement() {
                         std::cout << "GOOMPA DEAD" << '\n';
                     }
                     else {
-                        if (gompav[i].hit != 0) {
-                            imario -= 2.0;
+						ma_sound_stop(&DmgEffect);
+						ma_sound_seek_to_pcm_frame(&DmgEffect, 0);
+						ma_sound_start(&DmgEffect);
+                        for (int i = 0;i < 3;i++) {
                             NextState("left");
-                            NextState("left");
-                            gompav[i].hit--;
+                            imario -= 0.5;
                         }
                         if (invincibilityframes == 0) {
                             lifes--;
@@ -1396,11 +1462,12 @@ void MarioMovement() {
                         std::cout << "GOOMPA DEAD" << '\n';
                     }
                     else {
-                        if (gompav[i].hit != 0) {
-                            imario -= 2.0;
+                        ma_sound_stop(&DmgEffect);
+                        ma_sound_seek_to_pcm_frame(&DmgEffect, 0);
+                        ma_sound_start(&DmgEffect);
+                        for (int i = 0;i < 3;i++) {
                             NextState("right");
-                            NextState("right");
-                            gompav[i].hit--;
+                            imario += 0.5;
                         }
                         if (invincibilityframes == 0) {
                             lifes--;
@@ -1436,20 +1503,26 @@ void MarioMovement() {
 
     for (int i = 1;i <= p;i++) { //checker pentru coliziuni cu pirana
         if (power == 0) {
-            if (piranav[i].mapart == (int)(nci - nc1) && piranav[i].dead == 0) {
-                if (CheckBlock(imario * wh, jmario * wh, wh, (float)(piranav[i].ipirana) * wh, (float)(piranav[i].jpirana) * wh) == 1 && direct == "right") {
-                    //NextState("left");
-                    //NextState("left");
-                    ok += 6;
+            if (piranav[i].mapart == (int)(nci - nc1) && piranav[i].dead == 0 && piranav[i].ipinit!=piranav[i].ipirana /*piranav[i].upframes != 0 && piranav[i].reset*/) {
+                if (CheckBlock(imario * wh, jmario * wh, wh, (float)(piranav[i].ipirana) * wh, (float)(piranav[i].jpirana) * wh) == 1 && direct == "right" ) {
+					ma_sound_stop(&DmgEffect);
+					ma_sound_seek_to_pcm_frame(&DmgEffect, 0);
+					ma_sound_start(&DmgEffect);
+					if (piranav[i].orientation == 1) {
+						ok += 5;
+					}
                     if (invincibilityframes == 0) {
                         lifes--;
                         invincibilityframes = 10;
                     }
                 }
                 if (CheckBlock(imario * wh, jmario * wh, wh, (float)(piranav[i].ipirana) * wh, (float)(piranav[i].jpirana) * wh) == 1 && direct == "left") {
-                    //NextState("right");
-                    //NextState("right");
-                    ok += 6;
+                    ma_sound_stop(&DmgEffect);
+                    ma_sound_seek_to_pcm_frame(&DmgEffect, 0);
+                    ma_sound_start(&DmgEffect);
+                    if (piranav[i].orientation == 1) {
+                        ok += 5;
+                    }
                     if (invincibilityframes == 0) {
                         lifes--;
                         invincibilityframes = 10;
@@ -1490,7 +1563,7 @@ void MarioMovement() {
 
     for (int i = 1;i <= coino;i++) { //checker pentru coliziuni cu coins
         if (coins[i].mapart == (int)(nci - nc1) && coins[i].colected == 0) {
-            if (CheckBlock(imario * wh, jmario * wh, wh, (float)(coins[i].icolec) * wh, (float)(coins[i].jcolec) * wh) == 1 && direct == "right" && coins[i].colected == 0) {
+            if (CheckBlock(imario * wh, (jmario-nci) * wh, wh, (float)(coins[i].icolec) * wh, (float)(coins[i].jcolec- nci) * wh) == 1 && direct == "right") {
                 coinono++;
                 coins[i].colected = 1;
                 ma_sound_stop(&CoinEffect);
@@ -1503,10 +1576,8 @@ void MarioMovement() {
                 else {
 					putimage((jmario - nci)* wh, imario* wh, mario_idle_left, COPY_PUT);
                 }
-                i++;
-                continue;
             }
-            if (CheckBlock(imario * wh, jmario * wh, wh, (float)(coins[i].icolec) * wh, (float)(coins[i].jcolec) * wh) == 1 && direct == "left" && coins[i].colected == 0) {
+            if (CheckBlock(imario * wh, (jmario - nci) * wh, wh, (float)(coins[i].icolec) * wh, (float)(coins[i].jcolec - nci) * wh) == 1 && direct == "left") {
                 coinono++;
                 coins[i].colected = 1;
                 ma_sound_stop(&CoinEffect);
@@ -1519,7 +1590,6 @@ void MarioMovement() {
                 else {
                     putimage((jmario - nci) * wh, imario * wh, mario_idle_left, COPY_PUT);
                 }
-                continue;
             }
         }
     }
@@ -1596,10 +1666,62 @@ void MarioMovement() {
         }
     }
 
-    cout << "imario";
-	if (harta[(int)imario][(int)jmario] == 3) cout << "M ";
-	if (harta[(int)imario][(int)jmario - 1] == 3) cout << "L ";
-	if (harta[(int)imario][(int)jmario + 1] == 3) cout << "R ";
+    if (mover == 0) {
+        if(harta[(int)imario][(int)jmario]==3)
+			putimage(((int)jmario - nci) * wh, (int)imario * wh, mario_vine, COPY_PUT);
+		if (harta[(int)imario][(int)jmario] == 4)
+			putimage(((int)jmario - nci) * wh, (int)imario * wh, mario_vine_top, COPY_PUT);
+		if (harta[(int)imario][(int)jmario + 1] == 3)
+			putimage(((int)jmario - nci + 1) * wh, (int)imario * wh, mario_vine, COPY_PUT);
+		if (harta[(int)imario][(int)jmario + 1] == 4)
+			putimage(((int)jmario - nci + 1) * wh, (int)imario * wh, mario_vine_top, COPY_PUT);
+        if (harta[(int)imario + 1][(int)jmario] == 3)
+            putimage(((int)jmario - nci) * wh, ((int)imario + 1) * wh, mario_vine, COPY_PUT);
+        if (harta[(int)imario + 1][(int)jmario] == 4)
+            putimage(((int)jmario - nci) * wh, ((int)imario + 1) * wh, mario_vine_top, COPY_PUT);
+        if (harta[(int)imario + 1][(int)jmario + 1] == 3)
+            putimage(((int)jmario - nci + 1) * wh, ((int)imario + 1) * wh, mario_vine, COPY_PUT);
+        if (harta[(int)imario + 1][(int)jmario + 1] == 4)
+            putimage(((int)jmario - nci + 1) * wh, ((int)imario + 1) * wh, mario_vine_top, COPY_PUT);
+        if (direct == "right") {
+            if (fpow != 0 && power != 0) {
+                putimage((jmario - nci) * wh, imario * wh, MFmario_idle_right, COPY_PUT);
+            }
+            else {
+                if (power != 0) {
+                    putimage((jmario - nci) * wh, imario * wh, Mmario_idle_right, COPY_PUT);
+                }
+                else {
+                    if (fpow != 0) {
+                        putimage((jmario - nci) * wh, imario * wh, Fmario_idle_right, COPY_PUT);
+                    }
+                    else {
+                        putimage((jmario - nci) * wh, imario * wh, mario_idle_right, COPY_PUT);
+                    }
+                }
+            }
+        }
+        else {
+            if (fpow != 0 && power != 0) {
+                putimage((jmario - nci) * wh, imario * wh, MFmario_idle_left, COPY_PUT);
+            }
+            else {
+                if (power != 0) {
+                    putimage((jmario - nci) * wh, imario * wh, Mmario_idle_left, COPY_PUT);
+                }
+                else {
+                    if (fpow != 0) {
+                        putimage((jmario - nci) * wh, imario * wh, Fmario_idle_left, COPY_PUT);
+                    }
+                    else {
+                        putimage((jmario - nci) * wh, imario * wh, mario_idle_left, COPY_PUT);
+                    }
+                }
+            }
+        }
+    }
+
+    /*
     if (mover == 0) {
         if ((int)jmario - jmario == 0) {
             if (direct == "right" && harta[(int)imario][(int)jmario] != 3 && harta[(int)imario][(int)jmario] != 4) {
@@ -1687,9 +1809,8 @@ void MarioMovement() {
                 }
             }
         }
-        
     }
-
+    */
     if (jmario >= (int)ncf || ((jmario- nci +1)*wh >= x)) {
         MapLoaderNextRight(); //randam urmatoarea parte din harta
     }
@@ -1704,29 +1825,20 @@ void MarioMovement() {
     if (shoot < 20) shoot++;
 
     settextstyle(SANS_SERIF_FONT, HORIZ_DIR, wh/9);
-    char CoinsText[10], LifesText[10];
+    char CoinsText[10], LifesText[10], LifesText1[10];
     sprintf(CoinsText, "X %d", coinono);
 	sprintf(LifesText, "%d X", lifes);
+    sprintf(LifesText1, "%d X", lifes + 1);
 	putimage(0.4*wh, 0.3*wh, mario_coin, COPY_PUT);
     outtextxy(1.4*wh, 0.5*wh, CoinsText);
-    if (lifes >= 10) {
-        setcolor(RGB(126, 132, 246));
-		outtextxy((ncf - nci - wh / 15)* wh, 0.6 * wh, LifesText);
-        setcolor(WHITE);
-        outtextxy((ncf -nci - wh/13) * wh, 0.6 * wh, LifesText);
-    }
-    else {
-        outtextxy((ncf - nci - wh / 15)* wh, 0.6 * wh, LifesText);
-    }
+    setcolor(RGB(126, 132, 246));
+    outtextxy((ncf - nci - 1.6)* wh - textwidth(LifesText), 0.6 * wh, LifesText);
+    setcolor(RGB(126, 132, 246));
+    outtextxy((ncf - nci - 1.6) * wh - textwidth(LifesText1), 0.6 * wh, LifesText);
+    setcolor(WHITE);
+    outtextxy((ncf -nci - 1.6) * wh - textwidth(LifesText), 0.6 * wh, LifesText);
 	putimage((ncf-nci -1.4) * wh, 0.4 * wh, one_up, COPY_PUT);
-    char text2[20] = "Lives ";
-	char text3[30] = "Enemies Killed ";
-	char text4[30] = "Time(seconds): ";
-	char text5[30] = "SCORE: ";
-    char score[10], lives[10], enemkill[10], ts[10], SCORE[10];
-	itoa(gdead, enemkill, 10);
-    itoa(coinono, score, 10);
-    itoa(lifes, lives, 10);
+
     if (jmario == flagpole && flagpole != 0 && play==0) {
         PlaySound(TEXT("flagpole.wav"), NULL, SND_FILENAME | SND_SYNC);
         play = 1;
@@ -1740,9 +1852,6 @@ void MarioMovement() {
 
 		char charArray[50];
         strcpy(charArray, cht.c_str());
-		cout << charArray << '\n';
-		cout << levelstats[0].name << '\n';
-        cout << strcmp(levelstats[0].name, charArray);
         for (int i = 0;i < 9;i++) {
             if (strcmp(levelstats[i].name, charArray) == 0) {
                 if (levelstats[i].score < score1) {
@@ -1753,11 +1862,6 @@ void MarioMovement() {
                 levelstats[i].time = (int)time_spent;
             }
         }
-		cout << levelstats[0].score << '\n';
-		cout << levelstats[0].coins << '\n';
-		cout << levelstats[0].enemies << '\n';
-		cout << levelstats[0].time << '\n';
-
 
 		setvisualpage(1);
 		setactivepage(1);

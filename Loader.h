@@ -2,6 +2,7 @@
 
 struct LevelStats {
 	char* name;
+	char* disname;
 	int score;
 	int coins;
 	int enemies;

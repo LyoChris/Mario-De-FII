@@ -6,7 +6,7 @@
 #include "miniaudio.h"
 #include "Sounds.h"
 
-extern ma_sound JumpEffect, CoinEffect, ColideEffect, GombaDeadEffect, DeathEffect, BackGroundMusic, StageClear, OneUpEffect, FireBallEffect, PowerUpAppearEffect, PowerUpEffect;
+extern ma_sound JumpEffect, CoinEffect, ColideEffect, GombaDeadEffect, DeathEffect, BackGroundMusic, StageClear, OneUpEffect, FireBallEffect, PowerUpAppearEffect, PowerUpEffect, FireBallEffect;
 colectible coins[100], stars[100], life[100], starpow[100], fflower[100];
 extern goompa gompav[100];
 extern pirhana piranav[100];
@@ -45,50 +45,36 @@ void fireballmov(int a) {
 		if (fireb[a].jfireb - (int)fireb[a].jfireb != 0) {
 			if (harta[(int)fireb[a].ifireb][(int)fireb[a].jfireb] == 3) {
 				fireb[a].hoverf = 1;
-				//cout << 2;
 				putimage(((int)fireb[a].jfireb - nci) * wh, fireb[a].ifireb * wh, mario_vine, COPY_PUT);
-				//readimagefile("mario_vine.gif", ((int)gompav[a].jgompa - nci) * wh, gompav[a].igompa * wh, (((int)gompav[a].jgompa - nci) + 1) * wh, (gompav[a].igompa + 1) * wh);
 			}
 			if (harta[(int)fireb[a].ifireb][(int)fireb[a].jfireb + 1] == 3) {
 				fireb[a].hoverf = 1;
-				//cout << 3;
 				putimage(((int)fireb[a].jfireb + 1 - nci) * wh, fireb[a].ifireb * wh, mario_vine, COPY_PUT);
-				//readimagefile("mario_vine.gif", ((int)gompav[a].jgompa + 1 - nci) * wh, gompav[a].igompa * wh, (((int)gompav[a].jgompa + 1 - nci) + 1) * wh, (gompav[a].igompa + 1) * wh);
 			}
 			if (harta[(int)fireb[a].ifireb][(int)fireb[a].jfireb] == 4) {
 				fireb[a].hoverf = 1;
-				//cout << 2;
 				putimage(((int)fireb[a].jfireb - nci) * wh, fireb[a].ifireb * wh, mario_vine_top, COPY_PUT);
-				//readimagefile("mario_vine.gif", ((int)gompav[a].jgompa - nci) * wh, gompav[a].igompa * wh, (((int)gompav[a].jgompa - nci) + 1) * wh, (gompav[a].igompa + 1) * wh);
 			}
 			if (harta[(int)fireb[a].ifireb][(int)fireb[a].jfireb + 1] == 4) {
 				fireb[a].hoverf = 1;
-				//cout << 3;
 				putimage(((int)fireb[a].jfireb + 1 - nci) * wh, fireb[a].ifireb * wh, mario_vine_top, COPY_PUT);
-				//readimagefile("mario_vine.gif", ((int)gompav[a].jgompa + 1 - nci) * wh, gompav[a].igompa * wh, (((int)gompav[a].jgompa + 1 - nci) + 1) * wh, (gompav[a].igompa + 1) * wh);
 			}
 		}
 		else {
 			if (harta[(int)fireb[a].ifireb][(int)fireb[a].jfireb] == 3) {
 				fireb[a].hoverf = 1;
-				//cout << 4;
 				putimage((fireb[a].jfireb - nci) * wh, fireb[a].ifireb * wh, mario_vine, COPY_PUT);
-				//readimagefile("mario_vine.gif", (gompav[a].jgompa - nci) * wh, gompav[a].igompa * wh, ((gompav[a].jgompa - nci) + 1) * wh, (gompav[a].igompa + 1) * wh);
 			}
 			if (harta[(int)fireb[a].ifireb][(int)fireb[a].jfireb] == 4) {
 				fireb[a].hoverf = 1;
-				//cout << 4;
 				putimage((fireb[a].jfireb - nci) * wh, fireb[a].ifireb * wh, mario_vine_top, COPY_PUT);
-				//readimagefile("mario_vine.gif", (gompav[a].jgompa - nci) * wh, gompav[a].igompa * wh, ((gompav[a].jgompa - nci) + 1) * wh, (gompav[a].igompa + 1) * wh);
 			}
 		}
 		for (int i = 1;i <= coino;i++) {
 			if (coins[i].mapart == (int)(nci - nc1) && coins[i].icolec == fireb[a].ifireb && coins[i].colected == 0) {
 				if (CheckBlock(fireb[a].ifireb, fireb[a].jfireb, wh, coins[i].icolec, coins[i].jcolec)) {
 					fireb[a].hoverf = 1;
-					//cout << 5;
 					putimage((coins[i].jcolec - nci) * wh, coins[i].icolec * wh, mario_coin, COPY_PUT);
-					//readimagefile("mario_coin.gif", (coins[i].jcolec - nci) * wh, coins[i].icolec * wh, ((coins[i].jcolec - nci) + 1) * wh, (coins[i].icolec + 1) * wh);
 				}
 			}
 		}
@@ -96,9 +82,7 @@ void fireballmov(int a) {
 			if (starpow[i].mapart == (int)(nci - nc1) && starpow[i].icolec == fireb[a].ifireb && starpow[i].colected == 0) {
 				if (CheckBlock(fireb[a].ifireb, fireb[a].jfireb, wh, starpow[i].icolec, starpow[i].jcolec)) {
 					fireb[a].hoverf = 1;
-					//cout << 6;
 					putimage((starpow[i].jcolec - nci) * wh, starpow[i].icolec * wh, mario_star, COPY_PUT);
-					//readimagefile("mario_coin.gif", (coins[i].jcolec - nci) * wh, coins[i].icolec * wh, ((coins[i].jcolec - nci) + 1) * wh, (coins[i].icolec + 1) * wh);
 				}
 			}
 		}
@@ -106,19 +90,15 @@ void fireballmov(int a) {
 			if (life[i].mapart == (int)(nci - nc1) && life[i].icolec == fireb[a].ifireb && life[i].colected == 0) {
 				if (CheckBlock(fireb[a].ifireb, fireb[a].jfireb, wh, life[i].icolec, life[i].jcolec)) {
 					fireb[a].hoverf = 1;
-					//cout << 7;
 					putimage((life[i].jcolec - nci) * wh, life[i].icolec * wh, one_up, COPY_PUT);
-					//readimagefile("mario_coin.gif", (coins[i].jcolec - nci) * wh, coins[i].icolec * wh, ((coins[i].jcolec - nci) + 1) * wh, (coins[i].icolec + 1) * wh);
 				}
 			}
 		}
-		for (int i = 1;i <= lifo; i++) {
+		for (int i = 1;i <= firo; i++) {
 			if (fflower[i].mapart == (int)(nci - nc1) && fflower[i].icolec == fireb[a].ifireb && fflower[i].colected == 0) {
 				if (CheckBlock(fireb[a].ifireb, fireb[a].jfireb, wh, fflower[i].icolec, fflower[i].jcolec)) {
 					fireb[a].hoverf = 1;
-					//cout << 7;
 					putimage((fflower[i].jcolec - nci) * wh, fflower[i].icolec * wh, fire_flower, COPY_PUT);
-					//readimagefile("mario_coin.gif", (coins[i].jcolec - nci) * wh, coins[i].icolec * wh, ((coins[i].jcolec - nci) + 1) * wh, (coins[i].icolec + 1) * wh);
 				}
 			}
 		}
@@ -133,7 +113,9 @@ void fireballmov(int a) {
 					fireballstateread(a);
 				}
 				else {
-					//aici niste sunet
+					ma_sound_stop(&FireBallEffect);
+					ma_sound_seek_to_pcm_frame(&FireBallEffect, 0);
+					ma_sound_start(&FireBallEffect);
 					fireb[a].exist = 0;
 				}
 			}
@@ -160,7 +142,9 @@ void fireballmov(int a) {
 					fireballstateput(a);
 				}
 				else {
-					//aici niste sunet
+					ma_sound_stop(&FireBallEffect);
+					ma_sound_seek_to_pcm_frame(&FireBallEffect, 0);
+					ma_sound_start(&FireBallEffect);
 					fireb[a].exist = 0;
 				}
 			}
@@ -182,50 +166,36 @@ void fireballmov(int a) {
 		if (fireb[a].jfireb - (int)fireb[a].jfireb != 0) {
 			if (harta[(int)fireb[a].ifireb][(int)fireb[a].jfireb] == 3) {
 				fireb[a].hoverf = 1;
-				//cout << 2;
 				putimage(((int)fireb[a].jfireb - nci) * wh, fireb[a].ifireb * wh, mario_vine, COPY_PUT);
-				//readimagefile("mario_vine.gif", ((int)gompav[a].jgompa - nci) * wh, gompav[a].igompa * wh, (((int)gompav[a].jgompa - nci) + 1) * wh, (gompav[a].igompa + 1) * wh);
 			}
 			if (harta[(int)fireb[a].ifireb][(int)fireb[a].jfireb + 1] == 3) {
 				fireb[a].hoverf = 1;
-				//cout << 3;
 				putimage(((int)fireb[a].jfireb + 1 - nci) * wh, fireb[a].ifireb * wh, mario_vine, COPY_PUT);
-				//readimagefile("mario_vine.gif", ((int)gompav[a].jgompa + 1 - nci) * wh, gompav[a].igompa * wh, (((int)gompav[a].jgompa + 1 - nci) + 1) * wh, (gompav[a].igompa + 1) * wh);
 			}
 			if (harta[(int)fireb[a].ifireb][(int)fireb[a].jfireb] == 4) {
 				fireb[a].hoverf = 1;
-				//cout << 2;
 				putimage(((int)fireb[a].jfireb - nci) * wh, fireb[a].ifireb * wh, mario_vine_top, COPY_PUT);
-				//readimagefile("mario_vine.gif", ((int)gompav[a].jgompa - nci) * wh, gompav[a].igompa * wh, (((int)gompav[a].jgompa - nci) + 1) * wh, (gompav[a].igompa + 1) * wh);
 			}
 			if (harta[(int)fireb[a].ifireb][(int)fireb[a].jfireb + 1] == 4) {
 				fireb[a].hoverf = 1;
-				//cout << 3;
 				putimage(((int)fireb[a].jfireb + 1 - nci) * wh, fireb[a].ifireb * wh, mario_vine_top, COPY_PUT);
-				//readimagefile("mario_vine.gif", ((int)gompav[a].jgompa + 1 - nci) * wh, gompav[a].igompa * wh, (((int)gompav[a].jgompa + 1 - nci) + 1) * wh, (gompav[a].igompa + 1) * wh);
 			}
 		}
 		else {
 			if (harta[(int)fireb[a].ifireb][(int)fireb[a].jfireb] == 3) {
 				fireb[a].hoverf = 1;
-				//cout << 4;
 				putimage((fireb[a].jfireb - nci) * wh, fireb[a].ifireb * wh, mario_vine, COPY_PUT);
-				//readimagefile("mario_vine.gif", (gompav[a].jgompa - nci) * wh, gompav[a].igompa * wh, ((gompav[a].jgompa - nci) + 1) * wh, (gompav[a].igompa + 1) * wh);
 			}
 			if (harta[(int)fireb[a].ifireb][(int)fireb[a].jfireb] == 4) {
 				fireb[a].hoverf = 1;
-				//cout << 4;
 				putimage((fireb[a].jfireb - nci) * wh, fireb[a].ifireb * wh, mario_vine_top, COPY_PUT);
-				//readimagefile("mario_vine.gif", (gompav[a].jgompa - nci) * wh, gompav[a].igompa * wh, ((gompav[a].jgompa - nci) + 1) * wh, (gompav[a].igompa + 1) * wh);
 			}
 		}
 		for (int i = 1;i <= coino;i++) {
 			if (coins[i].mapart == (int)(nci - nc1) && coins[i].icolec == fireb[a].ifireb && coins[i].colected == 0) {
 				if (CheckBlock(fireb[a].ifireb, fireb[a].jfireb, wh, coins[i].icolec, coins[i].jcolec)) {
 					fireb[a].hoverf = 1;
-					//cout << 5;
 					putimage((coins[i].jcolec - nci) * wh, coins[i].icolec * wh, mario_coin, COPY_PUT);
-					//readimagefile("mario_coin.gif", (coins[i].jcolec - nci) * wh, coins[i].icolec * wh, ((coins[i].jcolec - nci) + 1) * wh, (coins[i].icolec + 1) * wh);
 				}
 			}
 		}
@@ -233,9 +203,7 @@ void fireballmov(int a) {
 			if (starpow[i].mapart == (int)(nci - nc1) && starpow[i].icolec == fireb[a].ifireb && starpow[i].colected == 0) {
 				if (CheckBlock(fireb[a].ifireb, fireb[a].jfireb, wh, starpow[i].icolec, starpow[i].jcolec)) {
 					fireb[a].hoverf = 1;
-					//cout << 6;
 					putimage((starpow[i].jcolec - nci) * wh, starpow[i].icolec * wh, mario_star, COPY_PUT);
-					//readimagefile("mario_coin.gif", (coins[i].jcolec - nci) * wh, coins[i].icolec * wh, ((coins[i].jcolec - nci) + 1) * wh, (coins[i].icolec + 1) * wh);
 				}
 			}
 		}
@@ -243,19 +211,15 @@ void fireballmov(int a) {
 			if (life[i].mapart == (int)(nci - nc1) && life[i].icolec == fireb[a].ifireb && life[i].colected == 0) {
 				if (CheckBlock(fireb[a].ifireb, fireb[a].jfireb, wh, life[i].icolec, life[i].jcolec)) {
 					fireb[a].hoverf = 1;
-					//cout << 7;
 					putimage((life[i].jcolec - nci) * wh, life[i].icolec * wh, one_up, COPY_PUT);
-					//readimagefile("mario_coin.gif", (coins[i].jcolec - nci) * wh, coins[i].icolec * wh, ((coins[i].jcolec - nci) + 1) * wh, (coins[i].icolec + 1) * wh);
 				}
 			}
 		}
-		for (int i = 1;i <= lifo; i++) {
+		for (int i = 1;i <= firo; i++) {
 			if (fflower[i].mapart == (int)(nci - nc1) && fflower[i].icolec == fireb[a].ifireb && fflower[i].colected == 0) {
 				if (CheckBlock(fireb[a].ifireb, fireb[a].jfireb, wh, fflower[i].icolec, fflower[i].jcolec)) {
 					fireb[a].hoverf = 1;
-					//cout << 7;
-					putimage((fflower[i].jcolec - nci) * wh, fflower[i].icolec * wh, fire_flower, COPY_PUT);
-					//readimagefile("mario_coin.gif", (coins[i].jcolec - nci) * wh, coins[i].icolec * wh, ((coins[i].jcolec - nci) + 1) * wh, (coins[i].icolec + 1) * wh);
+					putimage((fflower[i].jcolec - nci)* wh, fflower[i].icolec* wh, fire_flower, COPY_PUT);
 				}
 			}
 		}
@@ -270,7 +234,9 @@ void fireballmov(int a) {
 					fireballstateread(a);
 				}
 				else {
-					//aici niste sunet
+					ma_sound_stop(&FireBallEffect);
+					ma_sound_seek_to_pcm_frame(&FireBallEffect, 0);
+					ma_sound_start(&FireBallEffect);
 					fireb[a].exist = 0;
 				}
 			}
@@ -297,7 +263,9 @@ void fireballmov(int a) {
 					fireballstateput(a);
 				}
 				else {
-					//aici niste sunet
+					ma_sound_stop(&FireBallEffect);
+					ma_sound_seek_to_pcm_frame(&FireBallEffect, 0);
+					ma_sound_start(&FireBallEffect);
 					fireb[a].exist = 0;
 				}
 			}
@@ -321,7 +289,6 @@ void fireballsmov() {
 			fireballmov(i);
 			for (int j = 1;j <= n;j++) {
 				if (gompav[j].mapart == (int)(nci - nc1) && gompav[j].igompa == fireb[i].ifireb && gompav[j].dead == 0) {
-					
 					if (CheckBlock(fireb[i].ifireb * wh, fireb[i].jfireb * wh, wh, gompav[j].igompa * wh, gompav[j].jgompa * wh)) {
 						std::cout << "PATRU";
 						fireb[i].exist = 0;
@@ -340,12 +307,68 @@ void fireballsmov() {
 							putimage(((int)gompav[j].jgompa - nci + 1) * wh, gompav[j].igompa * wh, mario_vine, COPY_PUT);
 						if (harta[(int)gompav[j].igompa][(int)gompav[j].jgompa + 1] == 4)
 							putimage(((int)gompav[j].jgompa - nci + 1) * wh, gompav[j].igompa * wh, mario_vine_top, COPY_PUT);
+						if (harta[(int)fireb[i].ifireb][(int)fireb[i].jfireb] == 3)
+							putimage(((int)fireb[i].jfireb - nci) * wh, fireb[i].ifireb * wh, mario_vine, COPY_PUT);
+						if (harta[(int)fireb[i].ifireb][(int)fireb[i].jfireb] == 4)
+							putimage(((int)fireb[i].jfireb - nci) * wh, fireb[i].ifireb * wh, mario_vine_top, COPY_PUT);
+						if (harta[(int)fireb[i].ifireb][(int)fireb[i].jfireb + 1] == 3)
+							putimage(((int)fireb[i].jfireb - nci + 1) * wh, fireb[i].ifireb * wh, mario_vine, COPY_PUT);
+						if (harta[(int)fireb[i].ifireb][(int)fireb[i].jfireb + 1] == 4)
+							putimage(((int)fireb[i].jfireb - nci + 1) * wh, fireb[i].ifireb * wh, mario_vine_top, COPY_PUT);
+						
+					}
+					for (int k = 1;k <= coino;k++) {
+						if (coins[k].mapart == (int)(nci - nc1) && coins[k].icolec == gompav[j].igompa && coins[k].colected == 0 && abs((int)(coins[k].jcolec - gompav[j].jgompa)) <= 1) {
+							if (CheckBlock(gompav[j].igompa, gompav[j].jgompa, wh, coins[k].icolec, coins[k].jcolec)) {
+								putimage((coins[k].jcolec - nci) * wh, coins[k].icolec * wh, mario_coin, COPY_PUT);
+							}
+						}
+						if (coins[k].mapart == (int)(nci - nc1) && coins[k].icolec == fireb[i].ifireb && coins[k].colected == 0 && abs((int)(coins[k].jcolec - fireb[i].jfireb)) <= 1) {
+							if (CheckBlock(fireb[i].ifireb, fireb[i].jfireb, wh, coins[k].icolec, coins[k].jcolec)) {
+								putimage((coins[k].jcolec - nci) * wh, coins[k].icolec * wh, mario_coin, COPY_PUT);
+							}
+						}
+					}
+					for (int k = 1;k <= staro; k++) {
+						if (starpow[k].mapart == (int)(nci - nc1) && starpow[j].icolec == gompav[j].igompa && starpow[k].colected == 0 && abs((int)(starpow[k].jcolec - gompav[j].jgompa)) <= 1) {
+							if (CheckBlock(gompav[j].igompa, gompav[j].jgompa, wh, starpow[k].icolec, starpow[k].jcolec)) {
+								putimage((starpow[k].jcolec - nci) * wh, starpow[k].icolec * wh, mario_star, COPY_PUT);
+							}
+						}
+						if (starpow[k].mapart == (int)(nci - nc1) && starpow[k].icolec == fireb[i].ifireb && starpow[k].colected == 0 && abs((int)(starpow[k].jcolec - fireb[i].jfireb)) <= 1) {
+							if (CheckBlock(fireb[i].ifireb, fireb[i].jfireb, wh, starpow[k].icolec, starpow[k].jcolec)) {
+								putimage((starpow[k].jcolec - nci) * wh, starpow[k].icolec * wh, mario_star, COPY_PUT);
+							}
+						}
+					}
+					for (int k = 1;k <= lifo; k++) {
+						if (life[k].mapart == (int)(nci - nc1) && life[k].icolec == gompav[j].igompa && life[k].colected == 0 && abs((int)(life[k].jcolec - gompav[j].jgompa)) <= 1) {
+							if (CheckBlock(gompav[j].igompa, gompav[j].jgompa, wh, life[k].icolec, life[k].jcolec)) {
+								putimage((life[k].jcolec - nci) * wh, life[k].icolec * wh, one_up, COPY_PUT);
+							}
+						}
+						if (life[k].mapart == (int)(nci - nc1) && life[k].icolec == fireb[i].ifireb && life[k].colected == 0 && abs((int)(life[k].jcolec - fireb[i].jfireb)) <= 1) {
+							if (CheckBlock(fireb[i].ifireb, fireb[i].jfireb, wh, life[k].icolec, life[k].jcolec)) {
+								putimage((life[k].jcolec - nci) * wh, life[k].icolec * wh, one_up, COPY_PUT);
+							}
+						}
+					}
+					for (int k = 1;k <= firo; k++) {
+						if (fflower[k].mapart == (int)(nci - nc1) && fflower[k].icolec == gompav[j].igompa && fflower[k].colected == 0 && abs((int)(fflower[k].jcolec - gompav[j].jgompa)) <= 1) {
+							if (CheckBlock(gompav[j].igompa, gompav[j].jgompa, wh, fflower[k].icolec, fflower[k].jcolec)) {
+								putimage((fflower[k].jcolec - nci) * wh, fflower[k].icolec * wh, fire_flower, COPY_PUT);
+							}
+						}
+						if (fflower[k].mapart == (int)(nci - nc1) && fflower[k].icolec == fireb[i].ifireb && fflower[k].colected == 0 && abs((int)(fflower[k].jcolec - fireb[i].jfireb)) <= 1) {
+							if (CheckBlock(fireb[i].ifireb, fireb[i].jfireb, wh, fflower[k].icolec, fflower[k].jcolec)) {
+								putimage((fflower[k].jcolec - nci) * wh, fflower[k].icolec * wh, fire_flower, COPY_PUT);
+							}
+						}
 					}
 				}
 			}
 			for (int j = 1;j <= p;j++) {
 				if (piranav[j].mapart == (int)(nci - nc1) && piranav[j].ipirana == fireb[i].ifireb && piranav[j].dead == 0 && piranav[j].ipinit != piranav[j].ipirana) {
-					
 					if (CheckBlock(fireb[i].ifireb * wh, fireb[i].jfireb * wh, wh, piranav[j].ipirana * wh, piranav[j].jpirana * wh)) {
 						std::cout << "CINCI";
 						fireb[i].exist = 0;
@@ -354,18 +377,67 @@ void fireballsmov() {
 						ma_sound_seek_to_pcm_frame(&GombaDeadEffect, 0);
 						ma_sound_start(&GombaDeadEffect);
 						putimage((piranav[j].jpinit - nci) * wh, piranav[j].ipirana * wh, skyblock, COPY_PUT);
+						putimage((fireb[i].jfireb - nci) * wh, fireb[i].ifireb * wh, skyblock, COPY_PUT);
 						if (piranav[p].orientation == -1)
 							putimage((piranav[j].jpinit - nci) * wh, (piranav[j].ipinit) * wh, Rpipehead, COPY_PUT);
 						else
 							putimage((piranav[j].jpinit - nci) * wh, (piranav[j].ipinit) * wh, pipehead, COPY_PUT);
-						if (harta[(int)gompav[j].igompa][(int)gompav[j].jgompa] == 3)
-							putimage(((int)gompav[j].jgompa - nci) * wh, gompav[j].igompa * wh, mario_vine, COPY_PUT);
-						if (harta[(int)gompav[j].igompa][(int)gompav[j].jgompa] == 4)
-							putimage(((int)gompav[j].jgompa - nci) * wh, gompav[j].igompa * wh, mario_vine_top, COPY_PUT);
-						if (harta[(int)gompav[j].igompa][(int)gompav[j].jgompa + 1] == 3)
-							putimage(((int)gompav[j].jgompa - nci + 1) * wh, gompav[j].igompa * wh, mario_vine, COPY_PUT);
-						if (harta[(int)gompav[j].igompa][(int)gompav[j].jgompa + 1] == 4)
-							putimage(((int)gompav[j].jgompa - nci + 1) * wh, gompav[j].igompa * wh, mario_vine_top, COPY_PUT);
+						if (harta[(int)fireb[i].ifireb][(int)fireb[i].jfireb] == 3)
+							putimage(((int)fireb[i].jfireb - nci) * wh, fireb[i].ifireb * wh, mario_vine, COPY_PUT);
+						if (harta[(int)fireb[i].ifireb][(int)fireb[i].jfireb] == 4)
+							putimage(((int)fireb[i].jfireb - nci) * wh, fireb[i].ifireb * wh, mario_vine_top, COPY_PUT);
+						if (harta[(int)fireb[i].ifireb][(int)fireb[i].jfireb + 1] == 3)
+							putimage(((int)fireb[i].jfireb - nci + 1) * wh, fireb[i].ifireb * wh, mario_vine, COPY_PUT);
+						if (harta[(int)fireb[i].ifireb][(int)fireb[i].jfireb + 1] == 4)
+							putimage(((int)fireb[i].jfireb - nci + 1) * wh, fireb[i].ifireb * wh, mario_vine_top, COPY_PUT);
+					}
+					for (int k = 1;k <= coino;k++) {
+						if (coins[k].mapart == (int)(nci - nc1) && coins[k].icolec == piranav[j].ipirana && coins[k].colected == 0 && abs((int)(coins[k].jcolec - piranav[j].jpirana)) <= 1) {
+							if (CheckBlock(piranav[j].ipirana, piranav[j].jpirana, wh, coins[k].icolec, coins[k].jcolec)) {
+								putimage((coins[k].jcolec - nci) * wh, coins[k].icolec * wh, mario_coin, COPY_PUT);
+							}
+						}
+						if (coins[k].mapart == (int)(nci - nc1) && coins[k].icolec == fireb[i].ifireb && coins[k].colected == 0 && abs((int)(coins[k].jcolec - fireb[i].jfireb)) <= 1) {
+							if (CheckBlock(fireb[i].ifireb, fireb[i].jfireb, wh, coins[k].icolec, coins[k].jcolec)) {
+								putimage((coins[k].jcolec - nci) * wh, coins[k].icolec * wh, mario_coin, COPY_PUT);
+							}
+						}
+					}
+					for (int k = 1;k <= staro; k++) {
+						if (starpow[k].mapart == (int)(nci - nc1) && starpow[j].icolec == piranav[j].ipirana && starpow[k].colected == 0 && abs((int)(starpow[k].jcolec - piranav[j].jpirana)) <= 1) {
+							if (CheckBlock(piranav[j].ipirana, piranav[j].jpirana, wh, starpow[k].icolec, starpow[k].jcolec)) {
+								putimage((starpow[k].jcolec - nci) * wh, starpow[k].icolec * wh, mario_star, COPY_PUT);
+							}
+						}
+						if (starpow[k].mapart == (int)(nci - nc1) && starpow[k].icolec == fireb[i].ifireb && starpow[k].colected == 0 && abs((int)(starpow[k].jcolec - fireb[i].jfireb)) <= 1) {
+							if (CheckBlock(fireb[i].ifireb, fireb[i].jfireb, wh, starpow[k].icolec, starpow[k].jcolec)) {
+								putimage((starpow[k].jcolec - nci) * wh, starpow[k].icolec * wh, mario_star, COPY_PUT);
+							}
+						}
+					}
+					for (int k = 1;k <= lifo; k++) {
+						if (life[k].mapart == (int)(nci - nc1) && life[k].icolec == piranav[j].ipirana && life[k].colected == 0 && abs((int)(life[k].jcolec - piranav[j].jpirana)) <= 1) {
+							if (CheckBlock(piranav[j].ipirana, piranav[j].jpirana, wh, life[k].icolec, life[k].jcolec)) {
+								putimage((life[k].jcolec - nci) * wh, life[k].icolec * wh, one_up, COPY_PUT);
+							}
+						}
+						if (life[k].mapart == (int)(nci - nc1) && life[k].icolec == fireb[i].ifireb && life[k].colected == 0 && abs((int)(life[k].jcolec - fireb[i].jfireb)) <= 1) {
+							if (CheckBlock(fireb[i].ifireb, fireb[i].jfireb, wh, life[k].icolec, life[k].jcolec)) {
+								putimage((life[k].jcolec - nci) * wh, life[k].icolec * wh, one_up, COPY_PUT);
+							}
+						}
+					}
+					for (int k = 1;k <= firo; k++) {
+						if (fflower[k].mapart == (int)(nci - nc1) && fflower[k].icolec == piranav[j].ipirana && fflower[k].colected == 0 && abs((int)(fflower[k].jcolec - piranav[j].jpirana)) <= 1) {
+							if (CheckBlock(piranav[j].ipirana, piranav[j].jpirana, wh, fflower[k].icolec, fflower[k].jcolec)) {
+								putimage((fflower[k].jcolec - nci) * wh, fflower[k].icolec * wh, fire_flower, COPY_PUT);
+							}
+						}
+						if (fflower[k].mapart == (int)(nci - nc1) && fflower[k].icolec == fireb[i].ifireb && fflower[k].colected == 0 && abs((int)(fflower[k].jcolec - fireb[i].jfireb)) <= 1) {
+							if (CheckBlock(fireb[i].ifireb, fireb[i].jfireb, wh, fflower[k].icolec, fflower[k].jcolec)) {
+								putimage((fflower[k].jcolec - nci) * wh, fflower[k].icolec * wh, fire_flower, COPY_PUT);
+							}
+						}
 					}
 				}
 			}
