@@ -1,10 +1,10 @@
 9
-level1
-mnn
-nus10
-nus45
-nus
-nus10
-nus7
-nus34
-BACK
+level1 0 0 0 0
+nus80 0 0 0 0
+nus10 0 0 0 0
+nus20 0 0 0 0
+nus40 0 0 0 0
+nus50 0 0 0 0
+nus40 0 0 0 0
+nu60 0 0 0 0
+BACK 0 0 0 0

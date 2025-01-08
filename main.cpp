@@ -28,7 +28,7 @@ int main() {
 	SoundInitialisation();
 	drawLanguage(x, y);
 	loadStats(levelstats);
-	loadData(customLevelText, CUSTOM_LEVEL_ITEMS);
+	loadData(customLevelText, CUSTOM_LEVEL_ITEMS, customstats);
 	//MapEditorLevels();
 	//LevelLoader();
 	//MarioGame();

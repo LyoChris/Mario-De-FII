@@ -19,7 +19,7 @@ using namespace std;
 #define MAX2 1000
 
 extern LevelStats levelstats[9], customstats[9];
-extern ma_sound JumpEffect, CoinEffect, ColideEffect, GombaDeadEffect, DeathEffect, BackGroundMusic, StageClear, PauseEffect, StarTheme;
+extern ma_sound JumpEffect, CoinEffect, ColideEffect, GombaDeadEffect, DeathEffect, BackGroundMusic, StageClear, PauseEffect, StarTheme, MenuMusic, MapEditorMusic;
 extern clock_t start;
 extern colectible coins[100], life[100];
 extern goompa gompav[100];
@@ -29,8 +29,10 @@ extern void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goom
 extern double MarioInterval;
 extern float wh, ncf, nci, nc1, imario, jmario;
 extern int x, y, nl, nc, harta[30][1000];
-extern int time1, okesc, n, SplitMenuItems;
+extern int time1, okesc, n, SplitMenuItems, coinono, gdead, pdead, score1;
 extern string direct, levelselect, cht;
+int textH;
+extern double time_spent;
 //extern int lifes = 3, safeimario, safejmario, mover = 0, coinono = 0, invincibilityframes = 0, ok = 0, hoverm = 0, play = 0, gdead = 0;
 
 void MainMenu();
@@ -40,7 +42,13 @@ void SettingsMenu();
 void CustomMenu();
 void CustomLevelsMenu();
 void StatsMenu();
+void ControlMenu();
+void CustomControlMenu();
+void StatsMenuCustom();
 
+const int GAME_CONTROLS_ITEMS = 1;
+char* gamecontrolsTextRO[GAME_CONTROLS_ITEMS] = { "INAPOI" };
+char* gamecontrolsTextEN[GAME_CONTROLS_ITEMS] = { "BACK" };
 
 const int MENU_ITEMS = 4;
 char* menuTextEN[MENU_ITEMS] = { "START", "CUSTOM LEVELS", "CONTROLS", "EXIT" };
@@ -66,7 +74,7 @@ int CUSTOM_LEVEL_ITEMS;
 char* customLevelText[10];
 
 const int BUTTON_MENU_ITEMS = 3;
-char* levelclearedText[BUTTON_MENU_ITEMS] = { "PLAY", "BACK", "MENU" };
+char* levelclearedText[BUTTON_MENU_ITEMS] = { "PLAY", "MENU", "BACK" };
 
 // Global variable
 int selectedOption = 0;
@@ -226,15 +234,19 @@ void drawMenu(int screenWidth, int screenHeight) {
 }
 
 void MainMenu() {
+	ma_sound_stop(&MapEditorMusic);
+	ma_sound_seek_to_pcm_frame(&MapEditorMusic, 0);
 	ma_sound_stop(&StarTheme);
 	ma_sound_seek_to_pcm_frame(&StarTheme, 0);
+	ma_sound_stop(&BackGroundMusic);
+	ma_sound_seek_to_pcm_frame(&BackGroundMusic, 0);
 	int screenWidth = x;
 	int screenHeight = y;
 	bool running = true;
 	int page = 0;
 
 	while (running) {
-		if (!ma_sound_is_playing(&BackGroundMusic)) ma_sound_start(&BackGroundMusic);
+		if (!ma_sound_is_playing(&MenuMusic)) ma_sound_start(&MenuMusic);
 		setactivepage(page);
 		setvisualpage(1 - page);
 		setbkcolor(BLACK);
@@ -271,12 +283,11 @@ void MainMenu() {
 					CustomMenu();
 					break;
 				case 2:
-					outtextxy(screenWidth / 5, screenHeight / 2, "Opening Controls...");
-					delay(2000);
+					ControlMenu();
 					break;
 				case 3:
 					saveStats(levelstats);
-					saveData(customLevelText, CUSTOM_LEVEL_ITEMS);
+					saveData(customLevelText, CUSTOM_LEVEL_ITEMS, customstats);
 					running = false;
 					break;
 				}
@@ -361,15 +372,19 @@ void drawLevelsMenu(int screenWidth, int screenHeight) {
 }
 
 void LevelsMenu() {
+	ma_sound_stop(&MapEditorMusic);
+	ma_sound_seek_to_pcm_frame(&MapEditorMusic, 0);
 	ma_sound_stop(&StarTheme);
 	ma_sound_seek_to_pcm_frame(&StarTheme, 0);
+	ma_sound_stop(&BackGroundMusic);
+	ma_sound_seek_to_pcm_frame(&BackGroundMusic, 0);
 	int screenWidth = x;
 	int screenHeight = y;
 	bool running = true;
 	int page = 0;
 
 	while (running) {
-		if (!ma_sound_is_playing(&BackGroundMusic)) ma_sound_start(&BackGroundMusic);
+		if (!ma_sound_is_playing(&MenuMusic)) ma_sound_start(&MenuMusic);
 		setactivepage(page);
 		setvisualpage(1 - page);
 		cleardevice();
@@ -482,6 +497,12 @@ void drawCustomMenu(int screenWidth, int screenHeight) {
 }
 
 void CustomMenu() {
+	ma_sound_stop(&MapEditorMusic);
+	ma_sound_seek_to_pcm_frame(&MapEditorMusic, 0);
+	ma_sound_stop(&StarTheme);
+	ma_sound_seek_to_pcm_frame(&StarTheme, 0);
+	ma_sound_stop(&BackGroundMusic);
+	ma_sound_seek_to_pcm_frame(&BackGroundMusic, 0);
 	int screenWidth = x;
 	int screenHeight = y;
 	bool running = true;
@@ -490,7 +511,7 @@ void CustomMenu() {
 	settextstyle(DEFAULT_FONT, HORIZ_DIR, 1);
 
 	while (running) {
-		if (!ma_sound_is_playing(&BackGroundMusic)) ma_sound_start(&BackGroundMusic);
+		if (!ma_sound_is_playing(&MenuMusic)) ma_sound_start(&MenuMusic);
 		setactivepage(page);
 		setvisualpage(1 - page);
 		setbkcolor(BLACK);
@@ -520,15 +541,12 @@ void CustomMenu() {
 				switch (clickedButton) {
 				case 0:
 					CustomLevelsMenu();
-					/*outtextxy(screenWidth / 4, screenHeight / 2, "Starting Game...");
-					delay(2000);*/
 					break;
 				case 1:
 					MapEditorLevels();
 					break;
 				case 2:
-					outtextxy(screenWidth / 5, screenHeight / 2, "Opening Controls...");
-					delay(2000);
+					CustomControlMenu();
 					break;
 				case 3:
 					MainMenu();
@@ -574,8 +592,12 @@ void drawCustomLevelsMenu(int screenWidth, int screenHeight) {
 }
 
 void CustomLevelsMenu() {
+	ma_sound_stop(&MapEditorMusic);
+	ma_sound_seek_to_pcm_frame(&MapEditorMusic, 0);
 	ma_sound_stop(&StarTheme);
 	ma_sound_seek_to_pcm_frame(&StarTheme, 0);
+	ma_sound_stop(&BackGroundMusic);
+	ma_sound_seek_to_pcm_frame(&BackGroundMusic, 0);
 	int screenWidth = x;
 	int screenHeight = y;
 	bool running = true;
@@ -583,8 +605,8 @@ void CustomLevelsMenu() {
 
 	while (running) {
 
-		if (!ma_sound_is_playing(&BackGroundMusic)) {
-			ma_sound_start(&BackGroundMusic);
+		if (!ma_sound_is_playing(&MenuMusic)) {
+			ma_sound_start(&MenuMusic);
 		}
 		setactivepage(page);
 		setvisualpage(1 - page);
@@ -620,8 +642,7 @@ void CustomLevelsMenu() {
 					strcpy(path, customLevelText[clickedButton]);
 					strcat(path, ".txt"); // Append file extension
 					cht = path;
-					MapLoader();
-					MarioGame();
+					StatsMenuCustom();
 				}
 			}
 		}
@@ -705,14 +726,17 @@ void drawCustomLevelsMenuReplacer(int screenWidth, int screenHeight) {
 }
 
 void CustomLevelsMenuReplacer(char filename[]) {
-
+	ma_sound_stop(&MenuMusic);
+	ma_sound_seek_to_pcm_frame(&MenuMusic, 0);
+	ma_sound_stop(&BackGroundMusic);
+	ma_sound_seek_to_pcm_frame(&BackGroundMusic, 0);
 	int screenWidth = x;
 	int screenHeight = y;
 	bool running = true;
 	int page = 0;
 
 	while (running) {
-		if (!ma_sound_is_playing(&BackGroundMusic)) ma_sound_start(&BackGroundMusic);
+		if (!ma_sound_is_playing(&MapEditorMusic)) ma_sound_start(&MapEditorMusic);
 		setactivepage(page);
 		setvisualpage(1 - page);
 		cleardevice();
@@ -743,6 +767,13 @@ void CustomLevelsMenuReplacer(char filename[]) {
 					delete customLevelText[clickedButton];
 					customLevelText[clickedButton] = new char[strlen(filename) + 1];  // Allocate memory for the string
 					strcpy(customLevelText[clickedButton], filename);  // Copy the string into the allocated memory
+					customstats[clickedButton].name = new char[strlen(filename) + 1];
+					strcpy(customstats[clickedButton].name, filename);
+					customstats[clickedButton].disname = new char[strlen(filename) + 1];
+					strcpy(customstats[clickedButton].disname, filename);
+					customstats[clickedButton].score = 0;
+					customstats[clickedButton].time = 0;
+					customstats[clickedButton].enemies = 0;
 					setactivepage(page);
 					cleardevice();
 					setbkcolor(BLACK);
@@ -903,7 +934,7 @@ void GameOverMenu() {
 				break;
 			case 1:
 				selectedOption = 0;
-				MainMenu();
+				LevelsMenu();
 				break;
 			case 2:
 				selectedOption = 0;
@@ -1040,8 +1071,7 @@ void PauseMenu() {
 				return;
 				break;
 			case 1:
-				std::cout << "Levels Menu";
-				exit(0);
+				LevelsMenu();
 				break;
 			case 2:
 				selectedOption = 0;
@@ -1149,6 +1179,10 @@ void drawStatsMenu(int screenWidth, int screenHeight, int selected) {
 }
 
 void StatsMenu() {
+	ma_sound_stop(&StarTheme);
+	ma_sound_seek_to_pcm_frame(&StarTheme, 0);
+	ma_sound_stop(&BackGroundMusic);
+	ma_sound_seek_to_pcm_frame(&BackGroundMusic, 0);
 	int screenWidth = x;
 	int screenHeight = y;
 	bool running = true;
@@ -1159,10 +1193,6 @@ void StatsMenu() {
 
 	char charArray[50];
 	strcpy(charArray, cht.c_str());
-	cout << '\n';
-	cout << "CHT: " << cht;
-	cout << " " << charArray;
-	cout << " " << levelstats[1].name;
 	
 	for (int i = 0;i < 9;i++) {
 		cout << strcmp(charArray, levelstats[i].name)<<" ";
@@ -1177,6 +1207,7 @@ void StatsMenu() {
 	cout << '\n';
 
 	while (running) {
+		if (!ma_sound_is_playing(&MenuMusic)) ma_sound_start(&MenuMusic);
 		setactivepage(page);
 		setvisualpage(1 - page);
 		setbkcolor(BLACK);
@@ -1212,10 +1243,10 @@ void StatsMenu() {
 					MarioGame();
 					break;
 				case 1:
-					LevelsMenu();
+					MainMenu();
 					break;
 				case 2:
-					MainMenu();
+					LevelsMenu();
 					break;
 				}
 			}
@@ -1226,4 +1257,482 @@ void StatsMenu() {
 	}
 
 	//closegraph();
+}
+
+void drawStatsMenuCustom(int screenWidth, int screenHeight, int selected) {
+	int buttonWidth = screenWidth / 4;
+	int buttonHeight = screenHeight / 10;
+	int marginX = screenWidth / 11;
+	int marginY = screenHeight / 3;
+
+	settextjustify(LEFT_TEXT, TOP_TEXT);
+	int fontsize = screenHeight / 170;
+	char LevelSpecific[50], coinsCounter[50], enemiesCounter[50], timeCounter[50], scoreCounter[50];
+
+	sprintf(LevelSpecific, "%s STATS", customstats[selected].disname);
+	displayText(LevelSpecific, 1.35 * screenWidth, 2 * marginY, fontsize + 1, WHITE);
+
+	int textHeight = textheight(LevelSpecific);
+	sprintf(coinsCounter, "Coins collected:  %d", customstats[selected].coins);
+	sprintf(enemiesCounter, "Enemies killed:  %d", customstats[selected].enemies);
+	sprintf(timeCounter, "TIME:  %ds", customstats[selected].time);
+	sprintf(scoreCounter, "HIGH SCORE:  %d", customstats[selected].score);
+
+
+
+	displayText(coinsCounter, 1.35 * screenWidth, 2 * marginY + 4.5 * textHeight, fontsize, WHITE);
+	displayText(enemiesCounter, 1.35 * screenWidth, 2 * marginY + 7.0 * textHeight, fontsize, WHITE);
+	displayText(timeCounter, 1.35 * screenWidth, 2 * marginY + 9.5 * textHeight, fontsize, WHITE);
+	displayText(scoreCounter, 1.35 * screenWidth, 2 * marginY + 13.0 * textHeight, fontsize + 0.75, WHITE);
+
+	for (int i = 0; i < BUTTON_MENU_ITEMS; i++) {
+		int x = marginX;
+		int y = marginY + i * (buttonHeight + screenHeight / 20);  // Vertical spacing as 5% of screen height
+
+		bool isHovered = (i == hoveredButton);
+
+		drawButtonStats(x, y, buttonWidth, buttonHeight, levelclearedText[i], WHITE, BLACK, isHovered);
+		//if (SplitMenuItems == 1)
+			//drawButton(x, y, buttonWidth, buttonHeight, menuTextRO[i], WHITE, BLACK, isHovered);
+		//else
+		  //  drawButton(x, y, buttonWidth, buttonHeight, menuTextEN[i], WHITE, BLACK, isHovered);
+
+	}
+}
+
+void StatsMenuCustom() {
+	ma_sound_stop(&StarTheme);
+	ma_sound_seek_to_pcm_frame(&StarTheme, 0);
+	ma_sound_stop(&BackGroundMusic);
+	ma_sound_seek_to_pcm_frame(&BackGroundMusic, 0);
+	int screenWidth = x;
+	int screenHeight = y;
+	bool running = true;
+	int page = 0;
+	int selected = 0;
+	hoveredButton = -1;
+	clickedButton = -1;
+
+	char charArray[50];
+	strcpy(charArray, cht.c_str());
+
+	for (int i = 0;i < 9;i++) {
+		char str[50];
+		strcpy(str, customstats[i].name);
+		strcat(str, ".txt");
+		if (strcmp(charArray, str) == 0)
+		{
+			cout << " " << customstats[i].name;
+			cout << " " << customstats[i].disname;
+			selected = i;
+			break;
+		}
+	}
+	cout << '\n';
+
+	while (running) {
+		if (!ma_sound_is_playing(&MenuMusic)) ma_sound_start(&MenuMusic);
+		setactivepage(page);
+		setvisualpage(1 - page);
+		setbkcolor(BLACK);
+		cleardevice();
+		settextstyle(DEFAULT_FONT, HORIZ_DIR, 1);
+		// Get mouse position
+		int mouseX = mousex();
+		int mouseY = mousey();
+
+
+
+		// Detect hover
+		hoveredButton = detectMouseHoverStats(mouseX, mouseY, screenWidth, screenHeight);
+
+		// Draw the menu
+		drawStatsMenuCustom(screenWidth, screenHeight, selected);
+
+		// Check for mouse click
+		if (ismouseclick(WM_LBUTTONDOWN)) {
+			clearmouseclick(WM_LBUTTONDOWN);
+
+			if (hoveredButton != -1) {
+				clickedButton = hoveredButton;
+
+				// Perform action based on the clicked button
+				cleardevice();
+				setvisualpage(page);
+				settextstyle(DEFAULT_FONT, HORIZ_DIR, 7);
+				switch (clickedButton) {
+				case 0:
+					MapReseter();
+					delay(1000);
+					MarioGame();
+					break;
+				case 1:
+					CustomMenu();
+					break;
+				case 2:
+					CustomLevelsMenu();
+					break;
+				}
+			}
+		}
+
+		page = 1 - page;
+		delay(50);  // Reduce CPU usage
+	}
+
+	//closegraph();
+}
+
+void drawArrowStats(int option, int r, int g, int b, int menuX, int menuY, int menuSpacing, int winWidth, int winHeight, int TextHeight) {
+	setcolor(RGB(r, g, b));
+
+	// Scale the arrow dimensions relative to the window size
+	int arrowWidth = winWidth / 40;  // Scalable width (proportional to window width)
+	int arrowHeight = winHeight / 30; // Scalable height (proportional to window height)
+
+	// Arrow's horizontal position (offset slightly to the left of the text)
+	int x = menuX - arrowWidth - 10;
+	int textHeight;
+
+	if (SplitMenuItems == 1)
+		textHeight = textheight(PauseTextRO[option]);
+	else
+		textHeight = textheight(PauseTextEN[option]);
+	int y = menuY + (option * menuSpacing) + (menuSpacing / 2) - (textHeight / 2) + 4 * TextHeight;
+
+	// Define the arrow points
+	int points[8] = { x, y, x + arrowWidth, y + arrowHeight / 2, x, y + arrowHeight, x, y };
+	drawpoly(4, points);
+	setfillstyle(SOLID_FILL, RGB(r, g, b));
+	fillpoly(4, points);
+}
+
+void drawLevelClear(int r, int g, int b) {
+	int winWidth = getmaxx();
+	int winHeight = getmaxy();
+
+	int fontSize = winHeight / 40; // Dynamically calculate font size
+	if (fontSize > 15) fontSize = 15;  // Set a max font size
+	settextstyle(DEFAULT_FONT, HORIZ_DIR, fontSize);
+	int menuWidth = winWidth / 3;
+	int menuHeight = winHeight / 4; // Adjusted menu height for better centering
+
+	// Center the menu horizontally and vertically
+	int menuX = (winWidth - menuWidth) / 2;
+	int menuY = (winHeight - menuHeight) / 2;
+
+	int menuSpacing = menuHeight / (PAUSE_ITEMS + 1); // Adjusted spacing for centering
+
+	setcolor(RGB(r, g, b));
+	settextstyle(EUROPEAN_FONT, HORIZ_DIR, fontSize + 4);
+	int gameOverHeight = textheight("LEVEL CLEARED"), gameOverWidth;
+
+	if (SplitMenuItems == 1) {
+		gameOverWidth = textwidth("PAUZA");
+		int gameOverX = (winWidth - gameOverWidth) / 2;
+		int gameOverY = menuY - 150;  // Increased padding above "GAME PAUSED"
+		outtextxy(gameOverX, gameOverY, "PAUZA");
+	}
+	else {
+		gameOverWidth = textwidth("LEVEL CLEARED");
+		int gameOverX = (winWidth - gameOverWidth) / 2;
+		int gameOverY = menuY - 150;  // Increased padding above "GAME PAUSED"
+		outtextxy(gameOverX, gameOverY, "LEVEL CLEARED");
+	}
+
+	char coinsCounter[50], enemiesCounter[50], timeCounter[50], scoreCounter[50];
+	sprintf(coinsCounter, "Coins collected:  %d", coinono);
+	sprintf(enemiesCounter, "Enemies killed:  %d", gdead+pdead);
+	sprintf(timeCounter, "Time:  %ds", (int)time_spent);
+	if (score1 > 0) {
+		sprintf(scoreCounter, "HIGH SCORE:  %d", score1);
+	}
+	else {
+		sprintf(scoreCounter, "NEW HIGH SCORE:  %d", score1);
+	}
+
+
+	settextstyle(EUROPEAN_FONT, HORIZ_DIR, fontSize + 2);
+	int textHeight = textheight("LEVEL STATS");
+	textH = textHeight;
+
+
+	displayText(coinsCounter, winWidth, menuY + 150 + 1.25 * gameOverHeight, fontSize + 1, WHITE);
+	displayText(enemiesCounter, winWidth, menuY + 2 * textHeight + 150 + 1.25 * gameOverHeight, fontSize + 1, WHITE);
+	displayText(timeCounter, winWidth, menuY + 4 * textHeight + 150 + 1.25 * gameOverHeight, fontSize + 1, WHITE);
+	displayText(scoreCounter, winWidth, menuY + 6 * textHeight + 150 + 1.25 * gameOverHeight, fontSize + 1.75, WHITE);
+
+
+	settextstyle(EUROPEAN_FONT, HORIZ_DIR, fontSize + 4);
+
+
+	// Draw menu options
+	settextstyle(EUROPEAN_FONT, HORIZ_DIR, fontSize + 0.75);
+	for (int i = 0; i < GAMEOVER_ITEMS; i++) {
+		int textX, textY;
+		if (SplitMenuItems == 1) {
+			textX = menuX + (menuWidth - textwidth(gameOverTextRO[i])) / 2; // Center text horizontally
+			textY = menuY + i * menuSpacing + 4 * textHeight;
+			outtextxy(textX, textY, gameOverTextRO[i]);
+		}
+		else {
+			textX = menuX + (menuWidth - textwidth(gameOverTextEN[i])) / 2; // Center text horizontally
+			textY = menuY + i * menuSpacing + 4 * textHeight;
+			outtextxy(textX, textY, gameOverTextEN[i]);
+		}
+	}
+}
+
+void LevelCLearMenu() {
+	ma_sound_stop(&StarTheme);
+	ma_sound_seek_to_pcm_frame(&StarTheme, 0);
+	ma_sound_stop(&BackGroundMusic);
+	ma_sound_seek_to_pcm_frame(&BackGroundMusic, 0);
+	ma_sound_start(&StageClear);
+	setvisualpage(1);
+	setactivepage(1);
+	selectedOption = 2;
+	setbkcolor(RGB(126, 132, 246));
+	cleardevice();
+	setbkcolor(RGB(126, 132, 246));
+
+	char charArray[50];
+	strcpy(charArray, cht.c_str());
+
+	for (int i = 0;i < 9;i++) {
+		if (strcmp(levelstats[i].name, charArray) == 0) {
+			if (levelstats[i].score < score1) {
+				levelstats[i].score = score1;
+			}
+			levelstats[i].coins = coinono;
+			levelstats[i].enemies = gdead + pdead;
+			levelstats[i].time = (int)time_spent;
+		}
+	}
+	for (int i = 0;i < CUSTOM_LEVEL_ITEMS;i++) {
+		char str[50];
+		strcpy(str, customstats[i].disname);
+		strcat(str, ".txt");
+		cout << str << '\n';
+		if (strcmp(str, charArray) == 0) {
+			cout << i;
+			if (customstats[i].score < score1) {
+				customstats[i].score = score1;
+			}
+			customstats[i].coins = coinono;
+			customstats[i].enemies = gdead + pdead;
+			customstats[i].time = (int)time_spent;
+		}
+	}
+
+
+	int arrow_color[3] = { 255, 255, 255 };
+	char text_color[20] = "RGB(126, 132, 246)";
+
+	int winWidth = getmaxx();
+	int winHeight = getmaxy();
+	int menuWidth = winWidth / 3;
+	int menuHeight = winHeight / 4; // Adjusted menu height
+
+	// Calculate menu position
+	int menuX = (winWidth - menuWidth) / 2;
+	int menuY = (winHeight - menuHeight) / 2;
+	int menuSpacing = menuHeight / (GAMEOVER_ITEMS + 1);
+	// ma_sound_stop(&BackGroundMusic);
+	drawLevelClear(255, 255, 255);
+	drawArrowStats(selectedOption, 255, 255, 255, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight, textH);
+
+	char key = getch();
+
+	bool running = true;
+	while (running) {
+		char key = getch();
+		cout << (int)key << '\n';
+		cout << selectedOption << '\n';
+		if (key == 'w' || key == 72) { // UP
+			drawArrowStats(selectedOption, 126, 132, 246, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight, textH); // Erase current arrow
+			selectedOption = (selectedOption - 1 + GAMEOVER_ITEMS) % GAMEOVER_ITEMS;
+			drawArrowStats(selectedOption, 255, 255, 255, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight, textH); // Draw new arrow
+		}
+		if (key == 's' || key == 80) { // DOWN
+			drawArrowStats(selectedOption, 126, 132, 246, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight, textH); // Erase current arrow
+			selectedOption = (selectedOption + 1) % GAMEOVER_ITEMS;
+			drawArrowStats(selectedOption, 255, 255, 255, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight, textH); // Draw new arrow
+		}
+		if (key == 13) { // ENTER || SPACE
+			cleardevice();
+			settextstyle(DEFAULT_FONT, HORIZ_DIR, 4);
+			switch (selectedOption) {
+			case 0:
+				MapReseter();
+				cht = levelselect;
+				ma_sound_stop(&StageClear);
+				MarioGame();
+				break;
+			case 1:
+				//std::cout << "Levels Menu";
+				LevelsMenu();
+				exit(0);
+				break;
+			case 2:
+				selectedOption = 0;
+				MapReseter();
+				MainMenu();
+				break;
+			}
+		}
+	}
+}
+
+void drawButtonControls(int x, int y, int width, int height, char* text, int default_text_color, int button_color, bool isHovered) {
+	int finalColor = isHovered ? RED : button_color;
+	int textColor = isHovered ? YELLOW : default_text_color;
+
+	setfillstyle(SOLID_FILL, finalColor);
+	bar(x, y, x + width, y + height);
+
+	// Draw the border
+	setcolor(WHITE);
+	rectangle(x, y, x + width, y + height);
+
+	// Draw the button text
+	setbkcolor(finalColor);
+	setcolor(textColor);
+	settextstyle(EUROPEAN_FONT, HORIZ_DIR, 4);
+	int textX = x + (width - textwidth(text)) / 2;
+	int textY = y + (height - textheight(text)) / 2;
+	outtextxy(textX, textY, text);
+	setbkcolor(button_color);
+}
+
+int detectMouseHoverControls(int mouseX, int mouseY, int screenWidth, int screenHeight) {
+	int buttonWidth = screenWidth / 5;
+	int buttonHeight = screenHeight / 10;
+	int marginX = (screenWidth - buttonWidth) / 14;
+	int marginY = screenWidth - screenHeight + 50;
+
+	for (int i = 0; i < GAME_CONTROLS_ITEMS; i++) {
+		int x = marginX;
+		int y = marginY + i * (buttonHeight + screenHeight / 20);
+
+		// Check if the mouse is over this button
+		if (mouseX >= x && mouseX <= x + buttonWidth && mouseY >= y && mouseY <= y + buttonHeight) {
+			return i;
+		}
+	}
+	return -1;  // No button is hovered over
+}
+
+void drawButtonsMenuCustom(int screenWidth, int screenHeight) {
+	int buttonWidth = screenWidth / 5;
+	int buttonHeight = screenHeight / 10;
+	int marginX = (screenWidth - buttonWidth) / 14;
+	int marginY = screenWidth - screenHeight + 50;
+
+	for (int i = 0; i < GAME_CONTROLS_ITEMS; i++) {
+		int x = marginX;
+		int y = marginY + i * (buttonHeight + screenHeight / 20);
+		bool isHovered = (i == hoveredButton);
+		int SplitMenuItems = 1;
+		if (SplitMenuItems == 1) {
+			drawButtonControls(x, y, buttonWidth, buttonHeight, "INAPOI", WHITE, BLUE, isHovered);
+		}
+		else {
+			drawButtonControls(x, y, buttonWidth, buttonHeight, "BACK", WHITE, BLUE, isHovered);
+		}
+	}
+}
+
+void ControlMenu() {
+	// Get screen dimensions
+	int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+	int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+
+	bool running = true;
+	int page = 0;
+
+	while (running) {
+		setbkcolor(BLACK);
+		setactivepage(page);
+		setvisualpage(1 - page);
+		cleardevice();
+
+		if (SplitMenuItems == 1) {
+			readimagefile("GameControlsRO.jpg", 0, 0, screenWidth, screenHeight);
+		}
+		else {
+			readimagefile("GameControlsEN.jpg", 0, 0, screenWidth, screenHeight);
+		}
+
+		int mouseX = mousex();
+		int mouseY = mousey();
+
+		hoveredButton = detectMouseHoverControls(mouseX, mouseY, screenWidth, screenHeight);
+
+		drawButtonsMenuCustom(screenWidth, screenHeight);
+
+		if (ismouseclick(WM_LBUTTONDOWN)) {
+			clearmouseclick(WM_LBUTTONDOWN);
+
+			if (hoveredButton != -1) {
+				clickedButton = hoveredButton;
+
+				// Handle button clicks here
+				if (clickedButton == 0) {
+					MainMenu();
+					break;
+				}
+			}
+		}
+
+		setvisualpage(page);
+		page = 1 - page;
+	}
+}
+
+void CustomControlMenu() {
+	// Get screen dimensions
+	int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+	int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+
+	bool running = true;
+	int page = 0;
+
+	while (running) {
+		setbkcolor(BLACK);
+		setactivepage(page);
+		setvisualpage(1 - page);
+		cleardevice();
+
+		if (SplitMenuItems == 1) {
+			readimagefile("EditorControlsRO.jpg", 0, 0, screenWidth, screenHeight);
+		}
+		else {
+			readimagefile("EditorControlsEN.jpg", 0, 0, screenWidth, screenHeight);
+		}
+
+		int mouseX = mousex();
+		int mouseY = mousey();
+
+		hoveredButton = detectMouseHoverControls(mouseX, mouseY, screenWidth, screenHeight);
+
+		drawButtonsMenuCustom(screenWidth, screenHeight);
+
+		if (ismouseclick(WM_LBUTTONDOWN)) {
+			clearmouseclick(WM_LBUTTONDOWN);
+
+			if (hoveredButton != -1) {
+				clickedButton = hoveredButton;
+
+				// Handle button clicks here
+				if (clickedButton == 0) {
+					MainMenu();
+					break;
+				}
+			}
+		}
+
+		setvisualpage(page);
+		page = 1 - page;
+	}
 }

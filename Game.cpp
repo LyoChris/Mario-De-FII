@@ -14,6 +14,7 @@
 #include "miniaudio.h"
 #include "MapEditor.h"
 #include "Colectibles.h"
+#include "Loader.h"
 using namespace std;
 
 #define MARIO_TIME 0.05 // 80 ms
@@ -23,7 +24,8 @@ using namespace std;
 void* playerImg1;
 
 extern ma_engine engine;
-extern ma_sound BackGroundMusic, StarTheme, DeathEffect;
+extern LevelStats customstats[9];
+extern ma_sound BackGroundMusic, StarTheme, DeathEffect, MenuMusic;
 extern float wh, nc1, imario, jmario;
 extern int x, y, nl, nc, harta[30][1000], mv2, map, power, timespent;
 string direction, direction1;
@@ -45,6 +47,9 @@ void MarioGame() {
     timespent = 0;
 	ma_sound_stop(&BackGroundMusic);
 	ma_sound_seek_to_pcm_frame(&BackGroundMusic, 0);
+    ma_sound_stop(&MenuMusic);
+    ma_sound_seek_to_pcm_frame(&MenuMusic, 0);
+
 
     do {
         setbkcolor(RGB(126, 132, 246));

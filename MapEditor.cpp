@@ -29,8 +29,9 @@ struct spawnpoint {
 extern int CUSTOM_LEVEL_ITEMS;
 extern char* customLevelText[10];
 
+extern LevelStats levelstats[9], customstats[9];
 extern ma_engine engine;
-extern ma_sound plinc, incplace, mapediRO, mapediEN, blselecRO, blselecEN, BackGroundMusic;
+extern ma_sound plinc, incplace, mapediRO, mapediEN, blselecRO, blselecEN, BackGroundMusic, MapEditorMusic, MenuMusic;
 
 int hartaloader[20][1000] = { 0 }, nr=0, edit = 1, mapi = 0, mapj = 1, selecpoz[15] = { 1,0,3,4,12,13,14,131,141,8,7,2,5,9,11}, iselec = 0, bkselect = 1, panelnr = 0, ncmax = 0, jpole = -1, ipole = -1;
 float nwh, ncimap=0, ncfmap;
@@ -448,6 +449,13 @@ void saveMap() {
 	else {
 		customLevelText[CUSTOM_LEVEL_ITEMS -1] = new char[strlen(filename) + 1];  // Allocate memory for the string
 		strcpy(customLevelText[CUSTOM_LEVEL_ITEMS - 1], filename);  // Copy the string into the allocated memory
+		customstats[CUSTOM_LEVEL_ITEMS - 1].name = new char[strlen(filename) + 1];
+		strcpy(customstats[CUSTOM_LEVEL_ITEMS - 1].name, filename);
+		customstats[CUSTOM_LEVEL_ITEMS - 1].disname = new char[strlen(filename) + 1];
+		strcpy(customstats[CUSTOM_LEVEL_ITEMS - 1].disname, filename);
+		customstats[CUSTOM_LEVEL_ITEMS - 1].score = 0;
+		customstats[CUSTOM_LEVEL_ITEMS - 1].time = 0;
+		customstats[CUSTOM_LEVEL_ITEMS - 1].enemies = 0;
 		if (SplitMenuItems) {
 			customLevelText[CUSTOM_LEVEL_ITEMS] = new char[strlen("INAPOI") + 1];
 			strcpy(customLevelText[CUSTOM_LEVEL_ITEMS], "INAPOI");
@@ -580,7 +588,11 @@ void loadMap() {
 }
 
 void MapEditorLevels() {
-	if (!ma_sound_is_playing(&BackGroundMusic)) ma_sound_start(&BackGroundMusic);
+	ma_sound_stop(&MenuMusic);
+	ma_sound_seek_to_pcm_frame(&MenuMusic, 0);
+	ma_sound_stop(&BackGroundMusic);
+	ma_sound_seek_to_pcm_frame(&BackGroundMusic, 0);
+	if (!ma_sound_is_playing(&MapEditorMusic)) ma_sound_start(&MapEditorMusic);
 	setvisualpage(0);
 	setactivepage(0);
 	nwh = 0.7 * wh;
@@ -592,12 +604,13 @@ void MapEditorLevels() {
 	cout << mapi << " " << mapj << endl;
 
 	while (true) {
-		if (!ma_sound_is_playing(&BackGroundMusic)) ma_sound_start(&BackGroundMusic);
+		if (!ma_sound_is_playing(&MapEditorMusic)) ma_sound_start(&MapEditorMusic);
 		PutMovingImage(mapi, mapj);
 		PutMapEditor(mapi, mapj, bkselect);
 		SelectorImage(iselec);
 		cout << mapi << mapj << '\n';
 		char t = getch();
+		if (!ma_sound_is_playing(&MapEditorMusic)) ma_sound_start(&MapEditorMusic);
 		if (t == 'm') {
 			saveMap();
 		}
@@ -646,22 +659,22 @@ void MapEditorLevels() {
 			cout << "Mapa este selectata pentru editare" << '\n';
 			PutMovingImage(mapi, mapj);
 			PutMapEditor(mapi, mapj, bkselect);
-			if (t == 'w' && mapi> 0) {
+			if ((t == 'w' || t == 72) && mapi> 0) {
 				PutMovingImage(mapi, mapj);
 				mapi--;
 				PutMapEditor(mapi, mapj, bkselect);
 			}
-			if (t == 'a' && mapj > ncimap) {
+			if ((t == 'a'|| t==75) && mapj > ncimap) {
 				PutMovingImage(mapi, mapj);
 				mapj--;
 				PutMapEditor(mapi, mapj, bkselect);
 			}
-			if (t == 'd' && mapj < ncfmap-1) {
+			if ((t == 'd'|| t == 77) && mapj < ncfmap-1) {
 				PutMovingImage(mapi, mapj);
 				mapj++;
 				PutMapEditor(mapi, mapj, bkselect);
 			}
-			if (t == 's' && mapi < nl-1) {
+			if ((t == 's' || t == 80) && mapi < nl-1) {
 				PutMovingImage(mapi, mapj);
 				mapi++;
 				cout << "Mapi: " << mapi << '\n';
@@ -700,7 +713,28 @@ void MapEditorLevels() {
 						}
 					}
 				}
-				if (bkselect != 11) {
+				if (bkselect == 5 && hartaloader[mapi + 1][mapj] != 0) {
+					hartaloader[mapi][mapj] = bkselect;
+				}
+				else {
+					if (bkselect == 5 && hartaloader[mapi + 1][mapj] == 0) {
+						if (SplitMenuItems == 1) {
+							ma_sound_stop(&mapediRO);
+							ma_sound_seek_to_pcm_frame(&mapediRO, 0);
+							ma_sound_stop(&plinc);
+							ma_sound_seek_to_pcm_frame(&plinc, 0);
+							ma_sound_start(&plinc);
+						}
+						else {
+							ma_sound_stop(&mapediEN);
+							ma_sound_seek_to_pcm_frame(&mapediEN, 0);
+							ma_sound_stop(&incplace);
+							ma_sound_seek_to_pcm_frame(&incplace, 0);
+							ma_sound_start(&incplace);
+						}
+					}
+				}
+				if (bkselect != 11 && bkselect != 5) {
 					hartaloader[mapi][mapj] = bkselect;
 				}
 			}
@@ -728,12 +762,12 @@ void MapEditorLevels() {
 		}
 		if (edit == 0) {
 			cout << "Selectie blocks" << '\n';
-			if (t == 'a' && iselec > 0) {
+			if ((t == 'a' || t== 75) && iselec > 0) {
 				SelectorImageMono(iselec);
 				iselec--;
 				SelectorImage(iselec);
 			}
-			if (t == 'd' && iselec < 16) {
+			if ((t == 'd' || t == 77) && iselec < 16) {
 				SelectorImageMono(iselec);
 				iselec++;
 				SelectorImage(iselec);

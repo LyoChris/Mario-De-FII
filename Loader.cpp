@@ -19,7 +19,7 @@ extern firebll fireb[9];
 extern colectible coins[100], life[100], starpow[100], fflower[100];
 extern goompa gompav[100];
 extern pirhana piranav[100];
-extern int harta[30][1000], n, p, x, y, firo;
+extern int harta[30][1000], n, p, x, y, firo, fpow;
 extern std::string cht;
 extern float wh, nci, ncf, nc1;
 extern void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goomba_walking_2, * mario_climbing_down_1, * mario_climbing_down_2, * mario_climbing_up_1,
@@ -488,9 +488,10 @@ void MapReseter() {
     ncf = nc1;
     nci = 0;
     timespent = 0;
+    fpow = 0;
 }
 
-void saveData(char* strArray[], int intValue) {
+void saveData(char* strArray[], int intValue, LevelStats LvlSts[]) {
     std::ofstream outfile("CUSTOMLEVELS.txt");
 
     if (!outfile.is_open()) {
@@ -501,14 +502,17 @@ void saveData(char* strArray[], int intValue) {
     outfile << intValue << '\n';
 
     for (int i = 0; i < intValue; i++) {
-        outfile << strArray[i] << '\n';
+        outfile << strArray[i] << " ";
+        if (i <= 8) {
+            outfile << LvlSts[i].coins << " " << LvlSts[i].enemies << " " << LvlSts[i].time << " " << LvlSts[i].score << '\n';
+        }
     }
 
     outfile.close();
 }
 
 
-void loadData(char* strArray[], int& intValue) {
+void loadData(char* strArray[], int& intValue, LevelStats LvlSts[]) {
     std::ifstream infile("CUSTOMLEVELS.txt");
 
     infile >> intValue;
@@ -516,10 +520,19 @@ void loadData(char* strArray[], int& intValue) {
 
     for (int i = 0; i < intValue; i++) {
         char str[50];
-        infile.getline(str, 50);
+        infile.getline(str, 50, ' ');
 
         strArray[i] = new char[strlen(str) + 1];
         strcpy(strArray[i], str);
+       
+		LvlSts[i].disname = new char[strlen(str) + 1];
+		strcpy(LvlSts[i].disname, str);
+        LvlSts[i].name = new char[strlen(str) + 1];
+        strcpy(LvlSts[i].name, str);
+		infile >> LvlSts[i].coins >> LvlSts[i].enemies >> LvlSts[i].time >> LvlSts[i].score;
+		infile.ignore();
+
+		std::cout << LvlSts[i].name << " " << LvlSts[i].disname << " " << LvlSts[i].coins << " " << LvlSts[i].enemies << " " << LvlSts[i].time << '\n';
     }
 
     infile.close();
@@ -561,34 +574,3 @@ void loadStats(LevelStats LvlSts[]) {
 
     infile.close();
 }
-/*
-void saveStatsCustom(LevelStats LvlSts[]) {
-    std::ofstream outfile("CustomSTATS.txt");
-
-    if (!outfile.is_open()) {
-        std::cerr << "Error opening file for saving!" << std::endl;
-        return;
-    }
-    for (int i = 0; i < 9; i++) {
-        outfile << LvlSts[i].name << " " << LvlSts[i].coins << " " << LvlSts[i].enemies << " " << LvlSts[i].time << " " << LvlSts[i].score << '\n';
-    }
-
-    outfile.close();
-}
-
-void loadStatsCustom(LevelStats LvlSts[]) {
-    std::ifstream infile("CustomSTATS.txt");
-    
-
-    for (int i = 0; i < 9; i++) {
-        char str[50];
-        infile.getline(str, 50);
-
-        LvlSts[i].name = new char[strlen(str) + 1];
-        strcpy(LvlSts[i].name, str);
-		infile >> LvlSts[i].coins >> LvlSts[i].lives >> LvlSts[i].time >> LvlSts[i].score;
-        infile.ignore();
-    }
-
-    infile.close();
-}*/
