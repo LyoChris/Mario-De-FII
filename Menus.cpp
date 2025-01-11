@@ -192,8 +192,8 @@ void drawButton(int x, int y, int width, int height, char* text, int default_tex
 int detectMouseHover(int mouseX, int mouseY, int screenWidth, int screenHeight) {
 	int buttonWidth = screenWidth / 4;
 	int buttonHeight = screenHeight / 10;
-	int marginX = screenWidth / 7;
-	int marginY = screenHeight / 5;
+	int marginX = screenWidth / 9;
+	int marginY = screenHeight / 4.5;
 
 	for (int i = 0; i < MENU_ITEMS; i++) {
 		int x = marginX;
@@ -211,9 +211,11 @@ int detectMouseHover(int mouseX, int mouseY, int screenWidth, int screenHeight) 
 void drawMenu(int screenWidth, int screenHeight) {
 	int buttonWidth = screenWidth / 4;
 	int buttonHeight = screenHeight / 10;
-	int marginX = screenWidth / 7;
-	int marginY = screenHeight / 5;
+	int marginX = screenWidth / 9;
+	int marginY = screenHeight / 4.5;
 	
+	putimage(0, 0, mario_main_screen, COPY_PUT);
+
 	settextjustify(LEFT_TEXT, TOP_TEXT);
 
 	for (int i = 0; i < MENU_ITEMS; i++) {
@@ -230,7 +232,7 @@ void drawMenu(int screenWidth, int screenHeight) {
 	int imageX = (screenWidth - imageWidth) / 2;  // Center horizontally
 	int imageY = marginY - (x / 3 * 612) / x - screenHeight / 20;  // Place above the first button with padding
 
-	putimage((x - x / 3) / 2, marginY - (x / 3 * 7) / x - y / 20, mario_main_screen, COPY_PUT);
+	
 }
 
 void MainMenu() {
@@ -455,8 +457,8 @@ void LevelsMenu() {
 int detectMouseHoverCustom(int mouseX, int mouseY, int screenWidth, int screenHeight) {
 	int buttonWidth = screenWidth / 4;
 	int buttonHeight = screenHeight / 10;
-	int marginX = screenWidth / 7;
-	int marginY = screenHeight / 5;
+	int marginX = screenWidth / 9;
+	int marginY = screenHeight / 4.5;
 
 	for (int i = 0; i < CUSTOM_ITEMS; i++) {
 		int x = marginX;
@@ -474,8 +476,10 @@ int detectMouseHoverCustom(int mouseX, int mouseY, int screenWidth, int screenHe
 void drawCustomMenu(int screenWidth, int screenHeight) {
 	int buttonWidth = screenWidth / 4;
 	int buttonHeight = screenHeight / 10;
-	int marginX = screenWidth / 7;
-	int marginY = screenHeight / 5;
+	int marginX = screenWidth / 9;
+	int marginY = screenHeight / 4.5;
+
+	putimage(0, 0, mario_main_screen, COPY_PUT);
 
 	settextjustify(LEFT_TEXT, TOP_TEXT);
 
@@ -493,7 +497,7 @@ void drawCustomMenu(int screenWidth, int screenHeight) {
 	int imageX = (screenWidth - imageWidth) / 2;  // Center horizontally
 	int imageY = marginY - (x / 3 * 612) / x - screenHeight / 20;  // Place above the first button with padding
 
-	putimage((x - x / 3) / 2, marginY - (x / 3 * 7) / x - y / 20, mario_main_screen, COPY_PUT);
+	
 }
 
 void CustomMenu() {
@@ -934,10 +938,12 @@ void GameOverMenu() {
 				break;
 			case 1:
 				selectedOption = 0;
+				MapReseter();
 				LevelsMenu();
 				break;
 			case 2:
 				selectedOption = 0;
+				MapReseter();
 				MainMenu();
 				break;
 			}
@@ -1071,6 +1077,7 @@ void PauseMenu() {
 				return;
 				break;
 			case 1:
+				MapReseter();
 				LevelsMenu();
 				break;
 			case 2:
@@ -1571,6 +1578,7 @@ void LevelCLearMenu() {
 				break;
 			case 1:
 				//std::cout << "Levels Menu";
+				MapReseter();
 				LevelsMenu();
 				exit(0);
 				break;

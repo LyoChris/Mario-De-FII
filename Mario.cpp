@@ -38,14 +38,14 @@ extern void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goom
 * MFmario_right_run_2, * MFmario_right_run_3, * MFmario_jump_2, * Fmario_climbing_down_1, * Fmario_climbing_down_2, * Fmario_climbing_up_1,
 * Fmario_climbing_up_2, * Fmario_idle_left, * Fmario_idle_right, * Fmario_jump_1, * Fmario_left_run_1, * Fmario_left_run_2, * Fmario_left_run_3, * Fmario_right_run_1,
 * Fmario_right_run_2, * Fmario_right_run_3, * Fmario_jump_2, * fireball_1, * fireball_2, * fire_flower, * pipehead, * Rpipehead;
-int score1;
+
 double time_spent;
 extern double MarioInterval;
 extern float wh, ncf, nci, nc1, imario, jmario;
 extern int x, y, nl, nc, harta[30][1000], mv2, map, stage=-7, mappart, coino, lifo, flagpole, staro, SplitMenuItems, fpow;
 extern int time1, okesc, n, selectedOption, p, firo;
 string direct;
-int lifes = 3, okmov = 0, shoot = 0, safeimario, safejmario, mover = 0, coinono = 0, invincibilityframes = 0, ok = 0, hoverm = 0, play = 0, gdead = 0, hit, power = 0, pdead = 0, timespent = 0;
+int score1, lifes = 3, okmov = 0, shoot = 0, safeimario, safejmario, mover = 0, coinono = 0, invincibilityframes = 0, ok = 0, hoverm = 0, play = 0, gdead = 0, hit, power = 0, pdead = 0, timespent = 0;
 
 void MarioStageput() {
     switch (stage) {
@@ -1109,7 +1109,40 @@ void MarioMovement() {
         if (harta[(int)imario + 1][(int)jmario - 1] == 3) { cout << "DL "; putimage(((int)jmario - 1 - nci) * wh, ((int)imario + 1) * wh, mario_vine, COPY_PUT); vine = 1; }
     }*/
 
+
+
     mover = 0;
+
+    if (((GetKeyState(VK_SPACE) < 0))) {
+        if ((((int)jmario - jmario != 0 && (harta[(int)imario + 1][(int)jmario] == 1 || harta[(int)imario + 1][(int)jmario + 1] == 1)
+            || (harta[(int)imario + 1][(int)jmario] == 12 || harta[(int)imario + 1][(int)jmario + 1] == 12) || (harta[(int)imario + 1][(int)jmario] == 13 || harta[(int)imario + 1][(int)jmario + 1] == 13)
+            || (harta[(int)imario + 1][(int)jmario] == 14 || harta[(int)imario + 1][(int)jmario + 1] == 14) || (harta[(int)imario + 1][(int)jmario] == 8 || harta[(int)imario + 1][(int)jmario + 1] == 8)
+            || (harta[(int)imario + 1][(int)jmario] == 10 || harta[(int)imario + 1][(int)jmario + 1] == 10)) && (harta[(int)imario - 1][(int)jmario] != 1 && harta[(int)imario - 1][(int)jmario + 1] != 1))
+            || (((int)jmario - jmario == 0) && (harta[(int)imario + 1][(int)jmario] == 1 || harta[(int)imario + 1][(int)jmario] == 8 || harta[(int)imario + 1][(int)jmario] == 10
+                || harta[(int)imario + 1][(int)jmario] == 14 || harta[(int)imario + 1][(int)jmario] == 13 || harta[(int)imario + 1][(int)jmario] == 12)
+                && harta[(int)imario - 1][(int)jmario] != 1)) {
+            ma_sound_stop(&JumpEffect);
+            ma_sound_seek_to_pcm_frame(&JumpEffect, 0);
+            ma_sound_start(&JumpEffect);
+            ok = 8;
+            NextState("space");
+            mover = 1;
+            okmov = 0;
+            //direct = "space";
+            //k = 1;
+        }
+        else {
+            if (ok == 0 && (((int)jmario - jmario != 0) && ((harta[(int)imario - 1][(int)jmario] == 1 || harta[(int)imario - 1][(int)jmario] == 8 || harta[(int)imario - 1][(int)jmario] == 10
+                || harta[(int)imario - 1][(int)jmario] == 12 || harta[(int)imario - 1][(int)jmario] == 13 || harta[(int)imario - 1][(int)jmario] == 14) && (harta[(int)imario - 1][(int)jmario + 1] == 1
+                    || harta[(int)imario - 1][(int)jmario + 1] == 8 || harta[(int)imario - 1][(int)jmario + 1] == 10 || harta[(int)imario - 1][(int)jmario + 1] == 12 || harta[(int)imario - 1][(int)jmario + 1] == 13 || harta[(int)imario - 1][(int)jmario + 1] == 14)))
+                || (((int)jmario - jmario == 0) && (harta[(int)imario - 1][(int)jmario] == 1 || harta[(int)imario - 1][(int)jmario] == 12 || harta[(int)imario - 1][(int)jmario] == 13 || harta[(int)imario - 1][(int)jmario] == 14
+                    || harta[(int)imario - 1][(int)jmario] == 8 || harta[(int)imario - 1][(int)jmario] == 10))) {
+                ma_sound_stop(&ColideEffect);
+                ma_sound_seek_to_pcm_frame(&ColideEffect, 0);
+                ma_sound_start(&ColideEffect);
+            }
+        }
+    }
 
     if (((GetKeyState(0x41) < 0 || (GetKeyState(VK_LEFT) < 0))) && jmario > 0) {
         NextState("left");
@@ -1139,37 +1172,6 @@ void MarioMovement() {
         direct = "down";
     }
 
-
-    if (((GetKeyState(VK_SPACE) < 0))) {
-        if ((((int)jmario - jmario != 0 && (harta[(int)imario + 1][(int)jmario] == 1 || harta[(int)imario + 1][(int)jmario + 1] == 1)
-            || (harta[(int)imario + 1][(int)jmario] == 12 || harta[(int)imario + 1][(int)jmario + 1] == 12) || (harta[(int)imario + 1][(int)jmario] == 13 || harta[(int)imario + 1][(int)jmario + 1] == 13)
-            || (harta[(int)imario + 1][(int)jmario] == 14 || harta[(int)imario + 1][(int)jmario + 1] == 14) || (harta[(int)imario + 1][(int)jmario] == 8 || harta[(int)imario + 1][(int)jmario + 1] == 8)
-            || (harta[(int)imario + 1][(int)jmario] == 10 || harta[(int)imario + 1][(int)jmario + 1] == 10)) && (harta[(int)imario - 1][(int)jmario] != 1 && harta[(int)imario - 1][(int)jmario + 1] != 1))
-            || (((int)jmario - jmario == 0) && (harta[(int)imario + 1][(int)jmario] == 1 || harta[(int)imario + 1][(int)jmario] == 8 || harta[(int)imario + 1][(int)jmario] == 10
-                || harta[(int)imario + 1][(int)jmario] == 14 || harta[(int)imario + 1][(int)jmario] == 13 || harta[(int)imario + 1][(int)jmario] == 12)
-                && harta[(int)imario - 1][(int)jmario] != 1)) {
-            ma_sound_stop(&JumpEffect);
-            ma_sound_seek_to_pcm_frame(&JumpEffect, 0);
-            ma_sound_start(&JumpEffect);
-            ok = 8;
-            NextState("space");
-            mover = 1;
-            okmov = 0;
-            //direct = "space";
-            //k = 1;
-        }
-        else {
-            if (ok == 0 && (((int)jmario - jmario != 0) && ((harta[(int)imario - 1][(int)jmario] == 1 || harta[(int)imario - 1][(int)jmario] == 8 || harta[(int)imario - 1][(int)jmario] == 10 
-            || harta[(int)imario - 1][(int)jmario] == 12 || harta[(int)imario - 1][(int)jmario] == 13 || harta[(int)imario - 1][(int)jmario] == 14) && (harta[(int)imario - 1][(int)jmario + 1] == 1 
-            || harta[(int)imario - 1][(int)jmario + 1] == 8 || harta[(int)imario - 1][(int)jmario + 1] == 10 || harta[(int)imario - 1][(int)jmario + 1] == 12 || harta[(int)imario - 1][(int)jmario + 1] == 13 || harta[(int)imario - 1][(int)jmario + 1] == 14)))
-            || (((int)jmario - jmario == 0) && (harta[(int)imario - 1][(int)jmario] == 1 || harta[(int)imario - 1][(int)jmario] == 12 || harta[(int)imario - 1][(int)jmario] == 13 || harta[(int)imario - 1][(int)jmario] == 14
-            || harta[(int)imario - 1][(int)jmario] == 8 || harta[(int)imario - 1][(int)jmario] == 10))) {
-                ma_sound_stop(&ColideEffect);
-                ma_sound_seek_to_pcm_frame(&ColideEffect, 0);
-                ma_sound_start(&ColideEffect);
-            }
-        }
-    }
     
 
     if (ok > 0) {
@@ -1942,11 +1944,11 @@ void MarioMovement() {
     outtextxy((ncf -nci - 1.6) * wh - textwidth(LifesText), 0.6 * wh, LifesText);
 	putimage((ncf-nci -1.4) * wh, 0.4 * wh, one_up, COPY_PUT);
 
-    if (jmario == flagpole && flagpole != 0 && play==0) {
+    if (jmario == flagpole && flagpole > 0 && play==0) {
         PlaySound(TEXT("flagpole.wav"), NULL, SND_FILENAME | SND_SYNC);
         play = 1;
     }
-	if (jmario > flagpole+ 1 && flagpole!=0) {
+	if (jmario > flagpole+ 1 && flagpole > 0) {
 		//PlaySound(TEXT("stage_clear.wav"), NULL, SND_FILENAME | SND_ASYNC);
         clock_t end = clock();
         time_spent = ((double)(end - start) / CLOCKS_PER_SEC) - timespent;

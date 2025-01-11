@@ -17,7 +17,6 @@
 #include "MapEditor.h"
 using namespace std;
 
-
 string cht,  levelselect;
 
 void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goomba_walking_2, * mario_climbing_down_1, * mario_climbing_down_2, * mario_climbing_up_1,
@@ -41,7 +40,7 @@ extern colectible coins[100], life[100], starpow[100], fflower[100];
 extern firebll fireb[100];
 pozitii spawn[100];
 float wh, ncf, nci = 0, nc1, imario, jmario;
-int  x, y, nl = 20, nc, harta[30][1000], mv2, map, mappart, spawncount = 1, vizc[100], vize[100], buffersize, flagpole = 0, okmap = 1;
+int  x, y, nl = 20, nc, harta[30][1000], mv2, map, mappart, spawncount = 1, vizc[100], vize[100], buffersize, flagpole = -2, okmap = 1;
 extern goompa gompav[100];
 extern int n, coino, lifo, p, staro, firo;
 
@@ -300,6 +299,10 @@ void MapLoaderNextRight() {
 				if (okmap == 0)
 					break;
             }
+        }
+        if (okmap != 0) {
+            imario = 0;
+            jmario = ncf - nci + 2;
         }
         putimage((jmario - nci) * wh, imario * wh, mario_idle_right, COPY_PUT);
         /*

@@ -355,7 +355,7 @@ void AssetLoader() {
     preloadImage2("fireball_2.gif", wh, wh, fireball_2);
     cleardevice();
     setbkcolor(RGB(0, 0, 0));
-    preloadImage("mario_main.gif", x/3, (x / 3 * 612)/x, mario_main_screen);
+    preloadImage("pxfuel.jpg", x-3, y-3, mario_main_screen);
     cleardevice();
     setbkcolor(RGB(0, 0, 0));
     preloadImage("MarioLevelsMenu.jpg", x-3, y-3, mario_levels_menu);
