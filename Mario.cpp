@@ -377,6 +377,7 @@ void NextState(string direction1) {
                 if (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario + 1][(int)jmario + 1] == 1 && (jmario - (int)jmario != 0)) || jmario > ncf
                 || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario + 1][(int)jmario + 1] == 12 && (jmario - (int)jmario != 0)))
                 || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario + 1][(int)jmario + 1] == 13 && (jmario - (int)jmario != 0)))
+                || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario + 1][(int)jmario + 1] == 14 && (jmario - (int)jmario != 0)))
                 || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario + 1][(int)jmario + 1] == 8 && (jmario - (int)jmario != 0)))
                 || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario + 1][(int)jmario + 1] == 10 && (jmario - (int)jmario != 0)))) {
                     jmario -= 0.5;
@@ -421,6 +422,7 @@ void NextState(string direction1) {
                 if (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario][(int)jmario + 1] == 1 && (jmario - (int)jmario != 0)) || jmario > ncf
                 || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario][(int)jmario + 1] == 12 && (jmario - (int)jmario != 0)))
                 || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario][(int)jmario + 1] == 13 && (jmario - (int)jmario != 0)))
+                || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario][(int)jmario + 1] == 14 && (jmario - (int)jmario != 0)))
                 || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario][(int)jmario + 1] == 8 && (jmario - (int)jmario != 0)))
                 || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario][(int)jmario + 1] == 10 && (jmario - (int)jmario != 0)))) {
                     jmario -= 0.5;
@@ -468,6 +470,7 @@ void NextState(string direction1) {
                 || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario + 1][(int)jmario + 1] == 12 && (jmario - (int)jmario != 0)))
                 || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario + 1][(int)jmario + 1] == 13 && (jmario - (int)jmario != 0)))
                 || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario + 1][(int)jmario + 1] == 8 && (jmario - (int)jmario != 0)))
+                || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario + 1][(int)jmario + 1] == 14 && (jmario - (int)jmario != 0)))
                 || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario + 1][(int)jmario + 1] == 10 && (jmario - (int)jmario != 0)))) {
                     jmario -= 0.5;
                     stage = -7;
@@ -511,6 +514,7 @@ void NextState(string direction1) {
                 || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario][(int)jmario + 1] == 12 && (jmario - (int)jmario != 0)))
                 || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario][(int)jmario + 1] == 13 && (jmario - (int)jmario != 0)))
                 || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario][(int)jmario + 1] == 8 && (jmario - (int)jmario != 0)))
+                    || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario][(int)jmario + 1] == 14 && (jmario - (int)jmario != 0)))
                 || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario][(int)jmario + 1] == 10 && (jmario - (int)jmario != 0)))) {
                     jmario -= 0.5;
                     stage = -7;
@@ -582,6 +586,7 @@ void NextState(string direction1) {
                     if ((CheckBlock(imario * wh, jmario * wh, wh, (float)(imario) * wh, (float)(jmario)*wh) && (harta[(int)imario +1 ][(int)jmario] == 1)) || (jmario < 0)
                     || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario + 1][(int)jmario] == 12))
                     || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && harta[(int)imario + 1][(int)jmario] == 13)
+                    || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && harta[(int)imario + 1][(int)jmario] == 14)
                     || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario + 1][(int)jmario] == 8))
                     || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && harta[(int)imario + 1][(int)jmario] == 10)) {
                         jmario += 0.5;
@@ -625,6 +630,7 @@ void NextState(string direction1) {
                     if ((CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario][(int)jmario] == 1 || jmario < 0))
                     || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario][(int)jmario] == 12))
                     || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario][(int)jmario] == 13))
+                    || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario][(int)jmario] == 14))
                     || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario][(int)jmario] == 8))
                     || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario][(int)jmario] == 10))) {
                         jmario += 0.5;
@@ -670,6 +676,7 @@ void NextState(string direction1) {
                 if (imario - (int)imario != 0 && !(harta[(int)imario + 1][(int)jmario] == 0 && harta[(int)imario][(int)jmario] != 0)) {
                     if ((CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario + 1][(int)jmario] == 1 || jmario < 0))
                     || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario + 1][(int)jmario] == 12))
+                    || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario + 1][(int)jmario] == 14))
                     || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && harta[(int)imario + 1][(int)jmario] == 13)
                     || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario + 1][(int)jmario] == 8))
                     || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && harta[(int)imario + 1][(int)jmario] == 10)) {
@@ -714,6 +721,7 @@ void NextState(string direction1) {
                     if (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario][(int)jmario] == 1 || jmario < 0)
                     || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario][(int)jmario] == 12))
                     || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario][(int)jmario] == 13))
+                    || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario][(int)jmario] == 14))
                     || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario][(int)jmario] == 8))
                     || (CheckBlock(imario * wh, jmario * wh, wh, (float)imario * wh, (float)(jmario)*wh) && (harta[(int)imario][(int)jmario] == 10))) {
                         jmario += 0.5;
@@ -761,16 +769,16 @@ void NextState(string direction1) {
         if (abs(stage) == 10) stage = -stage;
         else stage = 10;
         if (harta[(int)imario][(int)jmario] == 3) {
-            readimagefile("SkyBlock.jpg", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
-            readimagefile("mario_vine.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
+            putimage(((int)jmario - nci)* wh, (int)imario* wh, skyblock, COPY_PUT);
+			putimage(((int)jmario - nci)* wh, (int)imario* wh, mario_vine, COPY_PUT);
         }
         else {
-            readimagefile("SkyBlock.jpg", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
-            readimagefile("mario_vine_top.gif", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
+            putimage(((int)jmario - nci)* wh, (int)imario* wh, skyblock, COPY_PUT);
+            putimage(((int)jmario - nci)* wh, (int)imario* wh, mario_vine_top, COPY_PUT);
         }
-        if (harta[(int)imario][(int)jmario - 1] == 3) {
-            readimagefile("SkyBlock.jpg", ((int)jmario - 1 - nci) * wh, (int)imario * wh, (((int)jmario - 1 - nci) + 1) * wh, ((int)imario + 1) * wh);
-            readimagefile("mario_vine.gif", ((int)jmario - 1 - nci) * wh, (int)imario * wh, (((int)jmario - 1 - nci) + 1) * wh, ((int)imario + 1) * wh);
+        if (harta[(int)imario + 1][(int)jmario] == 3) {
+			putimage(((int)jmario - nci)* wh, ((int)imario + 1)* wh, skyblock, COPY_PUT);
+			putimage(((int)jmario - nci)* wh, ((int)imario + 1)* wh, mario_vine, COPY_PUT);
         }
         imario -= 0.5;
         if (CheckBlock(imario, jmario, wh, (float)(imario), (float)(jmario)) && !((harta[(int)imario][(int)jmario] == 3) || harta[(int)imario][(int)jmario] == 4) && (jmario - (int)jmario == 0)) {
@@ -813,19 +821,22 @@ void NextState(string direction1) {
         if (abs(stage) == 9) stage = -stage;
         else stage = -9;
         if (harta[(int)imario][(int)jmario] == 3) {
-            readimagefile("SkyBlock.jpg", ((int)jmario - nci) * wh, (int)imario * wh, (((int)jmario - nci) + 1) * wh, ((int)imario + 1) * wh);
-            readimagefile("mario_vine.gif", ((int)jmario - nci) * wh, (int)imario * wh, (((int)jmario - nci) + 1) * wh, ((int)imario + 1) * wh);
+			putimage(((int)jmario - nci)* wh, (int)imario* wh, skyblock, COPY_PUT);
+			putimage(((int)jmario - nci)* wh, (int)imario* wh, mario_vine, COPY_PUT);
         }
         else {
-            readimagefile("SkyBlock.jpg", (jmario - nci) * wh, imario * wh, ((jmario - nci) + 1) * wh, (imario + 1) * wh);
-            readimagefile("mario_vine_top.gif", ((int)jmario - nci) * wh, (int)imario * wh, (((int)jmario - nci) + 1) * wh, ((int)imario + 1) * wh);
+			putimage(((int)jmario - nci)* wh, (int)imario* wh, skyblock, COPY_PUT);
+			putimage(((int)jmario - nci)* wh, (int)imario* wh, mario_vine_top, COPY_PUT);
         }
-        if (harta[(int)imario][(int)jmario + 1] == 3) {
-            readimagefile("SkyBlock.jpg", ((int)jmario + 1 - nci) * wh, (int)imario * wh, (((int)jmario + 1 - nci) + 1) * wh, ((int)imario + 1) * wh);
-            readimagefile("mario_vine.gif", ((int)jmario + 1 - nci) * wh, (int)imario * wh, (((int)jmario + 1 - nci) + 1) * wh, ((int)imario + 1) * wh);
+        if (harta[(int)imario + 1][(int)jmario] == 3) {
+			putimage(((int)jmario - nci)* wh, ((int)imario + 1)* wh, skyblock, COPY_PUT);
+			putimage(((int)jmario - nci)* wh, ((int)imario + 1)* wh, mario_vine, COPY_PUT);
         }
         imario += 0.5;
-        if (CheckBlock(imario, jmario, wh, (float)(imario), (float)(jmario)) && !(harta[(int)imario][(int)jmario] == 3 || harta[(int)imario][(int)jmario] == 4) && harta[(int)imario][(int)jmario] == 1) {
+		cout << "BLOCK DOWN: " <<(int)imario-imario<<" "<< harta[(int)imario][(int)jmario] << endl;
+		cout << "BLOCK DOWN: " << (int)imario - imario << " " << harta[(int)imario + 1][(int)jmario] << endl;
+        if (CheckBlock(imario, jmario, wh, (float)(imario), (float)(jmario)) && !(harta[(int)imario][(int)jmario] == 3 || harta[(int)imario][(int)jmario] == 4) && 
+            (harta[(int)imario][(int)jmario] == 1)) {
             imario -= 0.5;
             stage = 9;
             if (power != 0 && fpow != 0) {
@@ -929,7 +940,7 @@ void NextState(string direction1) {
                         ok--;
                     }
                     else {
-                        if (harta[(int)imario][(int)jmario] == 8) {
+                        if (harta[(int)imario][(int)jmario] == 8 && harta[(int)imario - 1][(int)jmario]==0) {
                             putimage(((int)jmario - nci) * wh, ((int)imario) * wh, lucky_block_used, COPY_PUT);
                             int ranblock = randnumb(0, 3);
                             cout << "ranblock" << ranblock << '\n';
@@ -1025,7 +1036,7 @@ void NextState(string direction1) {
                         ok--;
                     }
                     else {
-                        if (harta[(int)imario][(int)jmario] == 8) {
+                        if (harta[(int)imario][(int)jmario] == 8 && harta[(int)imario - 1][(int)jmario] == 0) {
                             putimage(((int)jmario - nci) * wh, ((int)imario) * wh, lucky_block_used, COPY_PUT);
                             int ranblock = randnumb(0, 3);
                             if (ranblock == 1) {
@@ -1113,6 +1124,7 @@ void MarioMovement() {
         okmov = 0;
         direct = "right";
     }
+
     if (((GetKeyState(0x57) < 0 || (GetKeyState(VK_UP) < 0))) && (harta[(int)imario][(int)jmario] == 3 || harta[(int)imario][(int)jmario] == 4) && jmario - (int)jmario == 0) {
         NextState("up");
         mover = 1;
@@ -1120,20 +1132,26 @@ void MarioMovement() {
         direct = "up";
     }
 
-    if (((GetKeyState(0x53) < 0 || (GetKeyState(VK_DOWN) < 0))) && (harta[(int)imario][(int)jmario] == 3 || harta[(int)imario][(int)jmario] == 4) && jmario-(int)jmario==0) {
+    if (((GetKeyState(0x53) < 0 || (GetKeyState(VK_DOWN) < 0))) && (harta[(int)imario][(int)jmario] == 3 || harta[(int)imario][(int)jmario] == 4 || harta[(int)imario + 1][(int)jmario] == 3 || harta[(int)imario + 1][(int)jmario] == 4) && jmario - (int)jmario == 0) {
         NextState("down");
         mover = 1;
         okmov = 0;
         direct = "down";
     }
 
+
     if (((GetKeyState(VK_SPACE) < 0))) {
-        if ((harta[(int)imario + 1][(int)jmario] == 1 || harta[(int)imario + 1][(int)jmario] == 8 || harta[(int)imario + 1][(int)jmario] == 10
-            || harta[(int)imario + 1][(int)jmario] == 14 || harta[(int)imario + 1][(int)jmario] == 13) && harta[(int)imario - 1][(int)jmario] != 1 && harta[(int)imario - 1][(int)jmario + 1] != 1) {
+        if ((((int)jmario - jmario != 0 && (harta[(int)imario + 1][(int)jmario] == 1 || harta[(int)imario + 1][(int)jmario + 1] == 1)
+            || (harta[(int)imario + 1][(int)jmario] == 12 || harta[(int)imario + 1][(int)jmario + 1] == 12) || (harta[(int)imario + 1][(int)jmario] == 13 || harta[(int)imario + 1][(int)jmario + 1] == 13)
+            || (harta[(int)imario + 1][(int)jmario] == 14 || harta[(int)imario + 1][(int)jmario + 1] == 14) || (harta[(int)imario + 1][(int)jmario] == 8 || harta[(int)imario + 1][(int)jmario + 1] == 8)
+            || (harta[(int)imario + 1][(int)jmario] == 10 || harta[(int)imario + 1][(int)jmario + 1] == 10)) && (harta[(int)imario - 1][(int)jmario] != 1 && harta[(int)imario - 1][(int)jmario + 1] != 1))
+            || (((int)jmario - jmario == 0) && (harta[(int)imario + 1][(int)jmario] == 1 || harta[(int)imario + 1][(int)jmario] == 8 || harta[(int)imario + 1][(int)jmario] == 10
+                || harta[(int)imario + 1][(int)jmario] == 14 || harta[(int)imario + 1][(int)jmario] == 13 || harta[(int)imario + 1][(int)jmario] == 12)
+                && harta[(int)imario - 1][(int)jmario] != 1)) {
             ma_sound_stop(&JumpEffect);
             ma_sound_seek_to_pcm_frame(&JumpEffect, 0);
             ma_sound_start(&JumpEffect);
-            ok = 6;
+            ok = 8;
             NextState("space");
             mover = 1;
             okmov = 0;
@@ -1141,7 +1159,11 @@ void MarioMovement() {
             //k = 1;
         }
         else {
-            if (ok == 0 && harta[(int)imario][(int)jmario]==1) {
+            if (ok == 0 && (((int)jmario - jmario != 0) && ((harta[(int)imario - 1][(int)jmario] == 1 || harta[(int)imario - 1][(int)jmario] == 8 || harta[(int)imario - 1][(int)jmario] == 10 
+            || harta[(int)imario - 1][(int)jmario] == 12 || harta[(int)imario - 1][(int)jmario] == 13 || harta[(int)imario - 1][(int)jmario] == 14) && (harta[(int)imario - 1][(int)jmario + 1] == 1 
+            || harta[(int)imario - 1][(int)jmario + 1] == 8 || harta[(int)imario - 1][(int)jmario + 1] == 10 || harta[(int)imario - 1][(int)jmario + 1] == 12 || harta[(int)imario - 1][(int)jmario + 1] == 13 || harta[(int)imario - 1][(int)jmario + 1] == 14)))
+            || (((int)jmario - jmario == 0) && (harta[(int)imario - 1][(int)jmario] == 1 || harta[(int)imario - 1][(int)jmario] == 12 || harta[(int)imario - 1][(int)jmario] == 13 || harta[(int)imario - 1][(int)jmario] == 14
+            || harta[(int)imario - 1][(int)jmario] == 8 || harta[(int)imario - 1][(int)jmario] == 10))) {
                 ma_sound_stop(&ColideEffect);
                 ma_sound_seek_to_pcm_frame(&ColideEffect, 0);
                 ma_sound_start(&ColideEffect);
@@ -1157,7 +1179,67 @@ void MarioMovement() {
         delay(MarioInterval);
     }
 
-    if (fpow != 0 && (GetAsyncKeyState(0x43)) && shoot > 5) {
+    if (fpow != 0 && (GetAsyncKeyState(0x43)) && shoot > 8) {
+        shoot = 0;
+        int put = 0;
+        int okput = 1;
+        if ((int)jmario - jmario == 0 && (harta[(int)imario][(int)jmario + 1] == 1 || harta[(int)imario][(int)jmario - 1] == 1 
+            || harta[(int)imario][(int)jmario + 1] == 12 || harta[(int)imario][(int)jmario - 1] == 12 ||
+            harta[(int)imario][(int)jmario + 1] == 13 || harta[(int)imario][(int)jmario - 1] == 13 || 
+            harta[(int)imario][(int)jmario + 1] == 14 || harta[(int)imario][(int)jmario - 1] == 14 || 
+            harta[(int)imario][(int)jmario + 1] == 8 || harta[(int)imario][(int)jmario - 1] == 8 || 
+            harta[(int)imario][(int)jmario + 1] == 10 || harta[(int)imario][(int)jmario - 1] == 10)) okput = 0;
+        if ((int)jmario - jmario != 0 && (harta[(int)imario][(int)jmario] == 1 || harta[(int)imario][(int)jmario + 1] == 1 || harta[(int)imario][(int)jmario - 1] == 1 ||
+            (harta[(int)imario][(int)jmario] == 12 || harta[(int)imario][(int)jmario + 1] == 12 || harta[(int)imario][(int)jmario - 1] == 12) ||
+            (harta[(int)imario][(int)jmario] == 13 || harta[(int)imario][(int)jmario + 1] == 13 || harta[(int)imario][(int)jmario - 1] == 13) ||
+            (harta[(int)imario][(int)jmario] == 14 || harta[(int)imario][(int)jmario + 1] == 14 || harta[(int)imario][(int)jmario - 1] == 14) ||
+            (harta[(int)imario][(int)jmario] == 8 || harta[(int)imario][(int)jmario + 1] == 8 || harta[(int)imario][(int)jmario - 1] == 8) ||
+            (harta[(int)imario][(int)jmario] == 10 || harta[(int)imario][(int)jmario + 1] == 10 || harta[(int)imario][(int)jmario - 1] == 10))) okput = 0;
+        if (okput == 1) {
+            for (int i = 0;i < 6;i++) {
+                if (fireb[i].exist == 0) {
+                    fireb[i].exist = 1;
+                    if (direct == "right" || direct == "up") {
+                        fireb[i].fbdirection = 0;
+                        fireb[i].ifireb = imario;
+                        fireb[i].jfireb = jmario + 1;
+                    }
+                    else {
+                        if (direct == "left" || direct == "dowm") {
+                            fireb[i].fbdirection = 1;
+                            fireb[i].ifireb = imario;
+                            fireb[i].jfireb = jmario - 1;
+                        }
+                    }
+                    fireb[i].mapart = (int)(nci - nc1);
+                    put = 1;
+                }
+                if (put == 0) {
+                    fireb[5].exist = 1;
+                    if (direct == "right" || direct == "up") {
+                        fireb[5].fbdirection = 0;
+                        fireb[5].ifireb = imario;
+                        fireb[5].jfireb = jmario + 1;
+                    }
+                    else {
+                        if (direct == "left" || direct == "dowm") {
+                            fireb[5].fbdirection = 1;
+                            fireb[5].ifireb = imario;
+                            fireb[5].jfireb = jmario - 1;
+
+                        }
+                    }
+                    ma_sound_stop(&FireBallEffect);
+                    ma_sound_seek_to_pcm_frame(&FireBallEffect, 0);
+                    ma_sound_start(&FireBallEffect);
+                    fireb[5].mapart = (int)(nci - nc1);
+                }
+            }
+                
+        }
+    }
+
+   /* if (fpow != 0 && (GetAsyncKeyState(0x43)) && shoot > 5) {
         shoot = 0;
         int put = 0;
         for (int i = 0;i < 6;i++) {
@@ -1255,95 +1337,7 @@ void MarioMovement() {
                 fireb[8].mapart = (int)(nci - nc1);
             }
         }
-    }
-
-    if (fpow != 0 && (GetKeyState(0x43) < 0) && (int)imario - imario == 0 && shoot > 5) {
-        cout << "BLOCK: " << harta[(int)imario][(int)jmario + 2];
-        if ((int)jmario - jmario != 0 && harta[(int)imario][(int)jmario + 2] != 1 && harta[(int)imario][(int)jmario + 2] != 12 && harta[(int)imario][(int)jmario + 2] != 13 
-            && harta[(int)imario][(int)jmario + 2] != 14 && harta[(int)imario][(int)jmario - 1] != 1 && harta[(int)imario][(int)jmario - 1] != 12 
-            && harta[(int)imario][(int)jmario - 1] != 13 && harta[(int)imario][(int)jmario - 1] != 14) {
-            ma_sound_stop(&FireBallEffect);
-            ma_sound_seek_to_pcm_frame(&FireBallEffect, 0);
-            ma_sound_start(&FireBallEffect);
-            shoot = 0;
-            int put = 0;
-            for (int i = 0;i < 6;i++) {
-                if (fireb[i].exist == 0) {
-                    fireb[i].exist = 1;
-                    if (direct == "right") {
-                        fireb[i].fbdirection = 0;
-                        fireb[i].ifireb = imario;
-                        fireb[i].jfireb = jmario + 1;
-                    }
-                    else {
-                        fireb[i].fbdirection = 1;
-                        fireb[i].ifireb = imario;
-                        fireb[i].jfireb = jmario - 1;
-                    }
-                    fireb[i].mapart = (int)(nci - nc1);
-                    put = 1;
-                    break;
-                }
-            }
-            if (put == 0) {
-                fireb[8].exist = 1;
-                if (direct == "right") {
-                    fireb[5].fbdirection = 0;
-                    fireb[5].ifireb = imario;
-                    fireb[5].jfireb = jmario + 1;
-                }
-                else {
-                    fireb[5].fbdirection = 1;
-                    fireb[5].ifireb = imario;
-                    fireb[5].jfireb = jmario - 1;
-                }
-                fireb[8].mapart = (int)(nci - nc1);
-            }
-        }
-        else {
-            if (harta[(int)imario][(int)jmario - 1] != 1 && harta[(int)imario][(int)jmario - 1] != 12 && harta[(int)imario][(int)jmario - 1] != 13 && harta[(int)imario][(int)jmario - 1] != 14
-                && harta[(int)imario][(int)jmario + 1] != 1 && harta[(int)imario][(int)jmario + 1] != 12 && harta[(int)imario][(int)jmario + 1] != 13 && harta[(int)imario][(int)jmario + 1] != 14) {
-                ma_sound_stop(&FireBallEffect);
-                ma_sound_seek_to_pcm_frame(&FireBallEffect, 0);
-                ma_sound_start(&FireBallEffect);
-                shoot = 0;
-                int put = 0;
-                for (int i = 0;i < 6;i++) {
-                    if (fireb[i].exist == 0) {
-                        fireb[i].exist = 1;
-                        if (direct == "right") {
-                            fireb[i].fbdirection = 0;
-                            fireb[i].ifireb = imario;
-                            fireb[i].jfireb = jmario + 1;
-                        }
-                        else {
-                            fireb[i].fbdirection = 1;
-                            fireb[i].ifireb = imario;
-                            fireb[i].jfireb = jmario - 1;
-                        }
-                        fireb[i].mapart = (int)(nci - nc1);
-                        put = 1;
-                        break;
-                    }
-                }
-                if (put == 0) {
-                    fireb[8].exist = 1;
-                    if (direct == "right") {
-                        fireb[5].fbdirection = 0;
-                        fireb[5].ifireb = imario;
-                        fireb[5].jfireb = jmario + 1;
-                    }
-                    else {
-                        fireb[5].fbdirection = 1;
-                        fireb[5].ifireb = imario;
-                        fireb[5].jfireb = jmario - 1;
-                    }
-                    fireb[8].mapart = (int)(nci - nc1);
-                }
-            }
-        }
-        
-    }
+    }*/
 
     if ((int)jmario - jmario != 0) {
         if (harta[(int)imario + 1][(int)jmario] == 0 && harta[(int)imario + 1][(int)jmario + 1] == 0 && ok == 0) {
@@ -1485,7 +1479,7 @@ void MarioMovement() {
 
     for (int i = 1;i <= staro;i++) { //checker pentru coliziuni cu star power
         if (starpow[i].mapart == (int)(nci - nc1)) {
-            if (CheckBlock(imario * wh, jmario * wh, wh, (float)(starpow[i].icolec) * wh, (float)(starpow[i].jcolec) * wh) == 1 && direct == "right" && starpow[i].colected == 0) {
+            if (CheckColec(imario * wh, jmario * wh, wh, (float)(starpow[i].icolec) * wh, (float)(starpow[i].jcolec) * wh) == 1 && direct == "right" && starpow[i].colected == 0) {
                 power += 80;
                 starpow[i].colected = 1;
                 putimage((starpow[i].jcolec - nci) * wh, starpow[i].icolec * wh, skyblock, COPY_PUT);
@@ -1497,7 +1491,7 @@ void MarioMovement() {
                 }
 
             }
-            if (CheckBlock(imario * wh, jmario * wh, wh, (float)(starpow[i].icolec) * wh, (float)(starpow[i].jcolec) * wh) == 1 && direct == "left" && starpow[i].colected == 0) {
+            if (CheckColec(imario * wh, jmario * wh, wh, (float)(starpow[i].icolec) * wh, (float)(starpow[i].jcolec) * wh) == 1 && direct == "left" && starpow[i].colected == 0) {
                 power += 80;
                 starpow[i].colected = 1;
                 putimage((starpow[i].jcolec - nci) * wh, starpow[i].icolec * wh, skyblock, COPY_PUT);
@@ -1538,10 +1532,13 @@ void MarioMovement() {
 						ma_sound_seek_to_pcm_frame(&DmgEffect, 0);
 						ma_sound_start(&DmgEffect);
                         for (int i = 0;i < 3;i++) {
-                            NextState("left");
+                            putimage((jmario - nci)* wh, imario* wh, skyblock, COPY_PUT);
                             imario -= 0.5;
+                            NextState("left");
+                            
                         }
                         if (invincibilityframes == 0) {
+							if (fpow != 0) fpow = 0;
                             lifes--;
                             invincibilityframes = 10;
                         }
@@ -1567,10 +1564,13 @@ void MarioMovement() {
                         ma_sound_seek_to_pcm_frame(&DmgEffect, 0);
                         ma_sound_start(&DmgEffect);
                         for (int i = 0;i < 3;i++) {
-                            NextState("right");
+							putimage((jmario - nci)* wh, imario* wh, skyblock, COPY_PUT);
                             imario -= 0.5;
+                            NextState("right");
+                            
                         }
                         if (invincibilityframes == 0) {
+                            if (fpow != 0) fpow = 0;
                             lifes--;
                             invincibilityframes = 10;
                         }
@@ -1613,6 +1613,7 @@ void MarioMovement() {
 						ok += 5;
 					}
                     if (invincibilityframes == 0) {
+                        if (fpow != 0) fpow = 0;
                         lifes--;
                         invincibilityframes = 10;
                     }
@@ -1625,6 +1626,7 @@ void MarioMovement() {
                         ok += 5;
                     }
                     if (invincibilityframes == 0) {
+                        if (fpow != 0) fpow = 0;
                         lifes--;
                         invincibilityframes = 10;
                     }
@@ -1664,7 +1666,7 @@ void MarioMovement() {
 
     for (int i = 1;i <= coino;i++) { //checker pentru coliziuni cu coins
         if (coins[i].mapart == (int)(nci - nc1) && coins[i].colected == 0) {
-            if (CheckBlock(imario * wh, (jmario-nci) * wh, wh, (float)(coins[i].icolec) * wh, (float)(coins[i].jcolec- nci) * wh) == 1 && direct == "right") {
+            if (CheckColec(imario * wh, (jmario-nci) * wh, wh, (float)(coins[i].icolec) * wh, (float)(coins[i].jcolec- nci) * wh) == 1 && direct == "right") {
                 coinono++;
                 coins[i].colected = 1;
                 ma_sound_stop(&CoinEffect);
@@ -1678,7 +1680,7 @@ void MarioMovement() {
 					putimage((jmario - nci)* wh, imario* wh, mario_idle_left, COPY_PUT);
                 }
             }
-            if (CheckBlock(imario * wh, (jmario - nci) * wh, wh, (float)(coins[i].icolec) * wh, (float)(coins[i].jcolec - nci) * wh) == 1 && direct == "left") {
+            if (CheckColec(imario * wh, (jmario - nci) * wh, wh, (float)(coins[i].icolec) * wh, (float)(coins[i].jcolec - nci) * wh) == 1 && direct == "left") {
                 coinono++;
                 coins[i].colected = 1;
                 ma_sound_stop(&CoinEffect);
@@ -1697,7 +1699,7 @@ void MarioMovement() {
 
     for (int i = 1;i <= firo;i++) { //checker pentru coliziuni cu fire flowers
         if (fflower[i].mapart == (int)(nci - nc1) && fflower[i].colected == 0) {
-            if (CheckBlock(imario * wh, jmario * wh, wh, (float)(fflower[i].icolec) * wh, (float)(fflower[i].jcolec) * wh) == 1 && direct == "right" && fflower[i].colected == 0) {
+            if (CheckColec(imario * wh, jmario * wh, wh, (float)(fflower[i].icolec) * wh, (float)(fflower[i].jcolec) * wh) == 1 && direct == "right" && fflower[i].colected == 0) {
                 fpow += 80;
 				ma_sound_stop(&PowerUpEffect);
 				ma_sound_seek_to_pcm_frame(&PowerUpEffect, 0);
@@ -1715,7 +1717,7 @@ void MarioMovement() {
                 }
                 continue;
             }
-            if (CheckBlock(imario * wh, jmario * wh, wh, (float)(fflower[i].icolec) * wh, (float)(fflower[i].jcolec) * wh) == 1 && direct == "left" && fflower[i].colected == 0) {
+            if (CheckColec(imario * wh, jmario * wh, wh, (float)(fflower[i].icolec) * wh, (float)(fflower[i].jcolec) * wh) == 1 && direct == "left" && fflower[i].colected == 0) {
                 fpow += 80;
                 ma_sound_stop(&PowerUpEffect);
                 ma_sound_seek_to_pcm_frame(&PowerUpEffect, 0);
@@ -1735,7 +1737,7 @@ void MarioMovement() {
 
     for (int i = 1;i <= lifo;i++) { //checker pentru coliziuni cu one_ups
         if (life[i].mapart == (int)(nci - nc1)) {
-            if (CheckBlock(imario * wh, jmario * wh, wh, (float)(life[i].icolec) * wh, (float)(life[i].jcolec) * wh) == 1 && direct == "right" && life[i].colected == 0) {
+            if (CheckColec(imario * wh, jmario * wh, wh, (float)(life[i].icolec) * wh, (float)(life[i].jcolec) * wh) == 1 && direct == "right" && life[i].colected == 0) {
                 lifes++;
                 life[i].colected = 1;
                 ma_sound_stop(&OneUpEffect);
@@ -1750,7 +1752,7 @@ void MarioMovement() {
                 }
                 
             }
-            if (CheckBlock(imario * wh, jmario * wh, wh, (float)(life[i].icolec) * wh, (float)(life[i].jcolec) * wh) == 1 && direct == "left" && life[i].colected == 0) {
+            if (CheckColec(imario * wh, jmario * wh, wh, (float)(life[i].icolec) * wh, (float)(life[i].jcolec) * wh) == 1 && direct == "left" && life[i].colected == 0) {
                 lifes++;
                 life[i].colected = 1;
                 ma_sound_stop(&OneUpEffect);

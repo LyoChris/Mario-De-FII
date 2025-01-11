@@ -35,7 +35,7 @@ extern void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goom
 * MFmario_climbing_up_2, * MFmario_idle_left, * MFmario_idle_right, * MFmario_jump_1, * MFmario_left_run_1, * MFmario_left_run_2, * MFmario_left_run_3, * MFmario_right_run_1,
 * MFmario_right_run_2, * MFmario_right_run_3, * MFmario_jump_2, * Fmario_climbing_down_1, * Fmario_climbing_down_2, * Fmario_climbing_up_1,
 * Fmario_climbing_up_2, * Fmario_idle_left, * Fmario_idle_right, * Fmario_jump_1, * Fmario_left_run_1, * Fmario_left_run_2, * Fmario_left_run_3, * Fmario_right_run_1,
-* Fmario_right_run_2, * Fmario_right_run_3, * Fmario_jump_2, * fireball_1, * fireball_2, * fire_flower;
+* Fmario_right_run_2, * Fmario_right_run_3, * Fmario_jump_2, * fireball_1, * fireball_2, * fire_flower, * skyblockmap1;
 
 void preloadImage(const char* filename, int width, int height, void*& buffer) {
     readimagefile(filename, 0, 0, width, height);
@@ -46,6 +46,15 @@ void preloadImage(const char* filename, int width, int height, void*& buffer) {
 void preloadImage2(const char* filename, int width, int height, void*& buffer) {
     readimagefile(filename, 0.30*wh, 0.30*wh, 0.70*width, 0.70*height);
     buffer = malloc(imagesize(0, 0, width, height));
+    getimage(0, 0, width, height, buffer);
+}
+
+void preloadImage3(const char* filename, int width, int height, void*& buffer) {
+    readimagefile(filename, 0, 0, width, height);
+    buffer = malloc(imagesize(0, 0, width, height));
+	rectangle(0, 0, width, height);
+	rectangle(1, 1, width-1, height-1);
+	rectangle(2, 2, width - 2, height - 2);
     getimage(0, 0, width, height, buffer);
 }
 
@@ -361,6 +370,9 @@ void AssetLoaderMap() {
     cleardevice();
     setbkcolor(RGB(126, 132, 246));
     preloadImage("SkyBlock.jpg", (0.7 * wh), (0.7 * wh), skyblockmap);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage3("SkyBlock.jpg", (0.7 * wh), (0.7 * wh), skyblockmap1);
     cleardevice();
     setbkcolor(RGB(126, 132, 246));
     preloadImage("mario_vine.gif", (0.7 * wh), (0.7 * wh), mario_vinemap);

@@ -135,7 +135,7 @@ void gompa(int a) {
 				}
 			}
 		}
-		cout << gompav[a].hoverg << '\n';
+		//cout << gompav[a].hoverg << '\n';
 		if (gompav[a].hoverg == 1) {
 			if (gompav[a].jgompa > 0 && harta[(int)gompav[a].igompa][(int)gompav[a].jgompa] != 1) {
 				gompav[a].jgompa -= 0.5;
@@ -212,7 +212,7 @@ void gompa(int a) {
 				}
 			}
 		}
-		cout << gompav[a].hoverg << '\n';
+		//cout << gompav[a].hoverg << '\n';
 		if (gompav[a].hoverg == 1) {
 			if (gompav[a].jgompa < ncf) {
 				gompav[a].jgompa += 0.5;
@@ -305,13 +305,11 @@ void pirhananext(int a) {
 void EnemiesMoving() {
 	for (int i = 1;i <= n;i++) {
 		if (gompav[i].mapart == (int)(nci - nc1) && gompav[i].dead == 0) {
-			cout << ncf << '\n';
 			gompa(i);
 		}
 	}
 	for (int i = 1;i <= p;i++) {
 		if (piranav[i].mapart == (int)(nci - nc1) && piranav[i].dead == 0) {
-			cout << ncf << '\n';
 			pirhananext(i);
 		}
 	}

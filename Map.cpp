@@ -142,7 +142,7 @@ void MapLoader() {
                 putimage(j * wh, i * wh, pipebody, COPY_PUT);
             }
             if (harta[i][j] == 14) {
-                if (harta[i - 1][j] == 1) {
+                if (harta[i - 1][j] == 1 || harta[i - 1][j] == 12 || harta[i - 1][j] == 14 || harta[i - 1][j] == 13) {
                     putimage(j * wh, i * wh, Rpipehead, COPY_PUT);
                 }
                 else {
@@ -155,7 +155,7 @@ void MapLoader() {
 				piranav[p].jpinit = j;
                 piranav[p].ipirana = i;
                 piranav[p].jpirana = j;
-				if (harta[i - 1][j] == 1) {
+				if (harta[i - 1][j] == 1 || harta[i - 1][j] == 12 || harta[i - 1][j] == 14 || harta[i - 1][j] == 13) {
 					piranav[p].orientation = -1;
                     putimage(j * wh, i * wh, Rpipehead, COPY_PUT);
 				}
@@ -196,13 +196,7 @@ void MapLoaderNextRight() {
     cleardevice();
     setbkcolor(RGB(126, 132, 246));
     cleardevice();
-    cout << ncf << '\n';
-    for (int i = 0;i < nl;i += 1) {
-        for (int j = (int)nci;j < ncf; j += 1) {
-            cout << harta[i][j] << " ";
-        }
-        cout << '\n';
-    }
+
     for (int i = 0;i < nl;i += 1) {
         for (int j = (int)nci;j < ncf; j += 1) {
             if (harta[i][j] == 1)
@@ -235,7 +229,7 @@ void MapLoaderNextRight() {
                 putimage((j - nci) * wh, i * wh, pipebody, COPY_PUT);
                 //bar(j * wh, i * wh, (j + 1) * wh, (i + 1) * wh); // placeholder pentru pipe body
             }
-            if (harta[i][j] == 14) {
+            if (harta[i][j] == 14 || harta[i - 1][j] == 12 || harta[i - 1][j] == 14 || harta[i - 1][j] == 13) {
                 putimage((j - nci) * wh, i * wh, pipehead, COPY_PUT);
                 //bar(j * wh, i * wh, (j + 1) * wh, (i + 1) * wh); // placeholder pentru pipe head without pirhana
             }
@@ -246,7 +240,7 @@ void MapLoaderNextRight() {
                 piranav[p].jpinit = j;
                 piranav[p].ipirana = i;
                 piranav[p].jpirana = j;
-                if (harta[i - 1][j] == 1) {
+                if (harta[i - 1][j] == 1 || harta[i - 1][j] == 12 || harta[i - 1][j] == 14 || harta[i - 1][j] == 13) {
                     piranav[p].orientation = -1;
                 }
                 else {
@@ -296,8 +290,8 @@ void MapLoaderNextRight() {
                 putimage((life[i].jcolec - nci) * wh, life[i].icolec * wh, one_up, COPY_PUT);
             }
         }
-        for (int i = nl; i >imario - 1;--i) {
-            for (int j = (int)jmario+1;j < ncf;++j) {
+        for (int i = imario; i < nl;++i) {
+            for (int j = (int)jmario+1;j < jmario + 3;++j) {
                 if (harta[i + 1][j] == 1 && harta[i][j]!=1 && okmap==1) {
                     imario = i;
                     jmario = j +1;
@@ -314,7 +308,6 @@ void MapLoaderNextRight() {
 		putimage((spawn[(int)(nci / nc1)].jbegin - nci) * wh, spawn[(int)(nci / nc1)].ibegin * wh, mario_idle_right, COPY_PUT);*/
     };
     setvisualpage(0);
-    cout << ncf << '\n';
 }
 
 void MapLoaderPrevLeft() {
@@ -384,8 +377,8 @@ void MapLoaderPrevLeft() {
                 putimage((life[i].jcolec - nci) * wh, life[i].icolec * wh, one_up, COPY_PUT);
             }
         }
-        for (int i = nl; i > imario - 1;--i) {
-            for (int j = ncf - 1;j > nci;--j) {
+        for (int i = imario - 1; i < nl;++i) {
+            for (int j = ncf - 1;j > ncf - 3;--j) {
                 if (harta[i + 1][j] == 1 && harta[i][j] != 1 && okmap == 1) {
                     imario = i;
                     jmario = j;

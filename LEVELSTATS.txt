@@ -1,9 +1,9 @@
-level1.txt LEVEL 1% 17 1 15 3090
+level1.txt LEVEL 1% 21 2 13 3170
 level2.txt LEVEL 2% 0 0 0 0
-level3.txt LEVEL 3% 0 0 0 0
-level4.txt LEVEL 4% 0 0 0 0
+level3.txt LEVEL 3% 13 4 38 2320
+level4.txt LEVEL 4% 6 10 23 2370
 level5.txt LEVEL 5% 0 0 0 0
 level6.txt LEVEL 6% 0 0 0 0
 level7.txt LEVEL 7% 0 0 0 0
-level8.txt LEVEL 8% 0 0 0 0
+level8.txt LEVEL 8% 19 15 74 3660
  % 0 0 0 0

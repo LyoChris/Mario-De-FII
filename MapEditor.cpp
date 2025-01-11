@@ -33,7 +33,7 @@ extern LevelStats levelstats[9], customstats[9];
 extern ma_engine engine;
 extern ma_sound plinc, incplace, mapediRO, mapediEN, blselecRO, blselecEN, BackGroundMusic, MapEditorMusic, MenuMusic;
 
-int hartaloader[20][1000] = { 0 }, nr=0, edit = 1, mapi = 0, mapj = 1, selecpoz[15] = { 1,0,3,4,12,13,14,131,141,8,7,2,5,9,11}, iselec = 0, bkselect = 1, panelnr = 0, ncmax = 0, jpole = -1, ipole = -1;
+int hartaloader[20][1000] = { 0 }, nr=0, edit = 1, mapi = 0, mapj = 1, selecpoz[15] = { 1,0,3,4,12,13,14,141,131,8,7,2,5,9,11}, iselec = 0, bkselect = 1, panelnr = 0, ncmax = 0, jpole = -1, ipole = -1;
 float nwh, ncimap=0, ncfmap;
 int SplitMenuItems = 1;
 
@@ -43,7 +43,7 @@ extern void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goom
 void* brickblockmap, * skyblockmap, * mario_vinemap, * mario_vine_topmap, * lucky_blockmap, * mario_coinmap, * mario_idle_rightmap, * one_upmap, * flagpolepmap, * gombamap,
 * pipeheadmap, * pipebodymap, * pipeheadpirmap, * brickblockmono, * skyblockmono, * mario_vinemono, * mario_vine_topmono, * lucky_blockmono, * mario_coinmono,
 * mario_idle_rightmono, * one_upmono, * flagpolepmono, * gombamono, * pipeheadmono, * pipebodymono, * pipeheadpirmono, * flagpolemapeditmono, * flagpolemapeditp,
-* Rpipeheadpirmono, * Rpipeheadmono, * Rpipeheadpir, * Rpipehead, * Rpipeheadpirmap, * Rpipeheadmap;
+* Rpipeheadpirmono, * Rpipeheadmono, * Rpipeheadpir, * Rpipehead, * Rpipeheadpirmap, * Rpipeheadmap, * skyblockmap1;
 
 
 void PutMovingImage(int i, int j) {
@@ -81,7 +81,7 @@ void PutMovingImage(int i, int j) {
 
 void PutMapEditor(int i, int j, int block) {
 	if (block == 0)
-		putimage((j - ncimap + 1) * nwh, (i + 1) * nwh, skyblockmap, COPY_PUT);
+		putimage((j - ncimap + 1) * nwh, (i + 1) * nwh, skyblockmap1, COPY_PUT);
 	if (block == 1)
 		putimage((j - ncimap + 1) * nwh, (i + 1) * nwh, brickblockmap, COPY_PUT);
 	if (block == 3)
@@ -438,6 +438,12 @@ void saveMap() {
 		if (outfile) {
 			for (int i = 0; i < nl; i++) {
 				for (int j = 0; j < ncmax; j++) {
+					if (hartaloader[i][j] == 131) {
+						hartaloader[i][j] = 13;
+					}
+					if (hartaloader[i][j] == 141) {
+						hartaloader[i][j] = 14;
+					}
 					outfile << hartaloader[i][j] << " ";
 				}
 				outfile << endl;
@@ -570,6 +576,12 @@ void loadMap() {
 		for (int i = 0; i < nl; i++) {
 			for (int j = 0; j < ncmax; j++) {
 				infile >> hartaloader[i][j];
+				if (hartaloader[i][j] == 13 && (hartaloader[i - 1][j] == 1 || hartaloader[i - 1][j] == 12)) {
+					hartaloader[i][j] = 131;
+				}
+				if (hartaloader[i][j] == 14 && (hartaloader[i - 1][j] == 1 || hartaloader[i - 1][j] == 12)) {
+					hartaloader[i][j] = 141;
+				}
 			};
 		}
 		infile.close();
@@ -774,7 +786,7 @@ void MapEditorLevels() {
 			}
 			if ((int)t == 32) {
 				bkselect = selecpoz[iselec];
-				cout << bkselect << '\n';
+				std::cout << "POZITIE " << selecpoz[iselec] << '\n';
 				if (SplitMenuItems == 0) {
 					ma_sound_start(&mapediEN);
 				}
