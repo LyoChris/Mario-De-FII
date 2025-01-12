@@ -35,7 +35,7 @@ extern void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goom
 * MFmario_climbing_up_2, * MFmario_idle_left, * MFmario_idle_right, * MFmario_jump_1, * MFmario_left_run_1, * MFmario_left_run_2, * MFmario_left_run_3, * MFmario_right_run_1,
 * MFmario_right_run_2, * MFmario_right_run_3, * MFmario_jump_2, * Fmario_climbing_down_1, * Fmario_climbing_down_2, * Fmario_climbing_up_1,
 * Fmario_climbing_up_2, * Fmario_idle_left, * Fmario_idle_right, * Fmario_jump_1, * Fmario_left_run_1, * Fmario_left_run_2, * Fmario_left_run_3, * Fmario_right_run_1,
-* Fmario_right_run_2, * Fmario_right_run_3, * Fmario_jump_2, * fireball_1, * fireball_2, * fire_flower, * skyblockmap1;
+* Fmario_right_run_2, * Fmario_right_run_3, * Fmario_jump_2, * fireball_1, * fireball_2, * fire_flower, * skyblockmap1, * mario_custom_screen;
 
 void preloadImage(const char* filename, int width, int height, void*& buffer) {
     readimagefile(filename, 0, 0, width, height);
@@ -356,6 +356,9 @@ void AssetLoader() {
     cleardevice();
     setbkcolor(RGB(0, 0, 0));
     preloadImage("pxfuel.jpg", x-3, y-3, mario_main_screen);
+    cleardevice();
+    setbkcolor(RGB(0, 0, 0));
+    preloadImage("pxfuel_custom.jpg", x - 3, y - 3, mario_custom_screen);
     cleardevice();
     setbkcolor(RGB(0, 0, 0));
     preloadImage("MarioLevelsMenu.jpg", x-3, y-3, mario_levels_menu);

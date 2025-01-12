@@ -344,6 +344,16 @@ void NextState(string direction1) {
                 hoverm = 1;
                 putimage(((int)jmario - nci) * wh, (int)imario *6* wh, flagpolep, COPY_PUT);
             }
+            if ((int)imario - imario != 0) {
+				if (harta[(int)imario + 1][(int)jmario] == 3) {
+					hoverm = 1;
+					putimage(((int)jmario - nci) * wh, ((int)imario + 1) * wh, mario_vine, COPY_PUT);
+				}
+                if (harta[(int)imario + 1][(int)jmario + 1] == 3) {
+                    hoverm = 1;
+                    putimage(((int)jmario - nci + 1) * wh, ((int)imario + 1) * wh, mario_vine, COPY_PUT);
+                }
+            }
         }
         else {
             if (harta[(int)imario][(int)jmario] == 3) {

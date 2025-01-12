@@ -25,13 +25,14 @@ extern colectible coins[100], life[100];
 extern goompa gompav[100];
 extern void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goomba_walking_2, * mario_climbing_down_1, * mario_climbing_down_2, * mario_climbing_up_1,
 * mario_climbing_up_2, * mario_idle_left, * mario_idle_right, * mario_jump_1, * mario_left_run_1, * mario_left_run_2, * mario_left_run_3, * mario_right_run_1,
-* mario_right_run_2, * mario_right_run_3, * mario_vine, * mario_vine_top, * skyblock, * lucky_block_used, * one_up, * flagpolep, *mario_main_screen, * mario_levels_menu;
+* mario_right_run_2, * mario_right_run_3, * mario_vine, * mario_vine_top, * skyblock, * lucky_block_used, * one_up, * flagpolep, *mario_main_screen, * mario_levels_menu,
+* mario_custom_screen;
 extern double MarioInterval;
 extern float wh, ncf, nci, nc1, imario, jmario;
 extern int x, y, nl, nc, harta[30][1000];
 extern int time1, okesc, n, SplitMenuItems, coinono, gdead, pdead, score1;
 extern string direct, levelselect, cht;
-int textH;
+int textH, menustate = 0;
 extern double time_spent;
 //extern int lifes = 3, safeimario, safejmario, mover = 0, coinono = 0, invincibilityframes = 0, ok = 0, hoverm = 0, play = 0, gdead = 0;
 
@@ -74,7 +75,8 @@ int CUSTOM_LEVEL_ITEMS;
 char* customLevelText[10];
 
 const int BUTTON_MENU_ITEMS = 3;
-char* levelclearedText[BUTTON_MENU_ITEMS] = { "PLAY", "MENU", "BACK" };
+char* levelclearedTextEN[BUTTON_MENU_ITEMS] = { "REPLAY", "MENU", "BACK" };
+char* levelclearedTextRO[BUTTON_MENU_ITEMS] = { "REINCEPE", "MENIU", "INAPOI" };
 
 // Global variable
 int selectedOption = 0;
@@ -242,6 +244,8 @@ void MainMenu() {
 	ma_sound_seek_to_pcm_frame(&StarTheme, 0);
 	ma_sound_stop(&BackGroundMusic);
 	ma_sound_seek_to_pcm_frame(&BackGroundMusic, 0);
+
+	menustate = 0;
 	int screenWidth = x;
 	int screenHeight = y;
 	bool running = true;
@@ -479,7 +483,7 @@ void drawCustomMenu(int screenWidth, int screenHeight) {
 	int marginX = screenWidth / 9;
 	int marginY = screenHeight / 4.5;
 
-	putimage(0, 0, mario_main_screen, COPY_PUT);
+	putimage(0, 0, mario_custom_screen, COPY_PUT);
 
 	settextjustify(LEFT_TEXT, TOP_TEXT);
 
@@ -507,6 +511,7 @@ void CustomMenu() {
 	ma_sound_seek_to_pcm_frame(&StarTheme, 0);
 	ma_sound_stop(&BackGroundMusic);
 	ma_sound_seek_to_pcm_frame(&BackGroundMusic, 0);
+	menustate = 1;
 	int screenWidth = x;
 	int screenHeight = y;
 	bool running = true;
@@ -938,13 +943,25 @@ void GameOverMenu() {
 				break;
 			case 1:
 				selectedOption = 0;
-				MapReseter();
-				LevelsMenu();
+				if (menustate == 0) {
+					MapReseter();
+					LevelsMenu();
+				}
+				else {
+					MapReseter();
+					CustomLevelsMenu();
+				}
 				break;
 			case 2:
 				selectedOption = 0;
-				MapReseter();
-				MainMenu();
+				if (menustate == 0) {
+					MapReseter();
+					MainMenu();
+				}
+				else {
+					MapReseter();
+					CustomMenu();
+				}
 				break;
 			}
 		}
@@ -1077,13 +1094,26 @@ void PauseMenu() {
 				return;
 				break;
 			case 1:
-				MapReseter();
-				LevelsMenu();
+				if (menustate == 0) {
+					MapReseter();
+					LevelsMenu();
+				}
+				else {
+					MapReseter();
+					CustomLevelsMenu();
+				}
+				
 				break;
 			case 2:
 				selectedOption = 0;
-				MapReseter();
-				MainMenu();
+				if (menustate == 0) {
+					MapReseter();
+					MainMenu();
+				}
+				else {
+					MapReseter();
+					CustomMenu();
+				}
 				break;
 			}
 		}
@@ -1176,7 +1206,10 @@ void drawStatsMenu(int screenWidth, int screenHeight, int selected) {
 
 		bool isHovered = (i == hoveredButton);
 
-		drawButtonStats(x, y, buttonWidth, buttonHeight, levelclearedText[i], WHITE, BLACK, isHovered);
+		if(SplitMenuItems == 1)
+			drawButtonStats(x, y, buttonWidth, buttonHeight, levelclearedTextRO[i], WHITE, BLACK, isHovered);
+		else
+			drawButtonStats(x, y, buttonWidth, buttonHeight, levelclearedTextEN[i], WHITE, BLACK, isHovered);
 		//if (SplitMenuItems == 1)
 			//drawButton(x, y, buttonWidth, buttonHeight, menuTextRO[i], WHITE, BLACK, isHovered);
 		//else
@@ -1280,10 +1313,18 @@ void drawStatsMenuCustom(int screenWidth, int screenHeight, int selected) {
 	displayText(LevelSpecific, 1.35 * screenWidth, 2 * marginY, fontsize + 1, WHITE);
 
 	int textHeight = textheight(LevelSpecific);
-	sprintf(coinsCounter, "Coins collected:  %d", customstats[selected].coins);
-	sprintf(enemiesCounter, "Enemies killed:  %d", customstats[selected].enemies);
-	sprintf(timeCounter, "TIME:  %ds", customstats[selected].time);
-	sprintf(scoreCounter, "HIGH SCORE:  %d", customstats[selected].score);
+	if (SplitMenuItems == 1) {
+		sprintf(coinsCounter, "Coins collected:  %d", customstats[selected].coins);
+		sprintf(enemiesCounter, "Enemies killed:  %d", customstats[selected].enemies);
+		sprintf(timeCounter, "TIME:  %ds", customstats[selected].time);
+		sprintf(scoreCounter, "HIGH SCORE:  %d", customstats[selected].score);
+	}
+	else {
+		sprintf(coinsCounter, "Monede colectate:  %d", customstats[selected].coins);
+		sprintf(enemiesCounter, "Enemies killed:  %d", customstats[selected].enemies);
+		sprintf(timeCounter, "TIME:  %ds", customstats[selected].time);
+		sprintf(scoreCounter, "HIGH SCORE:  %d", customstats[selected].score);
+	}
 
 
 
@@ -1298,7 +1339,10 @@ void drawStatsMenuCustom(int screenWidth, int screenHeight, int selected) {
 
 		bool isHovered = (i == hoveredButton);
 
-		drawButtonStats(x, y, buttonWidth, buttonHeight, levelclearedText[i], WHITE, BLACK, isHovered);
+		if (SplitMenuItems == 1)
+			drawButtonStats(x, y, buttonWidth, buttonHeight, levelclearedTextRO[i], WHITE, BLACK, isHovered);
+		else
+			drawButtonStats(x, y, buttonWidth, buttonHeight, levelclearedTextEN[i], WHITE, BLACK, isHovered);
 		//if (SplitMenuItems == 1)
 			//drawButton(x, y, buttonWidth, buttonHeight, menuTextRO[i], WHITE, BLACK, isHovered);
 		//else
@@ -1448,16 +1492,29 @@ void drawLevelClear(int r, int g, int b) {
 	}
 
 	char coinsCounter[50], enemiesCounter[50], timeCounter[50], scoreCounter[50];
-	sprintf(coinsCounter, "Coins collected:  %d", coinono);
-	sprintf(enemiesCounter, "Enemies killed:  %d", gdead+pdead);
-	sprintf(timeCounter, "Time:  %ds", (int)time_spent);
-	if (score1 > 0) {
-		sprintf(scoreCounter, "HIGH SCORE:  %d", score1);
+	if (SplitMenuItems == 1) {
+
+		sprintf(coinsCounter, "Coins collected:  %d", coinono);
+		sprintf(enemiesCounter, "Enemies killed:  %d", gdead + pdead);
+		sprintf(timeCounter, "Time:  %ds", (int)time_spent);
+		if (score1 > 0) {
+			sprintf(scoreCounter, "HIGH SCORE:  %d", score1);
+		}
+		else {
+			sprintf(scoreCounter, "NEW HIGH SCORE:  %d", score1);
+		}
 	}
 	else {
-		sprintf(scoreCounter, "NEW HIGH SCORE:  %d", score1);
+		sprintf(coinsCounter, "Coins collected:  %d", coinono);
+		sprintf(enemiesCounter, "Enemies killed:  %d", gdead + pdead);
+		sprintf(timeCounter, "Time:  %ds", (int)time_spent);
+		if (score1 > 0) {
+			sprintf(scoreCounter, "HIGH SCORE:  %d", score1);
+		}
+		else {
+			sprintf(scoreCounter, "NEW HIGH SCORE:  %d", score1);
+		}
 	}
-
 
 	settextstyle(EUROPEAN_FONT, HORIZ_DIR, fontSize + 2);
 	int textHeight = textheight("LEVEL STATS");
@@ -1480,12 +1537,12 @@ void drawLevelClear(int r, int g, int b) {
 		if (SplitMenuItems == 1) {
 			textX = menuX + (menuWidth - textwidth(gameOverTextRO[i])) / 2; // Center text horizontally
 			textY = menuY + i * menuSpacing + 4 * textHeight;
-			outtextxy(textX, textY, gameOverTextRO[i]);
+			outtextxy(textX, textY, levelclearedTextRO[i]);
 		}
 		else {
 			textX = menuX + (menuWidth - textwidth(gameOverTextEN[i])) / 2; // Center text horizontally
 			textY = menuY + i * menuSpacing + 4 * textHeight;
-			outtextxy(textX, textY, gameOverTextEN[i]);
+			outtextxy(textX, textY, levelclearedTextEN[i]);
 		}
 	}
 }
@@ -1641,7 +1698,6 @@ void drawButtonsMenuCustom(int screenWidth, int screenHeight) {
 		int x = marginX;
 		int y = marginY + i * (buttonHeight + screenHeight / 20);
 		bool isHovered = (i == hoveredButton);
-		int SplitMenuItems = 1;
 		if (SplitMenuItems == 1) {
 			drawButtonControls(x, y, buttonWidth, buttonHeight, "INAPOI", WHITE, BLUE, isHovered);
 		}
@@ -1734,7 +1790,7 @@ void CustomControlMenu() {
 
 				// Handle button clicks here
 				if (clickedButton == 0) {
-					MainMenu();
+					CustomMenu();
 					break;
 				}
 			}
