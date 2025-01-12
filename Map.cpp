@@ -40,7 +40,7 @@ extern colectible coins[100], life[100], starpow[100], fflower[100];
 extern firebll fireb[100];
 pozitii spawn[100];
 float wh, ncf, nci = 0, nc1, imario, jmario;
-int  x, y, nl = 20, nc, harta[30][1000], mv2, map, mappart, spawncount = 1, vizc[100], vize[100], buffersize, flagpole = -2, okmap = 1;
+int  x, y, nl = 20, nc, harta[30][1000], mv2, map, mappart, spawncount = 1, vizc[100], vize[100], buffersize, flagpolej = -2, flagpolei = -1, okmap = 1, flagpole;
 extern goompa gompav[100];
 extern int n, coino, lifo, p, staro, firo;
 
@@ -52,10 +52,10 @@ void MapReaderandSetter() {
     wh = (float)y / (float)nl;
     nc1 = (float)x / wh;
     ncf = nc1;
-	cout << "Dimensiuni ecran: " << x << " " << y << '\n';
-	AssetLoader();
-	AssetLoaderMap();
-	initwindow(x, y, "", -3, -3);
+    cout << "Dimensiuni ecran: " << x << " " << y << '\n';
+    AssetLoader();
+    AssetLoaderMap();
+    initwindow(x, y, "", -3, -3);
 }
 
 void MapLoader() {
@@ -68,15 +68,15 @@ void MapLoader() {
     }
     f.close();
     cout << "Dimensiuni harta: " << nl << " " << nc << '\n';
-    cout << "Dimensiuni tile: " << wh << " " << nc1 <<  '\n';
+    cout << "Dimensiuni tile: " << wh << " " << nc1 << '\n';
     levelselect = cht;
     //initwindow(x, y, "", -3, -3);
-	setvisualpage(1);
+    setvisualpage(1);
     setactivepage(0);
-	cleardevice();
+    cleardevice();
     setbkcolor(RGB(126, 132, 246));
-	cleardevice();
-	cout << "COINO " << coino << '\n';
+    cleardevice();
+    cout << "COINO " << coino << '\n';
     for (int i = 0; i < nl;i += 1) {
         for (int j = nci;j < ncf; j += 1) {
             if (harta[i][j] == 1)
@@ -86,31 +86,31 @@ void MapLoader() {
             if (harta[i][j] == 4)
                 putimage(j * wh, i * wh, mario_vine_top, COPY_PUT);
             if (harta[i][j] == 9) {
-				putimage(j * wh, i * wh, mario_idle_right, COPY_PUT);
-				cout << "Mario coord init: "<< i << " " << j << '\n';
+                putimage(j * wh, i * wh, mario_idle_right, COPY_PUT);
+                cout << "Mario coord init: " << i << " " << j << '\n';
                 imario = i, jmario = j;
                 harta[i][j] = 0;
             }
             if (harta[i][j] == 7) {
-					putimage(j * wh, i * wh, mario_coin, COPY_PUT);   
-                    coino++;
-                    coins[coino].icolec = i;
-                    coins[coino].jcolec = j;
-                    coins[coino].mapart = (int)(nci - nc1);
-					coins[coino].colected = 0;
-                    harta[i][j] = 0;
-					cout << coins[coino].icolec << " " << coins[coino].jcolec << " " << coins[coino].mapart << '\n';
+                putimage(j * wh, i * wh, mario_coin, COPY_PUT);
+                coino++;
+                coins[coino].icolec = i;
+                coins[coino].jcolec = j;
+                coins[coino].mapart = (int)(nci - nc1);
+                coins[coino].colected = 0;
+                harta[i][j] = 0;
+                cout << coins[coino].icolec << " " << coins[coino].jcolec << " " << coins[coino].mapart << '\n';
             }
             if (harta[i][j] == 16) {
                 putimage(j * wh, i * wh, fire_flower, COPY_PUT);
-				firo++;
-				fflower[firo].icolec = i;
-				fflower[firo].jcolec = j;
-				fflower[firo].mapart = (int)(nci - nc1);
-				harta[i][j] = 0;
+                firo++;
+                fflower[firo].icolec = i;
+                fflower[firo].jcolec = j;
+                fflower[firo].mapart = (int)(nci - nc1);
+                harta[i][j] = 0;
             }
             if (harta[i][j] == 15) {
-				putimage(j * wh, i * wh, mario_star, COPY_PUT);
+                putimage(j * wh, i * wh, mario_star, COPY_PUT);
                 staro++;
                 starpow[staro].icolec = i;
                 starpow[staro].jcolec = j;
@@ -118,24 +118,29 @@ void MapLoader() {
                 harta[i][j] = 0;
             }
             if (harta[i][j] == 8) {
-				putimage(j * wh, i * wh, lucky_block, COPY_PUT);
+                putimage(j * wh, i * wh, lucky_block, COPY_PUT);
             }
             if (harta[i][j] == 10) {
-				putimage(j * wh, i * wh, lucky_block_used, COPY_PUT);
+                putimage(j * wh, i * wh, lucky_block_used, COPY_PUT);
             }
             if (harta[i][j] == 2) {
-				putimage(j * wh, i * wh, one_up, COPY_PUT);
+                putimage(j * wh, i * wh, one_up, COPY_PUT);
                 lifo++;
                 life[lifo].icolec = i;
-				life[lifo].jcolec = j;
-				life[lifo].mapart = (int)(nci - nc1);
-				harta[i][j] = 0;
+                life[lifo].jcolec = j;
+                life[lifo].mapart = (int)(nci - nc1);
+                harta[i][j] = 0;
 
             }
             if (harta[i][j] == 11) {
-                flagpole = j;
-				putimage(j * wh, (i-7) * wh, flagpolep, COPY_PUT);
-                harta[i][j] = 0;
+                flagpolej = j;
+                flagpolei = i;
+                putimage((j) * wh, ((i) - 6) * wh, flagpolep, COPY_PUT);
+
+                harta[i][j] = 11;
+                for (int k = i;k >= i - 6;k--) {
+                    harta[k][j] = 20;
+                }
             }
             if (harta[i][j] == 12) {
                 putimage(j * wh, i * wh, pipebody, COPY_PUT);
@@ -220,9 +225,14 @@ void MapLoaderNextRight() {
                 harta[i][j] = 0;
             }
             if (harta[i][j] == 11) {
-                flagpole = j;
-                putimage((j - nci) * wh, (i-6) * wh, flagpolep, COPY_PUT);
-                harta[i][j] = 0;
+                flagpolej = j;
+                flagpolei = i;
+                putimage((j - nci) * wh, (i - 6) * wh, flagpolep, COPY_PUT);
+
+                harta[i][j] = 11;
+				for (int k = i;k >= i-6;k--) {
+						harta[k][j] = 20;
+				}
             }
             if (harta[i][j] == 12) {
                 putimage((j - nci) * wh, i * wh, pipebody, COPY_PUT);

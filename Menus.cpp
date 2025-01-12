@@ -25,7 +25,7 @@ extern colectible coins[100], life[100];
 extern goompa gompav[100];
 extern void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goomba_walking_2, * mario_climbing_down_1, * mario_climbing_down_2, * mario_climbing_up_1,
 * mario_climbing_up_2, * mario_idle_left, * mario_idle_right, * mario_jump_1, * mario_left_run_1, * mario_left_run_2, * mario_left_run_3, * mario_right_run_1,
-* mario_right_run_2, * mario_right_run_3, * mario_vine, * mario_vine_top, * skyblock, * lucky_block_used, * one_up, * flagpolep, *mario_main_screen, * mario_levels_menu,
+* mario_right_run_2, * mario_right_run_3, * mario_vine, * mario_vine_top, * skyblock, * lucky_block_used, * one_up, * flagpolep, * mario_main_screen, * mario_levels_menu,
 * mario_custom_screen;
 extern double MarioInterval;
 extern float wh, ncf, nci, nc1, imario, jmario;
@@ -68,15 +68,19 @@ char* levelTextEN[LEVEL_ITEMS] = { "LEVEL 1", "LEVEL 2", "LEVEL 3", "LEVEL 4", "
 char* levelTextRO[LEVEL_ITEMS] = { "NIVELUL 1", "NIVELUL 2", "NIVELUL 3", "NIVELUL 4", "NIVELUL 5", "NIVELUL 6", "NIVELUL 7", "NIVELUL 8", "INAPOI" };
 
 const int CUSTOM_ITEMS = 4;
-char* customTextEN[CUSTOM_ITEMS] = { "PLAY", "MAP EDITOR", "CONTROLS", "BACK"};
-char* customTextRO[CUSTOM_ITEMS] = { "PLAY", "MAP EDITOR", "CONTROALE", "INAPOI"};
+char* customTextEN[CUSTOM_ITEMS] = { "PLAY", "MAP EDITOR", "CONTROLS", "BACK" };
+char* customTextRO[CUSTOM_ITEMS] = { "PLAY", "MAP EDITOR", "CONTROALE", "INAPOI" };
 
 int CUSTOM_LEVEL_ITEMS;
 char* customLevelText[10];
 
 const int BUTTON_MENU_ITEMS = 3;
-char* levelclearedTextEN[BUTTON_MENU_ITEMS] = { "REPLAY", "MENU", "BACK" };
-char* levelclearedTextRO[BUTTON_MENU_ITEMS] = { "REINCEPE", "MENIU", "INAPOI" };
+char* levelclearedTextEN[BUTTON_MENU_ITEMS] = { "REPLAY", "LEVELS", "MAIN MENU" };
+char* levelclearedTextRO[BUTTON_MENU_ITEMS] = { "REINCEPE", "NIVELE", "MENIU PRINCIPAL" };
+
+const int BUTTON_STATS_ITEMS = 3;
+char* statsTextEN[BUTTON_MENU_ITEMS] = { "PLAY", "MAIN MENU", "BACK" };
+char* statsTextRO[BUTTON_MENU_ITEMS] = { "JOACA", "MENIU PRINCIPAL", "INAPOI" };
 
 // Global variable
 int selectedOption = 0;
@@ -96,7 +100,7 @@ void drawLanguage(int screenWidth, int screenHeight) {
 	int x1 = (screenWidth - imageWidth) / 4;  // Left image X position
 	int y1 = (screenHeight - imageHeight) / 2;                   // Centered vertically
 
-	int x2 = (screenWidth - imageWidth)/4 + imageWidth + imageWidth/30;  // Right image X position (10 pixels apart)
+	int x2 = (screenWidth - imageWidth) / 4 + imageWidth + imageWidth / 30;  // Right image X position (10 pixels apart)
 	int y2 = (screenHeight - imageHeight) / 2;      // Centered vertically
 
 	// Load and display the images
@@ -106,8 +110,8 @@ void drawLanguage(int screenWidth, int screenHeight) {
 	// Display a simple instruction message
 	setcolor(WHITE);
 	settextstyle(SIMPLEX_FONT, HORIZ_DIR, 4);
-	outtextxy((x2-x1), y1+imageHeight +imageHeight/20, "SELECT THE LANGUAGE");
-	outtextxy((x2 - x1/1.25), y1 + imageHeight + imageHeight/5, "SELECTEAZA LIMBA");
+	outtextxy((x2 - x1), y1 + imageHeight + imageHeight / 20, "SELECT THE LANGUAGE");
+	outtextxy((x2 - x1 / 1.25), y1 + imageHeight + imageHeight / 5, "SELECTEAZA LIMBA");
 
 	// Wait for mouse click
 	while (true) {
@@ -131,7 +135,7 @@ void drawLanguage(int screenWidth, int screenHeight) {
 		if (mouseX >= x2 && mouseX <= x2 + imageWidth && mouseY >= y2 && mouseY <= y2 + imageHeight) {
 			setcolor(LIGHTBLUE);
 			for (int i = 0;i < 4;i++) {
-				rectangle(x2+i, y2+i, x2 + imageWidth+i, y2 + imageHeight+i); // Draw a border around the hovered image
+				rectangle(x2 + i, y2 + i, x2 + imageWidth + i, y2 + imageHeight + i); // Draw a border around the hovered image
 			}
 		}
 		else {
@@ -215,7 +219,7 @@ void drawMenu(int screenWidth, int screenHeight) {
 	int buttonHeight = screenHeight / 10;
 	int marginX = screenWidth / 9;
 	int marginY = screenHeight / 4.5;
-	
+
 	putimage(0, 0, mario_main_screen, COPY_PUT);
 
 	settextjustify(LEFT_TEXT, TOP_TEXT);
@@ -234,7 +238,7 @@ void drawMenu(int screenWidth, int screenHeight) {
 	int imageX = (screenWidth - imageWidth) / 2;  // Center horizontally
 	int imageY = marginY - (x / 3 * 612) / x - screenHeight / 20;  // Place above the first button with padding
 
-	
+
 }
 
 void MainMenu() {
@@ -389,6 +393,7 @@ void LevelsMenu() {
 	bool running = true;
 	int page = 0;
 
+	menustate = 0;
 	while (running) {
 		if (!ma_sound_is_playing(&MenuMusic)) ma_sound_start(&MenuMusic);
 		setactivepage(page);
@@ -418,11 +423,11 @@ void LevelsMenu() {
 				cleardevice();
 				settextstyle(DEFAULT_FONT, HORIZ_DIR, 6);
 				switch (clickedButton) {
-				case 0: 
+				case 0:
 					cht = "level1.txt";
 					StatsMenu();
 					break;
-				case 1: 
+				case 1:
 					cht = "level2.txt";
 					StatsMenu();
 					break;
@@ -444,7 +449,7 @@ void LevelsMenu() {
 				case 7: cht = "level8.txt";
 					StatsMenu();
 					break;
-				case 8: 
+				case 8:
 					MainMenu();
 					break;
 				}
@@ -501,7 +506,7 @@ void drawCustomMenu(int screenWidth, int screenHeight) {
 	int imageX = (screenWidth - imageWidth) / 2;  // Center horizontally
 	int imageY = marginY - (x / 3 * 612) / x - screenHeight / 20;  // Place above the first button with padding
 
-	
+
 }
 
 void CustomMenu() {
@@ -519,6 +524,7 @@ void CustomMenu() {
 
 	settextstyle(DEFAULT_FONT, HORIZ_DIR, 1);
 
+	menustate = 1;
 	while (running) {
 		if (!ma_sound_is_playing(&MenuMusic)) ma_sound_start(&MenuMusic);
 		setactivepage(page);
@@ -612,6 +618,7 @@ void CustomLevelsMenu() {
 	bool running = true;
 	int page = 0;
 
+	menustate = 1;
 	while (running) {
 
 		if (!ma_sound_is_playing(&MenuMusic)) {
@@ -682,7 +689,7 @@ void drawButtonLevelsReplacer(int x, int y, int width, int height, char* text, i
 	setcolor(textColor);
 	settextstyle(EUROPEAN_FONT, HORIZ_DIR, 4);
 	int textX = x + (width - textwidth(text)) / 2;
-	int textY = y + (height - textheight(text)+ yOffset) / 2 ;
+	int textY = y + (height - textheight(text) + yOffset) / 2;
 	outtextxy(textX, textY, text);
 	setbkcolor(button_color);
 }
@@ -830,7 +837,7 @@ void drawArrowGameOver(int option, int color, int menuX, int menuY, int menuSpac
 	else {
 		textHeight = textheight(gameOverTextEN[option]);
 	}
-	
+
 	int y = menuY + (option * menuSpacing) + (menuSpacing / 2) - (textHeight / 2);
 
 	// Define the arrow points
@@ -1102,7 +1109,7 @@ void PauseMenu() {
 					MapReseter();
 					CustomLevelsMenu();
 				}
-				
+
 				break;
 			case 2:
 				selectedOption = 0;
@@ -1183,22 +1190,38 @@ void drawStatsMenu(int screenWidth, int screenHeight, int selected) {
 	settextjustify(LEFT_TEXT, TOP_TEXT);
 	int fontsize = screenHeight / 170;
 	char LevelSpecific[50], coinsCounter[50], enemiesCounter[50], timeCounter[50], scoreCounter[50];
+	int textHeight;
 
-	sprintf(LevelSpecific, "%s STATS", levelstats[selected].disname);
-	displayText(LevelSpecific, 1.35 * screenWidth, 2 * marginY, fontsize + 1, WHITE);
+	if (SplitMenuItems == 1) {
+		sprintf(LevelSpecific, "%s STATISTICI", levelstats[selected].disname);
+		displayText(LevelSpecific, 1.35 * screenWidth, 2 * marginY, fontsize + 1, WHITE);
 
-	int textHeight = textheight(LevelSpecific);
-	sprintf(coinsCounter, "Coins collected:  %d", levelstats[selected].coins);
-	sprintf(enemiesCounter, "Enemies killed:  %d", levelstats[selected].enemies);
-	sprintf(timeCounter, "TIME:  %ds", levelstats[selected].time);
-	sprintf(scoreCounter, "HIGH SCORE:  %d", levelstats[selected].score);
+		textHeight = textheight(LevelSpecific);
+		sprintf(coinsCounter, "Monede colectate: %d", levelstats[selected].coins);
+		sprintf(enemiesCounter, "Inamici ucisi: %d", levelstats[selected].enemies);
+		sprintf(timeCounter, "TIME: %ds", levelstats[selected].time);
+		sprintf(scoreCounter, "SCOR: %d", levelstats[selected].score);
 
+		displayText(coinsCounter, 1.35 * screenWidth, 2 * marginY + 4.5 * textHeight, fontsize, WHITE);
+		displayText(enemiesCounter, 1.35 * screenWidth, 2 * marginY + 7.0 * textHeight, fontsize, WHITE);
+		displayText(timeCounter, 1.35 * screenWidth, 2 * marginY + 9.5 * textHeight, fontsize, WHITE);
+		displayText(scoreCounter, 1.35 * screenWidth, 2 * marginY + 13.0 * textHeight, fontsize + 0.75, WHITE);
+	}
+	else {
+		sprintf(LevelSpecific, "%s STATS", levelstats[selected].disname);
+		displayText(LevelSpecific, 1.35 * screenWidth, 2 * marginY, fontsize + 1, WHITE);
 
-	
-	displayText(coinsCounter, 1.35 * screenWidth, 2 * marginY + 4.5 * textHeight, fontsize, WHITE);
-	displayText(enemiesCounter, 1.35 * screenWidth, 2 * marginY + 7.0 * textHeight, fontsize, WHITE);
-	displayText(timeCounter, 1.35 * screenWidth, 2 * marginY + 9.5 * textHeight, fontsize, WHITE);
-	displayText(scoreCounter, 1.35 * screenWidth, 2 * marginY + 13.0 * textHeight, fontsize + 0.75, WHITE);
+		textHeight = textheight(LevelSpecific);
+		sprintf(coinsCounter, "Coins collected:  %d", levelstats[selected].coins);
+		sprintf(enemiesCounter, "Enemies killed:  %d", levelstats[selected].enemies);
+		sprintf(timeCounter, "TIME:  %ds", levelstats[selected].time);
+		sprintf(scoreCounter, "HIGH SCORE:  %d", levelstats[selected].score);
+
+		displayText(coinsCounter, 1.35 * screenWidth, 2 * marginY + 4.5 * textHeight, fontsize, WHITE);
+		displayText(enemiesCounter, 1.35 * screenWidth, 2 * marginY + 7.0 * textHeight, fontsize, WHITE);
+		displayText(timeCounter, 1.35 * screenWidth, 2 * marginY + 9.5 * textHeight, fontsize, WHITE);
+		displayText(scoreCounter, 1.35 * screenWidth, 2 * marginY + 13.0 * textHeight, fontsize + 0.75, WHITE);
+	}
 
 	for (int i = 0; i < BUTTON_MENU_ITEMS; i++) {
 		int x = marginX;
@@ -1206,10 +1229,10 @@ void drawStatsMenu(int screenWidth, int screenHeight, int selected) {
 
 		bool isHovered = (i == hoveredButton);
 
-		if(SplitMenuItems == 1)
-			drawButtonStats(x, y, buttonWidth, buttonHeight, levelclearedTextRO[i], WHITE, BLACK, isHovered);
+		if (SplitMenuItems == 1)
+			drawButtonStats(x, y, buttonWidth, buttonHeight, statsTextRO[i], WHITE, BLACK, isHovered);
 		else
-			drawButtonStats(x, y, buttonWidth, buttonHeight, levelclearedTextEN[i], WHITE, BLACK, isHovered);
+			drawButtonStats(x, y, buttonWidth, buttonHeight, statsTextEN[i], WHITE, BLACK, isHovered);
 		//if (SplitMenuItems == 1)
 			//drawButton(x, y, buttonWidth, buttonHeight, menuTextRO[i], WHITE, BLACK, isHovered);
 		//else
@@ -1233,9 +1256,9 @@ void StatsMenu() {
 
 	char charArray[50];
 	strcpy(charArray, cht.c_str());
-	
+
 	for (int i = 0;i < 9;i++) {
-		cout << strcmp(charArray, levelstats[i].name)<<" ";
+		cout << strcmp(charArray, levelstats[i].name) << " ";
 		if (strcmp(charArray, levelstats[i].name) == 0)
 		{
 			cout << " " << levelstats[i].name;
@@ -1314,24 +1337,35 @@ void drawStatsMenuCustom(int screenWidth, int screenHeight, int selected) {
 
 	int textHeight = textheight(LevelSpecific);
 	if (SplitMenuItems == 1) {
-		sprintf(coinsCounter, "Coins collected:  %d", customstats[selected].coins);
-		sprintf(enemiesCounter, "Enemies killed:  %d", customstats[selected].enemies);
-		sprintf(timeCounter, "TIME:  %ds", customstats[selected].time);
-		sprintf(scoreCounter, "HIGH SCORE:  %d", customstats[selected].score);
+		sprintf(LevelSpecific, "%s STATISTICI", levelstats[selected].disname);
+		displayText(LevelSpecific, 1.35 * screenWidth, 2 * marginY, fontsize + 1, WHITE);
+
+		textHeight = textheight(LevelSpecific);
+		sprintf(coinsCounter, "Monede colectate: %d", levelstats[selected].coins);
+		sprintf(enemiesCounter, "Inamici ucisi: %d", levelstats[selected].enemies);
+		sprintf(timeCounter, "TIME: %ds", levelstats[selected].time);
+		sprintf(scoreCounter, "SCOR: %d", levelstats[selected].score);
+
+		displayText(coinsCounter, 1.35 * screenWidth, 2 * marginY + 4.5 * textHeight, fontsize, WHITE);
+		displayText(enemiesCounter, 1.35 * screenWidth, 2 * marginY + 7.0 * textHeight, fontsize, WHITE);
+		displayText(timeCounter, 1.35 * screenWidth, 2 * marginY + 9.5 * textHeight, fontsize, WHITE);
+		displayText(scoreCounter, 1.35 * screenWidth, 2 * marginY + 13.0 * textHeight, fontsize + 0.75, WHITE);
 	}
 	else {
-		sprintf(coinsCounter, "Monede colectate:  %d", customstats[selected].coins);
-		sprintf(enemiesCounter, "Enemies killed:  %d", customstats[selected].enemies);
-		sprintf(timeCounter, "TIME:  %ds", customstats[selected].time);
-		sprintf(scoreCounter, "HIGH SCORE:  %d", customstats[selected].score);
+		sprintf(LevelSpecific, "%s STATS", levelstats[selected].disname);
+		displayText(LevelSpecific, 1.35 * screenWidth, 2 * marginY, fontsize + 1, WHITE);
+
+		textHeight = textheight(LevelSpecific);
+		sprintf(coinsCounter, "Coins collected:  %d", levelstats[selected].coins);
+		sprintf(enemiesCounter, "Enemies killed:  %d", levelstats[selected].enemies);
+		sprintf(timeCounter, "TIME:  %ds", levelstats[selected].time);
+		sprintf(scoreCounter, "HIGH SCORE:  %d", levelstats[selected].score);
+
+		displayText(coinsCounter, 1.35 * screenWidth, 2 * marginY + 4.5 * textHeight, fontsize, WHITE);
+		displayText(enemiesCounter, 1.35 * screenWidth, 2 * marginY + 7.0 * textHeight, fontsize, WHITE);
+		displayText(timeCounter, 1.35 * screenWidth, 2 * marginY + 9.5 * textHeight, fontsize, WHITE);
+		displayText(scoreCounter, 1.35 * screenWidth, 2 * marginY + 13.0 * textHeight, fontsize + 0.75, WHITE);
 	}
-
-
-
-	displayText(coinsCounter, 1.35 * screenWidth, 2 * marginY + 4.5 * textHeight, fontsize, WHITE);
-	displayText(enemiesCounter, 1.35 * screenWidth, 2 * marginY + 7.0 * textHeight, fontsize, WHITE);
-	displayText(timeCounter, 1.35 * screenWidth, 2 * marginY + 9.5 * textHeight, fontsize, WHITE);
-	displayText(scoreCounter, 1.35 * screenWidth, 2 * marginY + 13.0 * textHeight, fontsize + 0.75, WHITE);
 
 	for (int i = 0; i < BUTTON_MENU_ITEMS; i++) {
 		int x = marginX;
@@ -1340,9 +1374,9 @@ void drawStatsMenuCustom(int screenWidth, int screenHeight, int selected) {
 		bool isHovered = (i == hoveredButton);
 
 		if (SplitMenuItems == 1)
-			drawButtonStats(x, y, buttonWidth, buttonHeight, levelclearedTextRO[i], WHITE, BLACK, isHovered);
+			drawButtonStats(x, y, buttonWidth, buttonHeight, statsTextRO[i], WHITE, BLACK, isHovered);
 		else
-			drawButtonStats(x, y, buttonWidth, buttonHeight, levelclearedTextEN[i], WHITE, BLACK, isHovered);
+			drawButtonStats(x, y, buttonWidth, buttonHeight, statsTextEN[i], WHITE, BLACK, isHovered);
 		//if (SplitMenuItems == 1)
 			//drawButton(x, y, buttonWidth, buttonHeight, menuTextRO[i], WHITE, BLACK, isHovered);
 		//else
@@ -1479,10 +1513,10 @@ void drawLevelClear(int r, int g, int b) {
 	int gameOverHeight = textheight("LEVEL CLEARED"), gameOverWidth;
 
 	if (SplitMenuItems == 1) {
-		gameOverWidth = textwidth("PAUZA");
+		gameOverWidth = textwidth("NIVEL TERMINAT");
 		int gameOverX = (winWidth - gameOverWidth) / 2;
 		int gameOverY = menuY - 150;  // Increased padding above "GAME PAUSED"
-		outtextxy(gameOverX, gameOverY, "PAUZA");
+		outtextxy(gameOverX, gameOverY, "NIVEL TERMINAT");
 	}
 	else {
 		gameOverWidth = textwidth("LEVEL CLEARED");
@@ -1492,27 +1526,27 @@ void drawLevelClear(int r, int g, int b) {
 	}
 
 	char coinsCounter[50], enemiesCounter[50], timeCounter[50], scoreCounter[50];
-	if (SplitMenuItems == 1) {
+	if (SplitMenuItems == 0) {
 
-		sprintf(coinsCounter, "Coins collected:  %d", coinono);
-		sprintf(enemiesCounter, "Enemies killed:  %d", gdead + pdead);
-		sprintf(timeCounter, "Time:  %ds", (int)time_spent);
+		sprintf(coinsCounter, "Coins collected: %d", coinono);
+		sprintf(enemiesCounter, "Enemies killed: %d", gdead + pdead);
+		sprintf(timeCounter, "Time: %ds", (int)time_spent);
 		if (score1 > 0) {
-			sprintf(scoreCounter, "HIGH SCORE:  %d", score1);
+			sprintf(scoreCounter, "HIGH SCORE: %d", score1);
 		}
 		else {
-			sprintf(scoreCounter, "NEW HIGH SCORE:  %d", score1);
+			sprintf(scoreCounter, "NEW HIGH SCORE: %d", score1);
 		}
 	}
 	else {
-		sprintf(coinsCounter, "Coins collected:  %d", coinono);
-		sprintf(enemiesCounter, "Enemies killed:  %d", gdead + pdead);
-		sprintf(timeCounter, "Time:  %ds", (int)time_spent);
+		sprintf(coinsCounter, "Monede Colectate: %d", coinono);
+		sprintf(enemiesCounter, "Inamici ucisi: %d", gdead + pdead);
+		sprintf(timeCounter, "Timp: %ds", (int)time_spent);
 		if (score1 > 0) {
-			sprintf(scoreCounter, "HIGH SCORE:  %d", score1);
+			sprintf(scoreCounter, "PUNCTAJ:  %d", score1);
 		}
 		else {
-			sprintf(scoreCounter, "NEW HIGH SCORE:  %d", score1);
+			sprintf(scoreCounter, "PUNCTAJ NOU:  %d", score1);
 		}
 	}
 
@@ -1535,12 +1569,12 @@ void drawLevelClear(int r, int g, int b) {
 	for (int i = 0; i < GAMEOVER_ITEMS; i++) {
 		int textX, textY;
 		if (SplitMenuItems == 1) {
-			textX = menuX + (menuWidth - textwidth(gameOverTextRO[i])) / 2; // Center text horizontally
+			textX = menuX + (menuWidth - textwidth(levelclearedTextRO[i])) / 2; // Center text horizontally
 			textY = menuY + i * menuSpacing + 4 * textHeight;
 			outtextxy(textX, textY, levelclearedTextRO[i]);
 		}
 		else {
-			textX = menuX + (menuWidth - textwidth(gameOverTextEN[i])) / 2; // Center text horizontally
+			textX = menuX + (menuWidth - textwidth(levelclearedTextEN[i])) / 2; // Center text horizontally
 			textY = menuY + i * menuSpacing + 4 * textHeight;
 			outtextxy(textX, textY, levelclearedTextEN[i]);
 		}
@@ -1634,15 +1668,26 @@ void LevelCLearMenu() {
 				MarioGame();
 				break;
 			case 1:
-				//std::cout << "Levels Menu";
-				MapReseter();
-				LevelsMenu();
+				if (menustate == 0) {
+					MapReseter();
+					LevelsMenu();
+				}
+				else {
+					MapReseter();
+					CustomLevelsMenu();
+				}
 				exit(0);
 				break;
 			case 2:
 				selectedOption = 0;
-				MapReseter();
-				MainMenu();
+				if (menustate == 0) {
+					MapReseter();
+					MainMenu();
+				}
+				else {
+					MapReseter();
+					CustomMenu();
+				}
 				break;
 			}
 		}

@@ -18,11 +18,12 @@ using namespace std;
 #define MAX1 30
 #define MAX2 1000
 
+extern double MarioInterval;
 extern string cht;
 LevelStats levelstats[9], customstats[9];
 extern ma_engine engine;
 extern ma_sound JumpEffect, CoinEffect, ColideEffect, GombaDeadEffect, DeathEffect, BackGroundMusic, StageClear, OneUpEffect, FireBallEffect, PowerUpAppearEffect, 
-PowerUpEffect, DmgEffect;
+PowerUpEffect, DmgEffect, FlagEffect;
 extern clock_t start, initpause;
 extern colectible coins[100], life[100], starpow[100], fflower[100];
 extern firebll fireb[9];
@@ -43,7 +44,7 @@ double time_spent;
 extern double MarioInterval;
 extern float wh, ncf, nci, nc1, imario, jmario;
 extern int x, y, nl, nc, harta[30][1000], mv2, map, stage=-7, mappart, coino, lifo, flagpole, staro, SplitMenuItems, fpow;
-extern int time1, okesc, n, selectedOption, p, firo;
+extern int time1, okesc, n, selectedOption, p, firo, flagpolej , flagpolei;
 string direct;
 int score1, lifes = 3, okmov = 0, shoot = 0, safeimario, safejmario, mover = 0, coinono = 0, invincibilityframes = 0, ok = 0, hoverm = 0, play = 0, gdead = 0, hit, power = 0, pdead = 0, timespent = 0;
 
@@ -336,24 +337,24 @@ void NextState(string direction1) {
                 hoverm = 1;
                 putimage(((int)jmario - nci) * wh, (int)imario * wh, mario_vine_top, COPY_PUT);
             }
-            if (jmario + 1 == flagpole) {
+
+            if (harta[(int)imario + 1][(int)jmario] == 3) {
                 hoverm = 1;
-                putimage(((int)jmario - nci + 1) * wh, (int)imario *6* wh, flagpolep, COPY_PUT);
+                putimage(((int)jmario - nci) * wh, ((int)imario +1) * wh, mario_vine, COPY_PUT);
             }
-            if (jmario==flagpole) {
+            if (harta[(int)imario + 1][(int)jmario + 1] == 3) {
                 hoverm = 1;
-                putimage(((int)jmario - nci) * wh, (int)imario *6* wh, flagpolep, COPY_PUT);
+                putimage(((int)jmario - nci + 1) * wh, ((int)imario + 1) * wh, mario_vine, COPY_PUT);
             }
-            if ((int)imario - imario != 0) {
-				if (harta[(int)imario + 1][(int)jmario] == 3) {
-					hoverm = 1;
-					putimage(((int)jmario - nci) * wh, ((int)imario + 1) * wh, mario_vine, COPY_PUT);
-				}
-                if (harta[(int)imario + 1][(int)jmario + 1] == 3) {
-                    hoverm = 1;
-                    putimage(((int)jmario - nci + 1) * wh, ((int)imario + 1) * wh, mario_vine, COPY_PUT);
-                }
+            if (harta[(int)imario + 1][(int)jmario + 1] == 4) {
+                hoverm = 1;
+                putimage(((int)jmario - nci + 1) * wh, ((int)imario + 1) * wh, mario_vine, COPY_PUT);
             }
+            if (harta[(int)imario + 1][(int)jmario] == 4) {
+                hoverm = 1;
+                putimage(((int)jmario - nci) * wh, ((int)imario + 1) * wh, mario_vine_top, COPY_PUT);
+            }
+            
         }
         else {
             if (harta[(int)imario][(int)jmario] == 3) {
@@ -1123,7 +1124,7 @@ void MarioMovement() {
 
     mover = 0;
 
-    if (((GetKeyState(VK_SPACE) < 0))) {
+     if (((GetKeyState(VK_SPACE) < 0))) {
         if ((((int)jmario - jmario != 0 && (harta[(int)imario + 1][(int)jmario] == 1 || harta[(int)imario + 1][(int)jmario + 1] == 1)
             || (harta[(int)imario + 1][(int)jmario] == 12 || harta[(int)imario + 1][(int)jmario + 1] == 12) || (harta[(int)imario + 1][(int)jmario] == 13 || harta[(int)imario + 1][(int)jmario + 1] == 13)
             || (harta[(int)imario + 1][(int)jmario] == 14 || harta[(int)imario + 1][(int)jmario + 1] == 14) || (harta[(int)imario + 1][(int)jmario] == 8 || harta[(int)imario + 1][(int)jmario + 1] == 8)
@@ -1182,16 +1183,16 @@ void MarioMovement() {
         direct = "down";
     }
 
-    
+   
 
     if (ok > 0) {
         NextState("space");
         mover = 1;
         okmov = 0;
-        delay(MarioInterval);
+        //delay(MarioInterval);
     }
 
-    if (fpow != 0 && (GetAsyncKeyState(0x43)) && shoot > 8) {
+    if (fpow != 0 && (GetAsyncKeyState(0x43)) && shoot > 8 && (int)imario - imario == 0) {
         shoot = 0;
         int put = 0;
         int okput = 1;
@@ -1954,18 +1955,38 @@ void MarioMovement() {
     outtextxy((ncf -nci - 1.6) * wh - textwidth(LifesText), 0.6 * wh, LifesText);
 	putimage((ncf-nci -1.4) * wh, 0.4 * wh, one_up, COPY_PUT);
 
-    if (jmario == flagpole && flagpole > 0 && play==0) {
-        PlaySound(TEXT("flagpole.wav"), NULL, SND_FILENAME | SND_SYNC);
-        play = 1;
-    }
-	if (jmario > flagpole+ 1 && flagpole > 0) {
+    
+	if (harta[(int)imario][(int)jmario] == 11 || harta[(int)imario][(int)jmario] == 20) {
 		//PlaySound(TEXT("stage_clear.wav"), NULL, SND_FILENAME | SND_ASYNC);
         clock_t end = clock();
+        play = 1;
         time_spent = ((double)(end - start) / CLOCKS_PER_SEC) - timespent;
 		score1 = 1000 - (int)time_spent * 10 + gdead * 100 + coinono * 100;
-		LevelCLearMenu();
+        ma_sound_start(&FlagEffect);
+		putimage((jmario - nci) * wh, imario * wh, skyblock, COPY_PUT);
+		putimage((flagpolej - nci)* wh, (flagpolei - 6)* wh, flagpolep, COPY_PUT);
 
+        if (fpow != 0 && power != 0) {
+			readimagefile("MFmario_climbing_down_1.gif", (jmario - nci) * wh, imario * wh, (jmario - nci + 1) * wh, (imario + 1) * wh);
+        }
+        else {
+            if (power != 0) {
+                readimagefile("Mmario_climbing_down_1.gif", (jmario - nci) * wh, imario * wh, (jmario - nci + 1) * wh, (imario + 1) * wh);
+            }
+            else {
+                if (fpow != 0) {
+                    readimagefile("Fmario_climbing_down_1.gif", (jmario - nci) * wh, imario * wh, (jmario - nci + 1) * wh, (imario + 1) * wh);
+                }
+                else {
+                    readimagefile("mario_climbing_down_1.gif", (jmario - nci) * wh, imario * wh, (jmario - nci + 1) * wh, (imario + 1) * wh);
+                }
+            }
+        }
+        delay(2000);
+
+		LevelCLearMenu();
     }
+
     if (lifes <= 0) {
         char key = getch();
 		ma_sound_stop(&BackGroundMusic);

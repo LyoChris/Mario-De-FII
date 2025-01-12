@@ -15,7 +15,7 @@ using namespace std;
 
 ma_engine engine;
 ma_sound JumpEffect, CoinEffect, ColideEffect, GombaDeadEffect, BackGroundMusic, DeathEffect, StageClear, StarTheme, plinc, incplace, mapediRO, mapediEN, blselecRO,
-blselecEN, OneUpEffect, PauseEffect, FireBallEffect, PowerUpAppearEffect, PowerUpEffect, DmgEffect, MenuMusic, MapEditorMusic;
+blselecEN, OneUpEffect, PauseEffect, FireBallEffect, PowerUpAppearEffect, PowerUpEffect, DmgEffect, MenuMusic, MapEditorMusic, FlagEffect;
 
 
 void SoundInitialisation() {
@@ -155,6 +155,12 @@ void SoundInitialisation() {
     if (ma_sound_init_from_file(&engine, "MapEditorMusic.wav", 0, NULL, NULL, &MapEditorMusic) != MA_SUCCESS) {
         printf("Failed to load sound effect 2.\n");
         ma_sound_uninit(&MapEditorMusic);
+        ma_engine_uninit(&engine);
+        exit(0);
+    }
+    if (ma_sound_init_from_file(&engine, "flagpole.wav", 0, NULL, NULL, &FlagEffect) != MA_SUCCESS) {
+        printf("Failed to load sound effect 2.\n");
+        ma_sound_uninit(&FlagEffect);
         ma_engine_uninit(&engine);
         exit(0);
     }

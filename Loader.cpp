@@ -19,7 +19,7 @@ extern firebll fireb[9];
 extern colectible coins[100], life[100], starpow[100], fflower[100];
 extern goompa gompav[100];
 extern pirhana piranav[100];
-extern int harta[30][1000], n, p, x, y, firo, fpow;
+extern int harta[30][1000], n, p, x, y, firo, fpow, flagpolei, flagpolej;
 extern std::string cht;
 extern float wh, nci, ncf, nc1;
 extern void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goomba_walking_2, * mario_climbing_down_1, * mario_climbing_down_2, * mario_climbing_up_1,
@@ -503,6 +503,8 @@ void MapReseter() {
     ncf = nc1;
     nci = 0;
     timespent = 0;
+	flagpolei = -1;
+    flagpolej = -2;
     fpow = 0;
 }
 
