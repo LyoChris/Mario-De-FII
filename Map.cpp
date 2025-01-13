@@ -31,7 +31,9 @@ void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goomba_walk
 * MFmario_climbing_up_2, * MFmario_idle_left, * MFmario_idle_right, * MFmario_jump_1, * MFmario_left_run_1, * MFmario_left_run_2, * MFmario_left_run_3, * MFmario_right_run_1,
 * MFmario_right_run_2, * MFmario_right_run_3, * MFmario_jump_2, * Fmario_climbing_down_1, * Fmario_climbing_down_2, * Fmario_climbing_up_1,
 * Fmario_climbing_up_2, * Fmario_idle_left, * Fmario_idle_right, * Fmario_jump_1, * Fmario_left_run_1, * Fmario_left_run_2, * Fmario_left_run_3, * Fmario_right_run_1,
-* Fmario_right_run_2, * Fmario_right_run_3, * Fmario_jump_2, * fireball_1, * fireball_2, * fire_flower, * mario_custom_screen;
+* Fmario_right_run_2, * Fmario_right_run_3, * Fmario_jump_2, * fireball_1, * fireball_2, * fire_flower, * mario_custom_screen,
+* mario_vine_idle_up, * mario_vine_idle_down, * Mmario_vine_idle_up, * Mmario_vine_idle_down, * Fmario_vine_idle_up, * Fmario_vine_idle_down,
+* FMmario_vine_idle_up, * FMmario_vine_idle_down;
 
 extern void* Rpipeheadpir, * Rpipehead;
 

@@ -38,7 +38,9 @@ extern void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goom
 * MFmario_climbing_up_2, * MFmario_idle_left, * MFmario_idle_right, * MFmario_jump_1, * MFmario_left_run_1, * MFmario_left_run_2, * MFmario_left_run_3, * MFmario_right_run_1,
 * MFmario_right_run_2, * MFmario_right_run_3, * MFmario_jump_2, * Fmario_climbing_down_1, * Fmario_climbing_down_2, * Fmario_climbing_up_1,
 * Fmario_climbing_up_2, * Fmario_idle_left, * Fmario_idle_right, * Fmario_jump_1, * Fmario_left_run_1, * Fmario_left_run_2, * Fmario_left_run_3, * Fmario_right_run_1,
-* Fmario_right_run_2, * Fmario_right_run_3, * Fmario_jump_2, * fireball_1, * fireball_2, * fire_flower, * pipehead, * Rpipehead;
+* Fmario_right_run_2, * Fmario_right_run_3, * Fmario_jump_2, * fireball_1, * fireball_2, * fire_flower, * pipehead, * Rpipehead,
+* mario_vine_idle_up, * mario_vine_idle_down, * Mmario_vine_idle_up, * Mmario_vine_idle_down, * Fmario_vine_idle_up, * Fmario_vine_idle_down,
+* FMmario_vine_idle_up, * FMmario_vine_idle_down;
 
 double time_spent;
 extern double MarioInterval;
@@ -348,12 +350,13 @@ void NextState(string direction1) {
             }
             if (harta[(int)imario + 1][(int)jmario + 1] == 4) {
                 hoverm = 1;
-                putimage(((int)jmario - nci + 1) * wh, ((int)imario + 1) * wh, mario_vine, COPY_PUT);
+                putimage(((int)jmario - nci + 1) * wh, ((int)imario + 1) * wh, mario_vine_top, COPY_PUT);
             }
             if (harta[(int)imario + 1][(int)jmario] == 4) {
                 hoverm = 1;
                 putimage(((int)jmario - nci) * wh, ((int)imario + 1) * wh, mario_vine_top, COPY_PUT);
             }
+            
             
         }
         else {
@@ -380,6 +383,22 @@ void NextState(string direction1) {
             if (harta[(int)imario][(int)jmario - 1] == 4) {
                 hoverm = 1;
                 putimage(((int)jmario - 1 - nci) * wh, (int)imario * wh, mario_vine_top, COPY_PUT);
+            }
+			if (harta[(int)imario + 1][(int)jmario] == 3) {
+				hoverm = 1;
+				putimage(((int)jmario - nci) * wh, ((int)imario + 1) * wh, mario_vine, COPY_PUT);
+			}
+            if (harta[(int)imario + 1][(int)jmario] == 4) {
+                hoverm = 1;
+                putimage(((int)jmario - nci) * wh, ((int)imario + 1) * wh, mario_vine_top, COPY_PUT);
+            }
+            if (harta[(int)imario + 1][(int)jmario - 1] == 3) {
+                hoverm = 1;
+                putimage(((int)jmario - 1 - nci) * wh, ((int)imario + 1) * wh, mario_vine, COPY_PUT);
+            }
+            if (harta[(int)imario + 1][(int)jmario - 1] == 4) {
+                hoverm = 1;
+                putimage(((int)jmario - 1 - nci) * wh, ((int)imario + 1) * wh, mario_vine_top, COPY_PUT);
             }
         }
         if (hoverm == 1) {
@@ -591,6 +610,14 @@ void NextState(string direction1) {
                 if (harta[(int)imario][(int)jmario +1] == 4) {
                     hoverm = 1;
                     putimage(((int)jmario - nci +1) * wh, (int)imario * wh, mario_vine_top, COPY_PUT);
+                }
+                if (harta[(int)imario + 1][(int)jmario + 1] == 3) {
+                    hoverm = 1;
+                    putimage(((int)jmario - nci + 1) * wh, ((int)imario + 1) * wh, mario_vine, COPY_PUT);
+                }
+                if (harta[(int)imario + 1][(int)jmario + 1] == 4) {
+                    hoverm = 1;
+                    putimage(((int)jmario - nci + 1) * wh, ((int)imario + 1) * wh, mario_vine_top, COPY_PUT);
                 }
             if (hoverm == 1) {
                 if (imario - (int)imario != 0 && !(harta[(int)imario + 1][(int)jmario] == 0 && harta[(int)imario][(int)jmario] != 0)) {
@@ -1106,22 +1133,6 @@ void MarioMovement() {
         safejmario = jmario;
     }
     int vine = 0;
-    /*
-	cout << '\n';
-    if ((direct == "left" || direct == "right")) {
-        // if (harta[(int)imario][(int)jmario] == 3) { cout << "M "; putimage(((int)jmario - nci) * wh, (int)imario * wh, mario_vine, COPY_PUT); }
-        if (harta[(int)imario - 1][(int)jmario] == 3) { cout << "U "; putimage(((int)jmario - nci) * wh, ((int)imario - 1) * wh, mario_vine, COPY_PUT); vine = 1; }
-        if (harta[(int)imario + 1][(int)jmario] == 3) { cout << "D "; putimage(((int)jmario - nci) * wh, ((int)imario + 1) * wh, mario_vine, COPY_PUT);  vine = 1; }
-        if (harta[(int)imario][(int)jmario + 1] == 3) { cout << "R "; putimage(((int)jmario + 1 - nci) * wh, (int)imario * wh, mario_vine, COPY_PUT); vine = 1; }
-        if (harta[(int)imario][(int)jmario - 1] == 3) { cout << "L "; putimage(((int)jmario - 1 - nci) * wh, (int)imario * wh, mario_vine, COPY_PUT); vine = 1; }
-        if (harta[(int)imario - 1][(int)jmario + 1] == 3) { cout << "UR "; putimage(((int)jmario + 1 - nci) * wh, ((int)imario - 1) * wh, mario_vine, COPY_PUT); vine = 1; }
-        if (harta[(int)imario - 1][(int)jmario - 1] == 3) { cout << "UL "; putimage(((int)jmario - 1 - nci) * wh, ((int)imario - 1) * wh, mario_vine, COPY_PUT); vine = 1; }
-        if (harta[(int)imario + 1][(int)jmario + 1] == 3) { cout << "DR "; putimage(((int)jmario + 1 - nci) * wh, ((int)imario + 1) * wh, mario_vine, COPY_PUT); vine = 1; }
-        if (harta[(int)imario + 1][(int)jmario - 1] == 3) { cout << "DL "; putimage(((int)jmario - 1 - nci) * wh, ((int)imario + 1) * wh, mario_vine, COPY_PUT); vine = 1; }
-    }*/
-
-
-
     mover = 0;
 
      if (((GetKeyState(VK_SPACE) < 0))) {
@@ -1176,20 +1187,18 @@ void MarioMovement() {
         direct = "up";
     }
 
-    if (((GetKeyState(0x53) < 0 || (GetKeyState(VK_DOWN) < 0))) && (harta[(int)imario][(int)jmario] == 3 || harta[(int)imario][(int)jmario] == 4 || harta[(int)imario + 1][(int)jmario] == 3 || harta[(int)imario + 1][(int)jmario] == 4) && jmario - (int)jmario == 0) {
+    if (((GetKeyState(0x53) < 0 || (GetKeyState(VK_DOWN) < 0))) && (harta[(int)imario][(int)jmario] == 3 || harta[(int)imario][(int)jmario] == 4 || harta[(int)imario + 1][(int)jmario] == 3 || harta[(int)imario + 1][(int)jmario] == 4) 
+        && !(imario-(int)imario ==0 && harta[(int)imario +1][(int)jmario] == 1) && jmario - (int)jmario == 0) {
         NextState("down");
         mover = 1;
         okmov = 0;
         direct = "down";
     }
 
-   
-
     if (ok > 0) {
         NextState("space");
         mover = 1;
         okmov = 0;
-        //delay(MarioInterval);
     }
 
     if (fpow != 0 && (GetAsyncKeyState(0x43)) && shoot > 8 && (int)imario - imario == 0) {
@@ -1251,106 +1260,6 @@ void MarioMovement() {
                 
         }
     }
-
-   /* if (fpow != 0 && (GetAsyncKeyState(0x43)) && shoot > 5) {
-        shoot = 0;
-        int put = 0;
-        for (int i = 0;i < 6;i++) {
-            if (fireb[i].exist == 0) {
-                fireb[i].exist = 1;
-                if (direct == "right" || direct == "up") {
-                    if (harta[(int)imario][(int)jmario + 1] != 1 && (int)jmario - jmario == 0) {
-                        fireb[i].fbdirection = 0;
-                        fireb[i].ifireb = imario;
-                        fireb[i].jfireb = jmario + 1;
-                    }
-                    else {
-                        if ((harta[(int)imario][(int)jmario + 2] != 1) && ((int)jmario - jmario != 0) && harta[(int)imario][(int)jmario + 1] != 0) {
-                            fireb[i].fbdirection = 0;
-                            fireb[i].ifireb = imario;
-                            fireb[i].jfireb = jmario + 1;
-                        }
-                        else {
-                            fireb[i].exist = 0;
-                            break;
-                        }
-                    }
-                }
-                else {
-                    if (direct == "left" || direct == "dowm") {
-                        if (harta[(int)imario][(int)jmario - 1] != 1 && (int)jmario - jmario == 0) {
-                            fireb[i].fbdirection = 1;
-                            fireb[i].ifireb = imario;
-                            fireb[i].jfireb = jmario - 1;
-                        }
-                        else {
-                            if ((harta[(int)imario][(int)jmario - 2] != 1) && ((int)jmario - jmario != 0) && harta[(int)imario][(int)jmario - 1] != 0) {
-                                fireb[i].fbdirection = 1;
-                                fireb[i].ifireb = imario;
-                                fireb[i].jfireb = jmario - 1;
-                            }
-                            else {
-                                fireb[i].exist = 0;
-                                break;
-                            }
-                        }
-
-                    }
-                    fireb[i].mapart = (int)(nci - nc1);
-                    put = 1;
-                    ma_sound_stop(&FireBallEffect);
-                    ma_sound_seek_to_pcm_frame(&FireBallEffect, 0);
-                    ma_sound_start(&FireBallEffect);
-                    break;
-                }
-            }
-            if (put == 0) {
-                fireb[5].exist = 1;
-                if (direct == "right" || direct == "up") {
-                    if (harta[(int)imario][(int)jmario + 1] != 1 && (int)jmario - jmario == 0) {
-                        fireb[5].fbdirection = 0;
-                        fireb[5].ifireb = imario;
-                        fireb[5].jfireb = jmario + 1;
-                    }
-                    else {
-                        if ((harta[(int)imario][(int)jmario + 2] != 1) && ((int)jmario - jmario != 0) && harta[(int)imario][(int)jmario + 1] != 0) {
-                            fireb[5].fbdirection = 0;
-                            fireb[5].ifireb = imario;
-                            fireb[5].jfireb = jmario + 1;
-                        }
-                        else {
-                            fireb[5].exist = 0;
-                            break;
-                        }
-                    }
-                }
-                else {
-                    if (direct == "left" || direct == "dowm") {
-                        if (harta[(int)imario][(int)jmario - 1] != 1 && (int)jmario - jmario == 0) {
-                            fireb[5].fbdirection = 1;
-                            fireb[5].ifireb = imario;
-                            fireb[5].jfireb = jmario - 1;
-                        }
-                        else {
-                            if ((harta[(int)imario][(int)jmario - 2] != 1) && ((int)jmario - jmario != 0) && harta[(int)imario][(int)jmario - 1] != 0) {
-                                fireb[5].fbdirection = 1;
-                                fireb[5].ifireb = imario;
-                                fireb[5].jfireb = jmario - 1;
-                            }
-                            else {
-                                fireb[5].exist = 0;
-                                break;
-                            }
-                        }
-                    }
-                }
-                ma_sound_stop(&FireBallEffect);
-                ma_sound_seek_to_pcm_frame(&FireBallEffect, 0);
-                ma_sound_start(&FireBallEffect);
-                fireb[8].mapart = (int)(nci - nc1);
-            }
-        }
-    }*/
 
     if ((int)jmario - jmario != 0) {
         if (harta[(int)imario + 1][(int)jmario] == 0 && harta[(int)imario + 1][(int)jmario + 1] == 0 && ok == 0) {
@@ -1781,16 +1690,16 @@ void MarioMovement() {
             }
         }
     }
-
+    
     if (mover == 0) {
-        if(harta[(int)imario][(int)jmario]==3)
-			putimage(((int)jmario - nci) * wh, (int)imario * wh, mario_vine, COPY_PUT);
-		if (harta[(int)imario][(int)jmario] == 4)
-			putimage(((int)jmario - nci) * wh, (int)imario * wh, mario_vine_top, COPY_PUT);
-		if (harta[(int)imario][(int)jmario + 1] == 3)
-			putimage(((int)jmario - nci + 1) * wh, (int)imario * wh, mario_vine, COPY_PUT);
-		if (harta[(int)imario][(int)jmario + 1] == 4)
-			putimage(((int)jmario - nci + 1) * wh, (int)imario * wh, mario_vine_top, COPY_PUT);
+        if (harta[(int)imario][(int)jmario] == 3)
+            putimage(((int)jmario - nci) * wh, (int)imario * wh, mario_vine, COPY_PUT);
+        if (harta[(int)imario][(int)jmario] == 4)
+            putimage(((int)jmario - nci) * wh, (int)imario * wh, mario_vine_top, COPY_PUT);
+        if (harta[(int)imario][(int)jmario + 1] == 3)
+            putimage(((int)jmario - nci + 1) * wh, (int)imario * wh, mario_vine, COPY_PUT);
+        if (harta[(int)imario][(int)jmario + 1] == 4)
+            putimage(((int)jmario - nci + 1) * wh, (int)imario * wh, mario_vine_top, COPY_PUT);
         if (harta[(int)imario + 1][(int)jmario] == 3)
             putimage(((int)jmario - nci) * wh, ((int)imario + 1) * wh, mario_vine, COPY_PUT);
         if (harta[(int)imario + 1][(int)jmario] == 4)
@@ -1799,44 +1708,83 @@ void MarioMovement() {
             putimage(((int)jmario - nci + 1) * wh, ((int)imario + 1) * wh, mario_vine, COPY_PUT);
         if (harta[(int)imario + 1][(int)jmario + 1] == 4)
             putimage(((int)jmario - nci + 1) * wh, ((int)imario + 1) * wh, mario_vine_top, COPY_PUT);
-        if (direct == "right") {
-            if (fpow != 0 && power != 0) {
-                putimage((jmario - nci) * wh, imario * wh, MFmario_idle_right, COPY_PUT);
-            }
-            else {
-                if (power != 0) {
-                    putimage((jmario - nci) * wh, imario * wh, Mmario_idle_right, COPY_PUT);
+        if ((harta[(int)imario][(int)jmario] == 3 || harta[(int)imario][(int)jmario] == 4) && (int)jmario-jmario == 0) {
+            if (direct == "up") {
+                if (fpow != 0 && power != 0) {
+                    putimage((jmario - nci) * wh, imario * wh, FMmario_vine_idle_up, COPY_PUT);
                 }
                 else {
-                    if (fpow != 0) {
-                        putimage((jmario - nci) * wh, imario * wh, Fmario_idle_right, COPY_PUT);
+                    if (power != 0) {
+                        putimage((jmario - nci) * wh, imario * wh, Mmario_vine_idle_up, COPY_PUT);
                     }
                     else {
-                        putimage((jmario - nci) * wh, imario * wh, mario_idle_right, COPY_PUT);
+                        if (fpow != 0) {
+                            putimage((jmario - nci) * wh, imario * wh, Fmario_vine_idle_up, COPY_PUT);
+                        }
+                        else {
+                            putimage((jmario - nci) * wh, imario * wh, mario_vine_idle_up, COPY_PUT);
+                        }
+                    }
+                }
+            }
+            else {
+                if (fpow != 0 && power != 0) {
+                    putimage((jmario - nci) * wh, imario * wh, FMmario_vine_idle_down, COPY_PUT);
+                }
+                else {
+                    if (power != 0) {
+                        putimage((jmario - nci) * wh, imario * wh, Mmario_vine_idle_down, COPY_PUT);
+                    }
+                    else {
+                        if (fpow != 0) {
+                            putimage((jmario - nci) * wh, imario * wh, Fmario_vine_idle_down, COPY_PUT);
+                        }
+                        else {
+                            putimage((jmario - nci) * wh, imario * wh, mario_vine_idle_down, COPY_PUT);
+                        }
                     }
                 }
             }
         }
         else {
-            if (fpow != 0 && power != 0) {
-                putimage((jmario - nci) * wh, imario * wh, MFmario_idle_left, COPY_PUT);
-            }
-            else {
-                if (power != 0) {
-                    putimage((jmario - nci) * wh, imario * wh, Mmario_idle_left, COPY_PUT);
+            if (direct == "right") {
+                if (fpow != 0 && power != 0) {
+                    putimage((jmario - nci) * wh, imario * wh, MFmario_idle_right, COPY_PUT);
                 }
                 else {
-                    if (fpow != 0) {
-                        putimage((jmario - nci) * wh, imario * wh, Fmario_idle_left, COPY_PUT);
+                    if (power != 0) {
+                        putimage((jmario - nci) * wh, imario * wh, Mmario_idle_right, COPY_PUT);
                     }
                     else {
-                        putimage((jmario - nci) * wh, imario * wh, mario_idle_left, COPY_PUT);
+                        if (fpow != 0) {
+                            putimage((jmario - nci) * wh, imario * wh, Fmario_idle_right, COPY_PUT);
+                        }
+                        else {
+                            putimage((jmario - nci) * wh, imario * wh, mario_idle_right, COPY_PUT);
+                        }
+                    }
+                }
+            }
+            else {
+                if (fpow != 0 && power != 0) {
+                    putimage((jmario - nci) * wh, imario * wh, MFmario_idle_left, COPY_PUT);
+                }
+                else {
+                    if (power != 0) {
+                        putimage((jmario - nci) * wh, imario * wh, Mmario_idle_left, COPY_PUT);
+                    }
+                    else {
+                        if (fpow != 0) {
+                            putimage((jmario - nci) * wh, imario * wh, Fmario_idle_left, COPY_PUT);
+                        }
+                        else {
+                            putimage((jmario - nci) * wh, imario * wh, mario_idle_left, COPY_PUT);
+                        }
                     }
                 }
             }
         }
     }
-
     /*
     if (mover == 0) {
         if ((int)jmario - jmario == 0) {

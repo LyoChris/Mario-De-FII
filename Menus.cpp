@@ -13,6 +13,7 @@
 #include "miniaudio.h"
 #include "Game.h"
 #include "MapEditor.h"
+#include <limits>
 using namespace std;
 
 #define MAX1 30
@@ -922,6 +923,11 @@ void GameOverMenu() {
 	int menuY = (winHeight - menuHeight) / 2;
 	int menuSpacing = menuHeight / (GAMEOVER_ITEMS + 1);
 
+	while (kbhit()) {
+		getch(); // Consume all available keypresses
+	}
+	selectedOption = 0;
+
 	drawGameOver(text_color);
 	drawArrowGameOver(selectedOption, arrow_color, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight);
 
@@ -1055,6 +1061,7 @@ void PauseMenu() {
 	setbkcolor(RGB(126, 132, 246));
 	cleardevice();
 	setbkcolor(RGB(126, 132, 246));
+	
 
 	int arrow_color[3] = { 255, 255, 255 };
 	char text_color[20] = "RGB(126, 132, 246)";
@@ -1071,15 +1078,17 @@ void PauseMenu() {
 	ma_sound_stop(&BackGroundMusic);
 	ma_sound_start(&PauseEffect);
 	drawPause(255, 255, 255);
-	drawArrowPause(selectedOption, 255, 255, 255, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight);
+	
+	while (kbhit()) {
+		getch(); // Consume all available keypresses
+	}
 
-	char key = getch();
+	selectedOption = 0;
+	drawArrowPause(selectedOption, 255, 255, 255, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight);
 
 	bool running = true;
 	while (running) {
 		char key = getch();
-		cout << (int)key << '\n';
-		cout << selectedOption << '\n';
 		if (key == 'w' || key == 72) { // UP
 			drawArrowPause(selectedOption, 126, 132, 246, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight); // Erase current arrow
 			selectedOption = (selectedOption - 1 + PAUSE_ITEMS) % PAUSE_ITEMS;
@@ -1637,10 +1646,14 @@ void LevelCLearMenu() {
 	int menuY = (winHeight - menuHeight) / 2;
 	int menuSpacing = menuHeight / (GAMEOVER_ITEMS + 1);
 	// ma_sound_stop(&BackGroundMusic);
+
+	while (kbhit()) {
+		getch(); // Consume all available keypresses
+	}
+	selectedOption = 0;
+
 	drawLevelClear(255, 255, 255);
 	drawArrowStats(selectedOption, 255, 255, 255, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight, textH);
-
-	char key = getch();
 
 	bool running = true;
 	while (running) {

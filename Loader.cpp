@@ -35,7 +35,9 @@ extern void* brickblock, * lucky_block, * mario_coin, * goomba_walking_1, * goom
 * MFmario_climbing_up_2, * MFmario_idle_left, * MFmario_idle_right, * MFmario_jump_1, * MFmario_left_run_1, * MFmario_left_run_2, * MFmario_left_run_3, * MFmario_right_run_1,
 * MFmario_right_run_2, * MFmario_right_run_3, * MFmario_jump_2, * Fmario_climbing_down_1, * Fmario_climbing_down_2, * Fmario_climbing_up_1,
 * Fmario_climbing_up_2, * Fmario_idle_left, * Fmario_idle_right, * Fmario_jump_1, * Fmario_left_run_1, * Fmario_left_run_2, * Fmario_left_run_3, * Fmario_right_run_1,
-* Fmario_right_run_2, * Fmario_right_run_3, * Fmario_jump_2, * fireball_1, * fireball_2, * fire_flower, * skyblockmap1, * mario_custom_screen;
+* Fmario_right_run_2, * Fmario_right_run_3, * Fmario_jump_2, * fireball_1, * fireball_2, * fire_flower, * skyblockmap1, * mario_custom_screen, 
+* mario_vine_idle_up, * mario_vine_idle_down, * Mmario_vine_idle_up, * Mmario_vine_idle_down, * Fmario_vine_idle_up, * Fmario_vine_idle_down,
+* FMmario_vine_idle_up, * FMmario_vine_idle_down;
 
 void preloadImage(const char* filename, int width, int height, void*& buffer) {
     readimagefile(filename, 0, 0, width, height);
@@ -55,6 +57,13 @@ void preloadImage3(const char* filename, int width, int height, void*& buffer) {
 	rectangle(0, 0, width, height);
 	rectangle(1, 1, width-1, height-1);
 	rectangle(2, 2, width - 2, height - 2);
+    getimage(0, 0, width, height, buffer);
+}
+
+void preloadImage4(const char* filename1, const char* filename2, int width, int height, void*& buffer) {
+    readimagefile(filename1, 0, 0, width, height);
+	readimagefile(filename2, 0, 0, width, height);
+    buffer = malloc(imagesize(0, 0, width, height));
     getimage(0, 0, width, height, buffer);
 }
 
@@ -362,7 +371,31 @@ void AssetLoader() {
     cleardevice();
     setbkcolor(RGB(0, 0, 0));
     preloadImage("MarioLevelsMenu.jpg", x-3, y-3, mario_levels_menu);
-    closegraph();
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage4("mario_vine.gif", "mario_climbing_down_1.gif", wh, wh, mario_vine_idle_down);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage4("mario_vine.gif", "mario_climbing_up_1.gif", wh, wh, mario_vine_idle_up);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage4("mario_vine.gif", "Mario_climbing_down_1.gif", wh, wh, Mmario_vine_idle_down);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage4("mario_vine.gif", "Mmario_climbing_up_1.gif", wh, wh, Mmario_vine_idle_up);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage4("mario_vine.gif", "Fmario_climbing_down_1.gif", wh, wh, Fmario_vine_idle_down);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage4("mario_vine.gif", "Fmario_climbing_up_1.gif", wh, wh, Fmario_vine_idle_up);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage4("mario_vine.gif", "FMario_climbing_down_1.gif", wh, wh, FMmario_vine_idle_down);
+    cleardevice();
+    setbkcolor(RGB(126, 132, 246));
+    preloadImage4("mario_vine.gif", "FMmario_climbing_up_1.gif", wh, wh, FMmario_vine_idle_up);
+	closegraph();
 }
 
 void AssetLoaderMap() {
