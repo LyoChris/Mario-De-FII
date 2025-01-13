@@ -2,7 +2,7 @@
 level1 17 0 7 3170
 nus80 0 0 0 0
 nbvbnvnbv 0 0 0 0
-level3 16 7 61 2690
+level4 16 0 0 0
 level5 0 6 56 1040
 nus50 0 0 0 0
 nus40 0 0 0 0

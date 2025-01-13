@@ -871,8 +871,6 @@ void NextState(string direction1) {
 			putimage(((int)jmario - nci)* wh, ((int)imario + 1)* wh, mario_vine, COPY_PUT);
         }
         imario += 0.5;
-		cout << "BLOCK DOWN: " <<(int)imario-imario<<" "<< harta[(int)imario][(int)jmario] << endl;
-		cout << "BLOCK DOWN: " << (int)imario - imario << " " << harta[(int)imario + 1][(int)jmario] << endl;
         if (CheckBlock(imario, jmario, wh, (float)(imario), (float)(jmario)) && !(harta[(int)imario][(int)jmario] == 3 || harta[(int)imario][(int)jmario] == 4) && 
             (harta[(int)imario][(int)jmario] == 1)) {
             imario -= 0.5;
@@ -981,7 +979,6 @@ void NextState(string direction1) {
                         if (harta[(int)imario][(int)jmario] == 8 && harta[(int)imario - 1][(int)jmario]==0) {
                             putimage(((int)jmario - nci) * wh, ((int)imario) * wh, lucky_block_used, COPY_PUT);
                             int ranblock = randnumb(0, 3);
-                            cout << "ranblock" << ranblock << '\n';
                             if (ranblock == 1) {
                                 lifo++;
                                 life[lifo].icolec = (int)imario - 1;
@@ -1446,8 +1443,6 @@ void MarioMovement() {
                         readimagefile("goomba_walking_1.gif", (gompav[i].jgompa - nci) * wh, (gompav[i].igompa + 0.5) * wh, (gompav[i].jgompa - nci + 1) * wh, (gompav[i].igompa + 1) * wh);
                         delay(40);
                         putimage((gompav[i].jgompa - nci) * wh, (gompav[i].igompa) * wh, skyblock, COPY_PUT);
-                        //readimagefile("SkyBlock.jpg", (gompav[i].jgompa - nci) * wh, gompav[i].igompa * wh, ((gompav[i].jgompa - nci) + 1) * wh, (gompav[i].igompa + 1) * wh);
-                        std::cout << "GOOMPA DEAD" << '\n';
                     }
                     else {
 						ma_sound_stop(&DmgEffect);
@@ -1455,7 +1450,13 @@ void MarioMovement() {
 						ma_sound_start(&DmgEffect);
                         for (int i = 0;i < 3;i++) {
                             putimage((jmario - nci)* wh, imario* wh, skyblock, COPY_PUT);
-                            imario -= 0.5;
+                            if ((int)imario - imario == 0 && (harta[(int)imario - 1][(int)jmario] == 1 || harta[(int)imario - 1][(int)jmario] == 10 ||
+                                harta[(int)imario - 1][(int)jmario] == 8 || harta[(int)imario - 1][(int)jmario] == 12 || harta[(int)imario - 1][(int)jmario] == 13
+                                || harta[(int)imario - 1][(int)jmario] == 14)) {
+                            }
+                            else {
+                                imario -= 0.5;
+                            }
                             NextState("left");
                             
                         }
@@ -1479,7 +1480,6 @@ void MarioMovement() {
                         readimagefile("goomba_walking_1.gif", (gompav[i].jgompa - nci) * wh, (gompav[i].igompa + 0.5) * wh, (gompav[i].jgompa - nci + 1) * wh, (gompav[i].igompa + 1) * wh);
                         delay(40);
                         putimage((gompav[i].jgompa - nci) * wh, (gompav[i].igompa) * wh, skyblock, COPY_PUT);
-                        std::cout << "GOOMPA DEAD" << '\n';
                     }
                     else {
                         ma_sound_stop(&DmgEffect);
@@ -1487,7 +1487,12 @@ void MarioMovement() {
                         ma_sound_start(&DmgEffect);
                         for (int i = 0;i < 3;i++) {
 							putimage((jmario - nci)* wh, imario* wh, skyblock, COPY_PUT);
-                            imario -= 0.5;
+                            if((int)imario-imario == 0 && (harta[(int)imario - 1][(int)jmario] == 1 || harta[(int)imario - 1][(int)jmario] == 10 ||
+                            harta[(int)imario - 1][(int)jmario] == 8 || harta[(int)imario - 1][(int)jmario] == 12 || harta[(int)imario - 1][(int)jmario] == 13
+                                || harta[(int)imario - 1][(int)jmario] == 14)){ }
+                            else {
+                                imario -= 0.5;
+                            }
                             NextState("right");
                             
                         }
@@ -1509,7 +1514,7 @@ void MarioMovement() {
                     ma_sound_seek_to_pcm_frame(&GombaDeadEffect, 0);
                     ma_sound_start(&GombaDeadEffect);
                     putimage((gompav[i].jgompa - nci) * wh, gompav[i].igompa * wh, skyblock, COPY_PUT);
-                    std::cout << "GOOMPA DEAD 2" << '\n';
+                    
                 }
                 if (CheckBlock(imario * wh, jmario * wh, wh, (float)(gompav[i].igompa) * wh, (float)(gompav[i].jgompa) * wh) == 1 && direct == "right") {
                     gompav[i].dead = 1;
@@ -1518,7 +1523,7 @@ void MarioMovement() {
                     ma_sound_seek_to_pcm_frame(&GombaDeadEffect, 0);
                     ma_sound_start(&GombaDeadEffect);
                     putimage((gompav[i].jgompa - nci) * wh, gompav[i].igompa * wh, skyblock, COPY_PUT);
-                    std::cout << "GOOMPA DEAD 2" << '\n';
+                    
                 }
             }
         }
@@ -1785,96 +1790,7 @@ void MarioMovement() {
             }
         }
     }
-    /*
-    if (mover == 0) {
-        if ((int)jmario - jmario == 0) {
-            if (direct == "right" && harta[(int)imario][(int)jmario] != 3 && harta[(int)imario][(int)jmario] != 4) {
-                if (fpow != 0 && power != 0) {
-                    putimage((jmario - nci) * wh, imario * wh, MFmario_idle_right, COPY_PUT);
-                }
-                else {
-                    if (power != 0) {
-						putimage((jmario - nci)* wh, imario* wh, Mmario_idle_right, COPY_PUT);
-					}
-                    else {
-                        if (fpow != 0) {
-                            putimage((jmario - nci) * wh, imario * wh, Fmario_idle_right, COPY_PUT);
-                        }
-                        else {
-                            putimage((jmario - nci) * wh, imario * wh, mario_idle_right, COPY_PUT);
-                        }
-                    }
-                }
-            }
-            else {
-                if (harta[(int)imario][(int)jmario] != 3 && harta[(int)imario][(int)jmario] != 4) {
-                    if (fpow != 0 && power != 0) {
-                        putimage((jmario - nci) * wh, imario * wh, MFmario_idle_left, COPY_PUT);
-                    }
-                    else {
-                        if (power != 0) {
-                            putimage((jmario - nci) * wh, imario * wh, Mmario_idle_left, COPY_PUT);
-                        }
-                        else {
-                            if (fpow != 0) {
-                                putimage((jmario - nci) * wh, imario * wh, Fmario_idle_left, COPY_PUT);
-                            }
-                            else {
-                                putimage((jmario - nci) * wh, imario * wh, mario_idle_left, COPY_PUT);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        else {
-            if (direct == "right") {
-                if (harta[(int)imario][(int)jmario + 1] != 3 && harta[(int)imario][(int)jmario + 1] != 4 && harta[(int)imario][(int)jmario - 1] != 3
-                && harta[(int)imario][(int)jmario - 1] != 4) {
-                    if (fpow != 0 && power != 0) {
-                        putimage((jmario - nci) * wh, imario * wh, MFmario_idle_right, COPY_PUT);
-                    }
-                    else {
-                        if (power != 0) {
-                            putimage((jmario - nci) * wh, imario * wh, Mmario_idle_right, COPY_PUT);
-                        }
-                        else {
-                            if (fpow != 0) {
-                                putimage((jmario - nci) * wh, imario * wh, Fmario_idle_right, COPY_PUT);
-                            }
-                            else {
-                                putimage((jmario - nci) * wh, imario * wh, mario_idle_right, COPY_PUT);
-                            }
-                        }
-                    }
-                }
-            }
-            else {
-                if (harta[(int)imario][(int)jmario + 1] != 3 && harta[(int)imario][(int)jmario + 1] != 4 && harta[(int)imario][(int)jmario - 1] != 3
-                && harta[(int)imario][(int)jmario - 1] != 4) {
-                    if (harta[(int)imario][(int)jmario] != 3 && harta[(int)imario][(int)jmario] != 4) {
-                        if (fpow != 0 && power != 0) {
-                            putimage((jmario - nci) * wh, imario * wh, MFmario_idle_left, COPY_PUT);
-                        }
-                        else {
-                            if (power != 0) {
-                                putimage((jmario - nci) * wh, imario * wh, Mmario_idle_left, COPY_PUT);
-                            }
-                            else {
-                                if (fpow != 0) {
-                                    putimage((jmario - nci) * wh, imario * wh, Fmario_idle_left, COPY_PUT);
-                                }
-                                else {
-                                    putimage((jmario - nci) * wh, imario * wh, mario_idle_left, COPY_PUT);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    */
+   
     if (jmario >= (int)ncf || ((jmario- nci +1)*wh >= x)) {
         MapLoaderNextRight(); //randam urmatoarea parte din harta
     }

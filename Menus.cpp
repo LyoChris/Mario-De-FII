@@ -20,7 +20,7 @@ using namespace std;
 #define MAX2 1000
 
 extern LevelStats levelstats[9], customstats[9];
-extern ma_sound JumpEffect, CoinEffect, ColideEffect, GombaDeadEffect, DeathEffect, BackGroundMusic, StageClear, PauseEffect, StarTheme, MenuMusic, MapEditorMusic;
+extern ma_sound JumpEffect, CoinEffect, ColideEffect, GombaDeadEffect, DeathEffect, BackGroundMusic, StageClear, PauseEffect, StarTheme, MenuMusic, MapEditorMusic, CreditMusic;
 extern clock_t start;
 extern colectible coins[100], life[100];
 extern goompa gompav[100];
@@ -47,14 +47,15 @@ void StatsMenu();
 void ControlMenu();
 void CustomControlMenu();
 void StatsMenuCustom();
+void Credits();
 
 const int GAME_CONTROLS_ITEMS = 1;
 char* gamecontrolsTextRO[GAME_CONTROLS_ITEMS] = { "INAPOI" };
 char* gamecontrolsTextEN[GAME_CONTROLS_ITEMS] = { "BACK" };
 
-const int MENU_ITEMS = 4;
-char* menuTextEN[MENU_ITEMS] = { "START", "CUSTOM LEVELS", "CONTROLS", "EXIT" };
-char* menuTextRO[MENU_ITEMS] = { "START", "NIVELE CUSTOM", "CONTROALE", "EXIT" };
+const int MENU_ITEMS = 5;
+char* menuTextEN[MENU_ITEMS] = { "START", "CUSTOM LEVELS", "CONTROLS", "CREDITS", "EXIT" };
+char* menuTextRO[MENU_ITEMS] = { "START", "NIVELE CUSTOM", "CONTROALE", "CREDITE", "EXIT" };
 
 const int GAMEOVER_ITEMS = 3;
 char* gameOverTextEN[GAMEOVER_ITEMS] = { "RESTART", "LEVELS", "MAIN MENU" };
@@ -200,7 +201,7 @@ int detectMouseHover(int mouseX, int mouseY, int screenWidth, int screenHeight) 
 	int buttonWidth = screenWidth / 4;
 	int buttonHeight = screenHeight / 10;
 	int marginX = screenWidth / 9;
-	int marginY = screenHeight / 4.5;
+	int marginY = screenHeight / 5.5;
 
 	for (int i = 0; i < MENU_ITEMS; i++) {
 		int x = marginX;
@@ -219,7 +220,7 @@ void drawMenu(int screenWidth, int screenHeight) {
 	int buttonWidth = screenWidth / 4;
 	int buttonHeight = screenHeight / 10;
 	int marginX = screenWidth / 9;
-	int marginY = screenHeight / 4.5;
+	int marginY = screenHeight / 5.5;
 
 	putimage(0, 0, mario_main_screen, COPY_PUT);
 
@@ -297,6 +298,9 @@ void MainMenu() {
 					ControlMenu();
 					break;
 				case 3:
+					Credits();
+					return;
+				case 4:
 					saveStats(levelstats);
 					saveData(customLevelText, CUSTOM_LEVEL_ITEMS, customstats);
 					running = false;
@@ -1857,4 +1861,176 @@ void CustomControlMenu() {
 		setvisualpage(page);
 		page = 1 - page;
 	}
+}
+
+struct CreditEntry {
+	char text[100];
+};
+
+void drawTextCredits(int x, int y, const char* text, int fontSize) {
+	settextstyle(SANS_SERIF_FONT, HORIZ_DIR, fontSize);
+	outtextxy(x, y, const_cast<char*>(text));
+}
+
+
+void Credits() {
+	int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+	int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+
+	CreditEntry creditsEN[] = {
+		{"Mario De FII"},
+		{" "},
+		{"Developed by:"},
+		{"Patranea Cosmin-Cristian"},
+		{"Iftimi George-Daniel"},
+		{" "},
+		{"Art and Graphic Design:"},
+		{"Lead Artist and Designer..............Iftimi George-Daniel"},
+		{"Artist and Designer..............Patranea Cosmin-Cristian"},
+		{"Main Menu art by Edi Capitanul"},
+		{" "},
+		{"Level Design:"},
+		{"Patranea Cosmin-Cristian"},
+		{"Iftimi George-Daniel"},
+		{"Logica Vietii"},
+		{" "},
+		{"Music and Sound:"},
+		{"Sound Engineer..............Patranea Cosmin-Cristian"},
+		{" "},
+		{"Quality Assurance:"},
+		{"QA manager..............Patranea Cosmin-Cristian"},
+		{"Lead QA..............Logica Vietii"},
+		{"QA..............Edi Capitanul"},
+		{"QA..............Idorando Crypto SRL"},
+		{" "},
+		{"Voice Actors:"},
+		{"Logica Vietii as Voice from Map Editor"},
+		{" "},
+		{"Extra Special thanks:"},
+		{"Room 404 from C5 dormatory for the hospitality"},
+		{" "},
+		{" "},
+		{"Thank you for playing!"},
+		{" "},
+		{"Press ESC to return to the main menu" }
+	};
+
+	CreditEntry creditsRO[] = {
+		{"Mario De FII"},
+		{" "},
+		{"Dezvoltat de:"},
+		{"Patranea Cosmin-Cristian"},
+		{"Iftimi George-Daniel"},
+		{" "},
+		{"Arta si design grafic:"},
+		{"Lead Artist and Designer.............. Iftimi George-Daniel"},
+		{"Artist and Designer..............Patranea Cosmin-Cristian"},
+		{"Arta pentru meniu de Edi Capitanul"},
+		{" "},
+		{"Level Design:"},
+		{"Patranea Cosmin-Cristian"},
+		{"Iftimi George-Daniel"},
+		{"Logica Vietii"},
+		{" "},
+		{"Muzica si sunet:"},
+		{"Inginer de sunet..............Patranea Cosmin-Cristian"},
+		{" "},
+		{"Asigurarea calitatii:"},
+		{"QA manager..............Patranea Cosmin-Cristian"},
+		{"Lead QA..............Logica Vietii"},
+		{"QA..............Edi Capitanul"},
+		{"QA..............Idorando Crypto SRL"},
+		{" "},
+		{"Voice Actors:"},
+		{"Logica Vietii drept vocea din Editorul pentru harti"},
+		{" "},
+		{"Multumiri speciale:"},
+		{"Camera 404 din caminul C5 pentru ospitalitate"},
+		{" "},
+		{" "},
+		{"Va multumesc ca ati jucat!"},
+		{" "},
+		{"Apasa ESC pentru a reveni la meniu"}
+	};
+
+	int creditCount;
+	cleardevice();
+	settextstyle(DEFAULT_FONT, HORIZ_DIR, 2);
+
+	if (SplitMenuItems == 1)
+		creditCount = sizeof(creditsRO) / sizeof(creditsRO[0]); // Total number of credits
+	else
+		creditCount = sizeof(creditsEN) / sizeof(creditsEN[0]); // Total number of credits
+
+	// Dynamically scale font size and scrolling speed
+	float fontScale = screenWidth / 480.0; // Base font size on default width
+	int fontSize = max(1, static_cast<int>(fontScale * 2));
+	int lineHeight = textheight("A") * fontSize + 5;
+	int scrollSpeed = max(1, static_cast<int>(2 * fontScale));
+
+	// Y-coordinate for scrolling
+	int yPos = screenHeight;
+
+	int ok = 1;
+
+	ma_sound_stop(&MenuMusic);
+	ma_sound_seek_to_pcm_frame(&MenuMusic, 0);
+	delay(1000);
+
+	// Main loop for the credits animation
+	while (ok == 1) {
+		cleardevice();
+		if (!ma_sound_is_playing(&CreditMusic)) ma_sound_start(&CreditMusic);
+		if (SplitMenuItems == 1) {
+			// Draw the credits
+			for (int i = 0; i < creditCount; i++) {
+				int yOffset = yPos + i * lineHeight;
+				if (yOffset >= 0 && yOffset < screenHeight) {
+					int textWidth = textwidth(creditsRO[i].text);
+					int xPos = (screenWidth - textWidth) / 2; // Center text horizontally
+					drawTextCredits(xPos, yOffset, creditsRO[i].text, fontSize);
+					
+				}
+			}
+
+			// Update position
+			yPos -= scrollSpeed;
+
+			// Reset to loop credits
+			if (yPos + creditCount * lineHeight < 0) {
+				yPos = screenHeight;
+			}
+
+			delay(30);
+		}
+		else {
+			// Draw the credits
+			for (int i = 0; i < creditCount; i++) {
+				int yOffset = yPos + i * lineHeight;
+				if (yOffset >= 0 && yOffset < screenHeight) {
+					int textWidth = textwidth(creditsEN[i].text);
+					int xPos = (screenWidth - textWidth) / 2; // Center text horizontally
+						drawTextCredits(xPos, yOffset, creditsEN[i].text, fontSize);
+				}
+			}
+
+			// Update position
+			yPos -= scrollSpeed;
+
+			// Reset to loop credits
+			if (yPos + creditCount * lineHeight < 0) {
+				yPos = screenHeight;
+			}
+
+			delay(30);
+			
+		}
+		if (GetKeyState(VK_ESCAPE) & 0x8000) {
+				ok = 0;
+			}
+	}
+
+	ma_sound_stop(&CreditMusic);
+	ma_sound_seek_to_pcm_frame(&CreditMusic, 0);
+	MainMenu();
 }
