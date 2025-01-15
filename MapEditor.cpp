@@ -157,7 +157,7 @@ void MapPaneler() {
 	cleardevice();
 	setbkcolor(BLACK);
 
-	int lastColumnX = 0; // To track the x-coordinate of the last column
+	int lastColumnX = 0; 
 
 	settextstyle(DEFAULT_FONT, HORIZ_DIR, 1);
 
@@ -165,13 +165,12 @@ void MapPaneler() {
 	for (int i = 0; i < nl; i += 1) {
 		for (int j = (int)ncimap; j < ncfmap; j += 1) {
 			PutMovingImage(i, j);
-			lastColumnX = j - ncimap; // Keep updating to get the last column index
+			lastColumnX = j - ncimap; 
 		}
 	}
 
-	// Compute the x-coordinate of the last column's right edge
-	int blockWidth = nwh; // Assuming 'wh' is the width of a single block
-	int menuStartX = (lastColumnX + 4) * blockWidth + (blockWidth / 10); // One padding space to the right of the last column
+	int blockWidth = nwh;
+	int menuStartX = (lastColumnX + 4) * blockWidth + (blockWidth / 10);
 
 	// Place other game elements
 	putimage((1 + 0 * 1.5) * wh, 17 * wh, brickblockmono, COPY_PUT);
@@ -207,33 +206,33 @@ void MapPaneler() {
 
 	settextstyle(SANS_SERIF_FONT, HORIZ_DIR, textSize);
 
-	// Draw the menu
+	
 	for (int i = 0; i < 5; i++) {
 		int rectY = baseY + i * (elementHeight + 2 * padding);
 
-		// Draw key rectangle
+		
 		rectangle(baseX, rectY, baseX + rectWidth, rectY + elementHeight);
 
-		// Center the key within the rectangle
+		
 		settextjustify(CENTER_TEXT, CENTER_TEXT);
 		char key[2] = { keys[i], '\0' };
 		int keyCenterX = baseX + rectWidth / 2;
 		int keyCenterY = rectY + elementHeight / 1.5;
 		outtextxy(keyCenterX, keyCenterY, key);
 
-		// Align menu text
-		if (SplitMenuItems == 1 && i < 4) { // Apply split layout for first 4 menu items
+		
+		if (SplitMenuItems == 1 && i < 4) { 
 			char temp[50];
-			strncpy(temp, menuItemsRO[i], sizeof(temp) - 1); // Copy the string to a writable buffer
-			temp[sizeof(temp) - 1] = '\0'; // Ensure null termination
+			strncpy(temp, menuItemsRO[i], sizeof(temp) - 1); 
+			temp[sizeof(temp) - 1] = '\0'; 
 
-			// Adjust split text starting position to align with the top of the rectangle
-			int splitY = rectY; // Start just below the rectangle top edge
+
+			int splitY = rectY; 
 			char* word = strtok(temp, " ");
 			while (word != nullptr) {
 				settextjustify(LEFT_TEXT, TOP_TEXT);
 				outtextxy(baseX + rectWidth + padding, splitY, word);
-				splitY += textSize * 3 + 3 * padding; // Adjust spacing for each word
+				splitY += textSize * 3 + 3 * padding; 
 				word = strtok(nullptr, " ");
 			}
 		}
@@ -258,7 +257,7 @@ void MapPaneler() {
 
 }
 
-void InitialDrawing() { // Add a parameter for enabling split menu items
+void InitialDrawing() {
 	cleardevice();
 	ncimap = 0;
 	ncfmap = ncf;
@@ -274,7 +273,7 @@ void InitialDrawing() { // Add a parameter for enabling split menu items
 		}
 	}
 
-	// Compute the x-coordinate of the last column's right edge
+	
 	int blockWidth = nwh;
 	int menuStartX = (lastColumnX + 4) * blockWidth + (blockWidth / 10);
 
@@ -311,33 +310,33 @@ void InitialDrawing() { // Add a parameter for enabling split menu items
 
 	settextstyle(SANS_SERIF_FONT, HORIZ_DIR, textSize);
 
-	// Draw the menu
+	
 	for (int i = 0; i < 5; i++) {
 		int rectY = baseY + i * (elementHeight + 2 * padding);
 
-		// Draw key rectangle
+		
 		rectangle(baseX, rectY, baseX + rectWidth, rectY + elementHeight);
 
-		// Center the key within the rectangle
+		
 		settextjustify(CENTER_TEXT, CENTER_TEXT);
 		char key[2] = { keys[i], '\0' };
 		int keyCenterX = baseX + rectWidth / 2;
 		int keyCenterY = rectY + elementHeight / 1.5;
 		outtextxy(keyCenterX, keyCenterY, key);
 
-		// Align menu text
-		if (SplitMenuItems == 1&& i < 4) { // Apply split layout for first 4 menu items
+		
+		if (SplitMenuItems == 1&& i < 4) {
 			char temp[50];
-			strncpy(temp, menuItemsRO[i], sizeof(temp) - 1); // Copy the string to a writable buffer
-			temp[sizeof(temp) - 1] = '\0'; // Ensure null termination
+			strncpy(temp, menuItemsRO[i], sizeof(temp) - 1); 
+			temp[sizeof(temp) - 1] = '\0';
 
-			// Adjust split text starting position to align with the top of the rectangle
-			int splitY = rectY; // Start just below the rectangle top edge
+		
+			int splitY = rectY; 
 			char* word = strtok(temp, " ");
 			while (word != nullptr) {
 				settextjustify(LEFT_TEXT, TOP_TEXT);
 				outtextxy(baseX + rectWidth + padding, splitY, word);
-				splitY += textSize * 3 + 3 * padding; // Adjust spacing for each word
+				splitY += textSize * 3 + 3 * padding; 
 				word = strtok(nullptr, " ");
 			}
 		}
@@ -390,7 +389,6 @@ void saveMap() {
 		outtextxy((x - textWidth) / 2, (y - textHeight) / 2 - 20, promptEN);
 	}
 
-	// Loop to capture user input
 	while (true) {
 		ch = getch();
 
@@ -483,11 +481,17 @@ void saveMap() {
 			outfile << endl;
 		}
 		outfile.close();
-		outtextxy((x - textwidth("Map saved successfully!")) / 2, y - 7 * nwh, "Map saved successfully!");
+		if (SplitMenuItems == 0)
+			outtextxy((x - textwidth("Map saved successfully!")) / 2, y - 7 * nwh, "Map saved successfully!");
+		else
+			outtextxy((x - textwidth("Harta salvata cu succes!")) / 2, y - 7 * nwh, "Harta salvata cu succes!");
 	}
 	else {
 		setcolor(RED);
-		outtextxy((x - textwidth("Error saving file.")) / 2, y - 7 * nwh, "Error saving6 file.");
+		if(SplitMenuItems == 0)
+			outtextxy((x - textwidth("Error saving file.")) / 2, y - 7 * nwh, "Error saving6 file.");
+		else
+			outtextxy((x - textwidth("Eroare la salvare.")) / 2, y - 7 * nwh, "Eroare la salvare.");
 	}
 	delay(2000);
 	cleardevice();
@@ -535,10 +539,9 @@ void loadMap() {
 		else if (ch == 8) { // If BACKSPACE is pressed
 			if (pos > 0) {
 				pos--;
-				filename[pos] = '\0'; // Remove the last character
+				filename[pos] = '\0';
 
-				// Clear the input area before redrawing
-				int inputWidth = textwidth("W") * 50; // Approximate width for 50 characters
+				int inputWidth = textwidth("W") * 50;
 				setfillstyle(SOLID_FILL, BLACK);
 				bar((x - inputWidth) / 2, y / 2 - textHeight / 2, (x + inputWidth) / 2, y / 2 + textHeight / 2);
 
@@ -580,11 +583,17 @@ void loadMap() {
 			};
 		}
 		infile.close();
+		if (SplitMenuItems == 1)
+			outtextxy((x - textwidth("Harta incarcata cu succes!")) / 2, y - 7 * nwh, "Harta incarcata cu succes!");
+		else
 		outtextxy((x - textwidth("Map loaded successfully!")) / 2, y - 7*nwh, "Map loaded successfully!");
 	}
 	else {
 		setcolor(RED);
-		outtextxy((x - textwidth("Error loading file.")) / 2, y - 7*nwh, "Error loading file.");
+		if(SplitMenuItems == 1)
+			outtextxy((x - textwidth("Eroare la incarcare.")) / 2, y - 7 * nwh, "Eroare la incarcare.");
+		else
+			outtextxy((x - textwidth("Error loading file.")) / 2, y - 7*nwh, "Error loading file.");
 	}
 	setcolor(WHITE);
 	delay(2000);

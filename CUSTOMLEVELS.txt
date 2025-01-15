@@ -4,7 +4,7 @@ nus80 0 0 0 0
 nbvbnvnbv 0 0 0 0
 level4 16 0 0 0
 level5 0 18 55 2250
-harta1 0 0 1 990
+lvl 0 0 0 0
 nus40 0 0 0 0
 level8 0 0 0 0
 BACK 0 0 0 0

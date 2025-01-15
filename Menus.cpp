@@ -37,10 +37,9 @@ extern int time1, okesc, n, SplitMenuItems, coinono, gdead, pdead, score1;
 extern string direct, levelselect, cht;
 int textH, menustate = 0;
 extern double time_spent;
-float volume = 1.0f;     // Volume (0.0 to 1.0)
-bool isMuted = false;    // Mute toggle
+float volume = 1.0f;    
+bool isMuted = false;    
 
-//extern int lifes = 3, safeimario, safejmario, mover = 0, coinono = 0, invincibilityframes = 0, ok = 0, hoverm = 0, play = 0, gdead = 0;
 
 void MainMenu();
 void LevelsMenu();
@@ -93,91 +92,90 @@ const int SETTINGS_ITEMS = 4;
 char* settingsTextEN[SETTINGS_ITEMS] = { "INCREASE VOLUME", "DECREASE VOLUME", "MUTE SOUND", "BACK" };
 char* settingsTextRO[SETTINGS_ITEMS] = { "CRESTE VOLUMUL", "SCADE VOLUMUL", "OPRESTE SUNETUL", "INAPOI" };
 
-// Global variable
-int selectedOption = 0;
-int hoveredButton = -1;  // Index of the button being hovered over
-int clickedButton = -1;  // Index of the button clicked
 
-// Function to calculate the width of the longest text element
+int selectedOption = 0;
+int hoveredButton = -1;
+int clickedButton = -1; 
+
 
 void drawLanguage(int screenWidth, int screenHeight) {
 	cleardevice();
 	int selectedImage = 0;
-	// Set up scaling factors for the images
-	int imageWidth = screenWidth / 3;   // Set image width to 1/3 of screen width
-	int imageHeight = screenHeight / 3;  // Set image height to 1/3 of screen height
+	
+	int imageWidth = screenWidth / 3;
+	int imageHeight = screenHeight / 3;
 
-	// Calculate X and Y positions for both images to be centered
-	int x1 = (screenWidth - imageWidth) / 4;  // Left image X position
-	int y1 = (screenHeight - imageHeight) / 2;                   // Centered vertically
+	
+	int x1 = (screenWidth - imageWidth) / 4;
+	int y1 = (screenHeight - imageHeight) / 2;      
 
-	int x2 = (screenWidth - imageWidth) / 4 + imageWidth + imageWidth / 30;  // Right image X position (10 pixels apart)
-	int y2 = (screenHeight - imageHeight) / 2;      // Centered vertically
+	int x2 = (screenWidth - imageWidth) / 4 + imageWidth + imageWidth / 30;
+	int y2 = (screenHeight - imageHeight) / 2;
 
-	// Load and display the images
+	
 	readimagefile("ROFLAG.jpg", x1, y1, x1 + imageWidth, y1 + imageHeight);
 	readimagefile("ENFLAG.jpg", x2, y2, x2 + imageWidth, y2 + imageHeight);
 
-	// Display a simple instruction message
+	
 	setcolor(WHITE);
 	settextstyle(SIMPLEX_FONT, HORIZ_DIR, 4);
 	outtextxy((x2 - x1), y1 + imageHeight + imageHeight / 20, "SELECT THE LANGUAGE");
 	outtextxy((x2 - x1 / 1.25), y1 + imageHeight + imageHeight / 5, "SELECTEAZA LIMBA");
 
-	// Wait for mouse click
+	
 	while (true) {
-		// Continuously track mouse position
+		
 		int mouseX = mousex();
 		int mouseY = mousey();
 
-		// Handle hover effect: Highlight the image being hovered over
+		
 		if (mouseX >= x1 && mouseX <= x1 + imageWidth && mouseY >= y1 && mouseY <= y1 + imageHeight) {
 			setcolor(LIGHTBLUE);
 			for (int i = 0;i < 4;i++) {
-				rectangle(x1 + i, y1 + i, x1 + imageWidth + i, y1 + imageHeight + i); // Draw a border around the hovered image
+				rectangle(x1 + i, y1 + i, x1 + imageWidth + i, y1 + imageHeight + i);
 			}
 		}
 		else {
 			setcolor(BLACK);
 			for (int i = 0;i < 4;i++) {
-				rectangle(x1 + i, y1 + i, x1 + imageWidth + i, y1 + imageHeight + i); // Draw a border around the hovered image
+				rectangle(x1 + i, y1 + i, x1 + imageWidth + i, y1 + imageHeight + i);
 			}
 		}
 		if (mouseX >= x2 && mouseX <= x2 + imageWidth && mouseY >= y2 && mouseY <= y2 + imageHeight) {
 			setcolor(LIGHTBLUE);
 			for (int i = 0;i < 4;i++) {
-				rectangle(x2 + i, y2 + i, x2 + imageWidth + i, y2 + imageHeight + i); // Draw a border around the hovered image
+				rectangle(x2 + i, y2 + i, x2 + imageWidth + i, y2 + imageHeight + i);
 			}
 		}
 		else {
 			setcolor(BLACK);
 			for (int i = 0;i < 4;i++) {
-				rectangle(x2 + i, y2 + i, x2 + imageWidth + i, y2 + imageHeight + i); // Draw a border around the hovered image
+				rectangle(x2 + i, y2 + i, x2 + imageWidth + i, y2 + imageHeight + i);
 			}
 		}
 
-		// Check if the mouse click occurs on one of the images
+		
 		if (ismouseclick(WM_LBUTTONDOWN)) {
-			clearmouseclick(WM_LBUTTONDOWN);  // Clear the click event
+			clearmouseclick(WM_LBUTTONDOWN); 
 
-			// Handle selection and change variable based on clicked image
+			
 			if (mouseX >= x1 && mouseX <= x1 + imageWidth && mouseY >= y1 && mouseY <= y1 + imageHeight) {
-				selectedImage = 1;  // Set the variable to 1 if the left image is selected
+				selectedImage = 1;  
 				setcolor(GREEN);
 				outtextxy(screenWidth / 2 - 70, screenHeight - 50, "Left image selected!");
 				SplitMenuItems = 1;
-				break; // Exit the loop after selection
+				break; 
 			}
 			else if (mouseX >= x2 && mouseX <= x2 + imageWidth && mouseY >= y2 && mouseY <= y2 + imageHeight) {
-				selectedImage = 2;  // Set the variable to 2 if the right image is selected
+				selectedImage = 2; 
 				setcolor(GREEN);
 				outtextxy(screenWidth / 2 - 70, screenHeight - 50, "Right image selected!");
 				SplitMenuItems = 0;
-				break; // Exit the loop after selection
+				break;
 			}
 		}
 
-		delay(20); // Small delay to prevent high CPU usage
+		delay(20);
 	}
 }
 
@@ -214,14 +212,14 @@ int detectMouseHover(int mouseX, int mouseY, int screenWidth, int screenHeight) 
 
 	for (int i = 0; i < MENU_ITEMS; i++) {
 		int x = marginX;
-		int y = marginY + i * (buttonHeight + screenHeight / 20);  // Vertical spacing as 5% of screen height
+		int y = marginY + i * (buttonHeight + screenHeight / 20);
 
-		// Check if the mouse is over this button
+		
 		if (mouseX >= x && mouseX <= x + buttonWidth && mouseY >= y && mouseY <= y + buttonHeight) {
 			return i;
 		}
 	}
-	return -1;  // No button is being hovered over
+	return -1;
 }
 
 // Draw Menu
@@ -237,7 +235,7 @@ void drawMenu(int screenWidth, int screenHeight) {
 
 	for (int i = 0; i < MENU_ITEMS; i++) {
 		int x = marginX;
-		int y = marginY + i * (buttonHeight + screenHeight / 20);  // Vertical spacing as 5% of screen height
+		int y = marginY + i * (buttonHeight + screenHeight / 20);
 
 		bool isHovered = (i == hoveredButton);
 		if (SplitMenuItems == 1)
@@ -245,9 +243,9 @@ void drawMenu(int screenWidth, int screenHeight) {
 		else
 			drawButton(x, y, buttonWidth, buttonHeight, menuTextEN[i], WHITE, BLACK, isHovered);
 	}
-	int imageWidth = screenWidth / 3;  // Image takes 1/3 of the screen width
-	int imageX = (screenWidth - imageWidth) / 2;  // Center horizontally
-	int imageY = marginY - (x / 3 * 612) / x - screenHeight / 20;  // Place above the first button with padding
+	int imageWidth = screenWidth / 3; 
+	int imageX = (screenWidth - imageWidth) / 2;  
+	int imageY = marginY - (x / 3 * 612) / x - screenHeight / 20;
 
 
 }
@@ -273,33 +271,31 @@ void MainMenu() {
 		setbkcolor(BLACK);
 		cleardevice();
 		settextstyle(DEFAULT_FONT, HORIZ_DIR, 1);
-		// Get mouse position
+		
 		int mouseX = mousex();
 		int mouseY = mousey();
 
-		// Detect hover
+		
 		hoveredButton = detectMouseHover(mouseX, mouseY, screenWidth, screenHeight);
 
-		// Draw the menu
+		
 		drawMenu(screenWidth, screenHeight);
 
-		// Check for mouse click
+		
 		if (ismouseclick(WM_LBUTTONDOWN)) {
 			clearmouseclick(WM_LBUTTONDOWN);
 
 			if (hoveredButton != -1) {
 				clickedButton = hoveredButton;
 
-				// Perform action based on the clicked button
+				
 				cleardevice();
 				setvisualpage(page);
 				settextstyle(DEFAULT_FONT, HORIZ_DIR, 7);
 				switch (clickedButton) {
 				case 0:
 					LevelsMenu();
-					/*outtextxy(screenWidth / 4, screenHeight / 2, "Starting Game...");
-					delay(2000);
-					break;*/
+					break;
 				case 1:
 					CustomMenu();
 					break;
@@ -322,29 +318,26 @@ void MainMenu() {
 		}
 
 		page = 1 - page;
-		delay(50);  // Reduce CPU usage
+		delay(50);  
 	}
 
-	//closegraph();
 	exit(0);
 }
 
-// Function to Draw a Button
+
 void drawButtonLevels(int x, int y, int width, int height, char* text, int default_text_color, int button_color, bool isHovered) {
-	// Set button color
+	
 	int finalColor = isHovered ? RED : button_color;
 	int textColor = isHovered ? YELLOW : default_text_color;
 	setcolor(10);
 	setfillstyle(SOLID_FILL, finalColor);
 	bar(x, y, x + width, y + height);
 
-	// Draw border
+	
 	setcolor(WHITE);
 	rectangle(x, y, x + width, y + height);
 
-	// Draw text
-	/*setcolor(text_color);
-	setbkcolor(BLACK);*/
+	
 	setbkcolor(finalColor);
 	setcolor(textColor);
 	settextstyle(EUROPEAN_FONT, HORIZ_DIR, 4);
@@ -354,38 +347,38 @@ void drawButtonLevels(int x, int y, int width, int height, char* text, int defau
 	setbkcolor(button_color);
 }
 
-// Function to Detect Which Button the Mouse is Hovering Over
+
 int detectMouseHoverLevels(int mouseX, int mouseY, int screenWidth, int screenHeight) {
-	int cellWidth = screenWidth / 4;  // Button width
-	int cellHeight = screenHeight / 6; // Button height
-	int marginX = (screenWidth - (3 * cellWidth)) / 4; // Horizontal margin
-	int marginY = (screenHeight - (3 * cellHeight)) / 4; // Vertical margin
+	int cellWidth = screenWidth / 4; 
+	int cellHeight = screenHeight / 6; 
+	int marginX = (screenWidth - (3 * cellWidth)) / 4; 
+	int marginY = (screenHeight - (3 * cellHeight)) / 4; 
 
 	for (int i = 0; i < LEVEL_ITEMS; i++) {
-		int column = i % 3; // Column index
-		int row = i / 3;    // Row index
+		int column = i % 3; 
+		int row = i / 3;   
 
 		int x = marginX + column * (cellWidth + marginX);
 		int y = marginY + row * (cellHeight + marginY);
 
-		// Check if the mouse is over this button
+		
 		if (mouseX >= x && mouseX <= x + cellWidth && mouseY >= y && mouseY <= y + cellHeight) {
 			return i;
 		}
 	}
-	return -1; // No button is being hovered over
+	return -1; 
 }
 
 // Draw Levels Menu
 void drawLevelsMenu(int screenWidth, int screenHeight) {
-	int cellWidth = screenWidth / 4;  // Button width
-	int cellHeight = screenHeight / 6; // Button height
-	int marginX = (screenWidth - (3 * cellWidth)) / 4; // Horizontal margin
-	int marginY = (screenHeight - (3 * cellHeight)) / 4; // Vertical margin
+	int cellWidth = screenWidth / 4;  
+	int cellHeight = screenHeight / 6; 
+	int marginX = (screenWidth - (3 * cellWidth)) / 4; 
+	int marginY = (screenHeight - (3 * cellHeight)) / 4; 
 
 	for (int i = 0; i < LEVEL_ITEMS; i++) {
-		int column = i % 3; // Column index
-		int row = i / 3;    // Row index
+		int column = i % 3;
+		int row = i / 3;    
 
 		int x = marginX + column * (cellWidth + marginX);
 		int y = marginY + row * (cellHeight + marginY);
@@ -418,24 +411,24 @@ void LevelsMenu() {
 		cleardevice();
 		putimage(0, 0, mario_levels_menu, COPY_PUT);
 
-		// Get mouse position
+		
 		int mouseX = mousex();
 		int mouseY = mousey();
 
-		// Detect hover
+		
 		hoveredButton = detectMouseHoverLevels(mouseX, mouseY, screenWidth, screenHeight);
 
-		// Draw the menu
+		
 		drawLevelsMenu(screenWidth, screenHeight);
 
-		//Check for mouse click
+		
 		if (ismouseclick(WM_LBUTTONDOWN)) {
 			clearmouseclick(WM_LBUTTONDOWN);
 
 			if (hoveredButton != -1) {
 				clickedButton = hoveredButton;
 
-				// Perform action based on the clicked button
+				
 				setvisualpage(page);
 				cleardevice();
 				settextstyle(DEFAULT_FONT, HORIZ_DIR, 6);
@@ -476,7 +469,7 @@ void LevelsMenu() {
 		delay(50);
 	}
 
-	//closegraph();
+	
 	exit(0);
 }
 
@@ -488,17 +481,17 @@ int detectMouseHoverCustom(int mouseX, int mouseY, int screenWidth, int screenHe
 
 	for (int i = 0; i < CUSTOM_ITEMS; i++) {
 		int x = marginX;
-		int y = marginY + i * (buttonHeight + screenHeight / 20);  // Vertical spacing as 5% of screen height
+		int y = marginY + i * (buttonHeight + screenHeight / 20);
 
-		// Check if the mouse is over this button
+		
 		if (mouseX >= x && mouseX <= x + buttonWidth && mouseY >= y && mouseY <= y + buttonHeight) {
 			return i;
 		}
 	}
-	return -1;  // No button is being hovered over
+	return -1;
 }
 
-// Draw Menu
+
 void drawCustomMenu(int screenWidth, int screenHeight) {
 	int buttonWidth = screenWidth / 4;
 	int buttonHeight = screenHeight / 10;
@@ -511,7 +504,7 @@ void drawCustomMenu(int screenWidth, int screenHeight) {
 
 	for (int i = 0; i < CUSTOM_ITEMS; i++) {
 		int x = marginX;
-		int y = marginY + i * (buttonHeight + screenHeight / 20);  // Vertical spacing as 5% of screen height
+		int y = marginY + i * (buttonHeight + screenHeight / 20); 
 
 		bool isHovered = (i == hoveredButton);
 		if (SplitMenuItems == 1)
@@ -519,9 +512,9 @@ void drawCustomMenu(int screenWidth, int screenHeight) {
 		else
 			drawButton(x, y, buttonWidth, buttonHeight, customTextEN[i], WHITE, BLACK, isHovered);
 	}
-	int imageWidth = screenWidth / 3;  // Image takes 1/3 of the screen width
-	int imageX = (screenWidth - imageWidth) / 2;  // Center horizontally
-	int imageY = marginY - (x / 3 * 612) / x - screenHeight / 20;  // Place above the first button with padding
+	int imageWidth = screenWidth / 3;  
+	int imageX = (screenWidth - imageWidth) / 2; 
+	int imageY = marginY - (x / 3 * 612) / x - screenHeight / 20; 
 
 
 }
@@ -549,24 +542,23 @@ void CustomMenu() {
 		setbkcolor(BLACK);
 		cleardevice();
 
-		// Get mouse position
+		
 		int mouseX = mousex();
 		int mouseY = mousey();
 
-		// Detect hover
+		
 		hoveredButton = detectMouseHoverCustom(mouseX, mouseY, screenWidth, screenHeight);
 
-		// Draw the menu
+		
 		drawCustomMenu(screenWidth, screenHeight);
 
-		// Check for mouse click
 		if (ismouseclick(WM_LBUTTONDOWN)) {
 			clearmouseclick(WM_LBUTTONDOWN);
 
 			if (hoveredButton != -1) {
 				clickedButton = hoveredButton;
 
-				// Perform action based on the clicked button
+				
 				cleardevice();
 				setvisualpage(page);
 				settextstyle(DEFAULT_FONT, HORIZ_DIR, 7);
@@ -587,22 +579,22 @@ void CustomMenu() {
 		}
 
 		page = 1 - page;
-		delay(50);  // Reduce CPU usage
+		delay(50);  
 	}
 
-	//closegraph();
+	
 	exit(0);
 }
 
-// Draw Levels Menu
+
 void drawCustomLevelsMenu(int screenWidth, int screenHeight) {
-	int cellWidth = screenWidth / 4;  // Button width
-	int cellHeight = screenHeight / 6; // Button height
-	int marginX = (screenWidth - (3 * cellWidth)) / 4; // Horizontal margin
-	int marginY = (screenHeight - (3 * cellHeight)) / 4; // Vertical margin
+	int cellWidth = screenWidth / 4;  
+	int cellHeight = screenHeight / 6; 
+	int marginX = (screenWidth - (3 * cellWidth)) / 4; 
+	int marginY = (screenHeight - (3 * cellHeight)) / 4; 
 	for (int i = 0; i < CUSTOM_LEVEL_ITEMS; i++) {
-		int column = i % 3; // Column index
-		int row = i / 3;    // Row index
+		int column = i % 3; 
+		int row = i / 3;    
 		int x = marginX + column * (cellWidth + marginX);
 		int y = marginY + row * (cellHeight + marginY);
 
@@ -644,24 +636,24 @@ void CustomLevelsMenu() {
 		cleardevice();
 		putimage(0, 0, mario_levels_menu, COPY_PUT);
 
-		// Get mouse position
+		
 		int mouseX = mousex();
 		int mouseY = mousey();
 
-		// Detect hover
+		
 		hoveredButton = detectMouseHoverLevels(mouseX, mouseY, screenWidth, screenHeight);
 
-		// Draw the menu
+		
 		drawCustomLevelsMenu(screenWidth, screenHeight);
 
-		//Check for mouse click
+		
 		if (ismouseclick(WM_LBUTTONDOWN)) {
 			clearmouseclick(WM_LBUTTONDOWN);
 
 			if (hoveredButton != -1) {
 				clickedButton = hoveredButton;
 
-				// Perform action based on the clicked button
+				
 				setvisualpage(page);
 				cleardevice();
 				settextstyle(DEFAULT_FONT, HORIZ_DIR, 6);
@@ -671,7 +663,7 @@ void CustomLevelsMenu() {
 				else {
 					char path[50];
 					strcpy(path, customLevelText[clickedButton]);
-					strcat(path, ".txt"); // Append file extension
+					strcat(path, ".txt");
 					cht = path;
 					StatsMenuCustom();
 				}
@@ -681,25 +673,23 @@ void CustomLevelsMenu() {
 		delay(50);
 	}
 
-	//closegraph();
+	
 	exit(0);
 }
 
 void drawButtonLevelsReplacer(int x, int y, int width, int height, char* text, int default_text_color, int button_color, bool isHovered, int yOffset) {
-	// Set button color
+	
 	int finalColor = isHovered ? RED : button_color;
 	int textColor = isHovered ? YELLOW : default_text_color;
 	setcolor(10);
 	setfillstyle(SOLID_FILL, finalColor);
 	bar(x, y, x + width, y + height);
 
-	// Draw border
+	
 	setcolor(WHITE);
 	rectangle(x, y, x + width, y + height);
 
-	// Draw text
-	/*setcolor(text_color);
-	setbkcolor(BLACK);*/
+	
 	setbkcolor(finalColor);
 	setcolor(textColor);
 	settextstyle(EUROPEAN_FONT, HORIZ_DIR, 4);
@@ -712,7 +702,7 @@ void drawButtonLevelsReplacer(int x, int y, int width, int height, char* text, i
 void drawCustomLevelsMenuReplacer(int screenWidth, int screenHeight) {
 	int textHeight;
 
-	settextstyle(DEFAULT_FONT, HORIZ_DIR, 4); // Set font and size
+	settextstyle(DEFAULT_FONT, HORIZ_DIR, 4);
 	if (SplitMenuItems == 1) {
 		char headerText[] = "ALEGE CE NIVEL INLOCUIESTI:";
 		int textWidth = textwidth(headerText);
@@ -726,17 +716,17 @@ void drawCustomLevelsMenuReplacer(int screenWidth, int screenHeight) {
 		outtextxy((screenWidth - textWidth) / 2, textHeight, headerText);
 	}
 
-	// Calculate button grid layout
-	int cellWidth = screenWidth / 4;  // Button width
-	int cellHeight = screenHeight / 6; // Button height
-	int marginX = (screenWidth - (3 * cellWidth)) / 4; // Horizontal margin
-	int marginY = (screenHeight - (3 * cellHeight)) / 4; // Vertical margin
-	int yOffset = textHeight; // Offset buttons below the header text
+	
+	int cellWidth = screenWidth / 4; 
+	int cellHeight = screenHeight / 6; 
+	int marginX = (screenWidth - (3 * cellWidth)) / 4; 
+	int marginY = (screenHeight - (3 * cellHeight)) / 4; 
+	int yOffset = textHeight; 
 
-	// Draw buttons
+	
 	for (int i = 0; i < CUSTOM_LEVEL_ITEMS; i++) {
-		int column = i % 3; // Column index
-		int row = i / 3;    // Row index
+		int column = i % 3;
+		int row = i / 3;
 		int x = marginX + column * (cellWidth + marginX);
 		int y = marginY + row * (cellHeight + marginY) + yOffset;
 
@@ -773,31 +763,27 @@ void CustomLevelsMenuReplacer(char filename[]) {
 		cleardevice();
 		putimage(0, 0, mario_levels_menu, COPY_PUT);
 
-		// Get mouse position
 		int mouseX = mousex();
 		int mouseY = mousey();
 
-		// Detect hover
 		hoveredButton = detectMouseHoverLevels(mouseX, mouseY, screenWidth, screenHeight);
 
-		// Draw the menu
 		drawCustomLevelsMenuReplacer(screenWidth, screenHeight);
 
-		//Check for mouse click
 		if (ismouseclick(WM_LBUTTONDOWN)) {
 			clearmouseclick(WM_LBUTTONDOWN);
 
 			if (hoveredButton != -1) {
 				clickedButton = hoveredButton;
 
-				// Perform action based on the clicked button
+				
 				setvisualpage(page);
 				cleardevice();
 				settextstyle(DEFAULT_FONT, HORIZ_DIR, 6);
 				if (strcmp(customLevelText[clickedButton], "BACK") != 0) {
 					delete customLevelText[clickedButton];
-					customLevelText[clickedButton] = new char[strlen(filename) + 1];  // Allocate memory for the string
-					strcpy(customLevelText[clickedButton], filename);  // Copy the string into the allocated memory
+					customLevelText[clickedButton] = new char[strlen(filename) + 1];  
+					strcpy(customLevelText[clickedButton], filename); 
 					customstats[clickedButton].name = new char[strlen(filename) + 1];
 					strcpy(customstats[clickedButton].name, filename);
 					customstats[clickedButton].disname = new char[strlen(filename) + 1];
@@ -831,21 +817,20 @@ void CustomLevelsMenuReplacer(char filename[]) {
 		delay(50);
 	}
 
-	//closegraph();
+	
 	exit(0);
 }
 
 void drawArrowGameOver(int option, int color, int menuX, int menuY, int menuSpacing, int winWidth, int winHeight) {
 	setcolor(color);
 
-	// Scale the arrow dimensions relative to the window size
-	int arrowWidth = winWidth / 40;  // Scalable width (proportional to window width)
-	int arrowHeight = winHeight / 30; // Scalable height (proportional to window height)
+	int arrowWidth = winWidth / 40;  
+	int arrowHeight = winHeight / 30; 
 
-	// Arrow's horizontal position (offset slightly to the left of the text)
+	
 	int x = menuX - arrowWidth - 10;
 	int textHeight;
-	// Arrow's vertical position aligned to the text
+	
 	if (SplitMenuItems == 1) {
 		textHeight = textheight(gameOverTextRO[option]);
 	}
@@ -855,7 +840,7 @@ void drawArrowGameOver(int option, int color, int menuX, int menuY, int menuSpac
 
 	int y = menuY + (option * menuSpacing) + (menuSpacing / 2) - (textHeight / 2);
 
-	// Define the arrow points
+	
 	int points[8] = { x, y, x + arrowWidth, y + arrowHeight / 2, x, y + arrowHeight, x, y };
 	drawpoly(4, points);
 	setfillstyle(SOLID_FILL, color);
@@ -866,49 +851,47 @@ void drawGameOver(int text_color) {
 	int winWidth = getmaxx();
 	int winHeight = getmaxy();
 
-	// Dynamically calculate font size
-	int fontSize = winHeight / 40; // Dynamically calculate font size
-	if (fontSize > 15) fontSize = 15;  // Set a max font size
+	int fontSize = winHeight / 40; 
+	if (fontSize > 15) fontSize = 15;
 	settextstyle(DEFAULT_FONT, HORIZ_DIR, fontSize);
 
 	int menuWidth = winWidth / 3;
-	int menuHeight = winHeight / 4; // Adjusted menu height for better centering
+	int menuHeight = winHeight / 4;
 
-	// Center the menu horizontally and vertically
+	
 	int menuX = (winWidth - menuWidth) / 2;
 	int menuY = (winHeight - menuHeight) / 2;
 
-	int menuSpacing = menuHeight / (GAMEOVER_ITEMS + 1); // Adjusted spacing for centering
+	int menuSpacing = menuHeight / (GAMEOVER_ITEMS + 1);
 
 	setcolor(text_color);
 
-	// Draw "GAME OVER" text above the menu
+	
 	settextstyle(EUROPEAN_FONT, HORIZ_DIR, fontSize + 4);
 	if (SplitMenuItems == 0) {
 		int gameOverWidth = textwidth("GAME OVER");
 		int gameOverX = (winWidth - gameOverWidth) / 2;
-		int gameOverY = menuY - 150;  // Increased padding above "GAME OVER"
+		int gameOverY = menuY - 150;  
 		outtextxy(gameOverX, gameOverY, "GAME OVER");
 	}
 	else {
 		int gameOverWidth = textwidth("AI PIERDUT");
 		int gameOverX = (winWidth - gameOverWidth) / 2;
-		int gameOverY = menuY - 150;  // Increased padding above "GAME OVER"
+		int gameOverY = menuY - 150;  
 		outtextxy(gameOverX, gameOverY, "AI PIERDUT");
 	}
 
 	int textX, textY;
 
-	// Draw menu options
 	settextstyle(EUROPEAN_FONT, HORIZ_DIR, fontSize);
 	for (int i = 0; i < GAMEOVER_ITEMS; i++) {
 		if (SplitMenuItems == 1) {
-			textX = menuX + (menuWidth - textwidth(gameOverTextRO[i])) / 2; // Center text horizontally
+			textX = menuX + (menuWidth - textwidth(gameOverTextRO[i])) / 2; 
 			textY = menuY + i * menuSpacing;
 			outtextxy(textX, textY, gameOverTextRO[i]);
 		}
 		else {
-			textX = menuX + (menuWidth - textwidth(gameOverTextEN[i])) / 2; // Center text horizontally
+			textX = menuX + (menuWidth - textwidth(gameOverTextEN[i])) / 2; 
 			textY = menuY + i * menuSpacing;
 			outtextxy(textX, textY, gameOverTextEN[i]);
 		}
@@ -930,15 +913,15 @@ void GameOverMenu() {
 	int winHeight = getmaxy();
 
 	int menuWidth = winWidth / 3;
-	int menuHeight = winHeight / 4; // Adjusted menu height
+	int menuHeight = winHeight / 4; 
 
-	// Calculate menu position
+	
 	int menuX = (winWidth - menuWidth) / 2;
 	int menuY = (winHeight - menuHeight) / 2;
 	int menuSpacing = menuHeight / (GAMEOVER_ITEMS + 1);
 
 	while (kbhit()) {
-		getch(); // Consume all available keypresses
+		getch(); 
 	}
 	selectedOption = 0;
 
@@ -949,14 +932,14 @@ void GameOverMenu() {
 	while (running) {
 		char key = getch();
 		if (key == 'w' || key == 72) { // UP
-			drawArrowGameOver(selectedOption, 0, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight); // Erase current arrow
+			drawArrowGameOver(selectedOption, 0, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight); 
 			selectedOption = (selectedOption - 1 + GAMEOVER_ITEMS) % GAMEOVER_ITEMS;
-			drawArrowGameOver(selectedOption, arrow_color, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight); // Draw new arrow
+			drawArrowGameOver(selectedOption, arrow_color, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight); 
 		}
 		if (key == 's' || key == 80) { // DOWN
-			drawArrowGameOver(selectedOption, 0, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight); // Erase current arrow
+			drawArrowGameOver(selectedOption, 0, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight); 
 			selectedOption = (selectedOption + 1) % GAMEOVER_ITEMS;
-			drawArrowGameOver(selectedOption, arrow_color, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight); // Draw new arrow
+			drawArrowGameOver(selectedOption, arrow_color, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight);
 		}
 		if (key == 13) { // ENTER || SPACE
 			cleardevice();
@@ -998,11 +981,11 @@ void GameOverMenu() {
 void drawArrowPause(int option, int r, int g, int b, int menuX, int menuY, int menuSpacing, int winWidth, int winHeight) {
 	setcolor(RGB(r, g, b));
 
-	// Scale the arrow dimensions relative to the window size
-	int arrowWidth = winWidth / 40;  // Scalable width (proportional to window width)
-	int arrowHeight = winHeight / 30; // Scalable height (proportional to window height)
+	
+	int arrowWidth = winWidth / 40;  
+	int arrowHeight = winHeight / 30; 
 
-	// Arrow's horizontal position (offset slightly to the left of the text)
+	
 	int x = menuX - arrowWidth - 10;
 	int textHeight;
 
@@ -1012,7 +995,7 @@ void drawArrowPause(int option, int r, int g, int b, int menuX, int menuY, int m
 		textHeight = textheight(PauseTextEN[option]);
 	int y = menuY + (option * menuSpacing) + (menuSpacing / 2) - (textHeight / 2);
 
-	// Define the arrow points
+	
 	int points[8] = { x, y, x + arrowWidth, y + arrowHeight / 2, x, y + arrowHeight, x, y };
 	drawpoly(4, points);
 	setfillstyle(SOLID_FILL, RGB(r, g, b));
@@ -1023,17 +1006,17 @@ void drawPause(int r, int g, int b) {
 	int winWidth = getmaxx();
 	int winHeight = getmaxy();
 
-	int fontSize = winHeight / 40; // Dynamically calculate font size
-	if (fontSize > 15) fontSize = 15;  // Set a max font size
+	int fontSize = winHeight / 40; 
+	if (fontSize > 15) fontSize = 15;  
 	settextstyle(DEFAULT_FONT, HORIZ_DIR, fontSize);
 	int menuWidth = winWidth / 3;
-	int menuHeight = winHeight / 4; // Adjusted menu height for better centering
+	int menuHeight = winHeight / 4; 
 
-	// Center the menu horizontally and vertically
+	
 	int menuX = (winWidth - menuWidth) / 2;
 	int menuY = (winHeight - menuHeight) / 2;
 
-	int menuSpacing = menuHeight / (PAUSE_ITEMS + 1); // Adjusted spacing for centering
+	int menuSpacing = menuHeight / (PAUSE_ITEMS + 1); 
 
 	setcolor(RGB(r, g, b));
 	settextstyle(EUROPEAN_FONT, HORIZ_DIR, fontSize + 4);
@@ -1041,13 +1024,13 @@ void drawPause(int r, int g, int b) {
 	if (SplitMenuItems == 1) {
 		int gameOverWidth = textwidth("PAUZA");
 		int gameOverX = (winWidth - gameOverWidth) / 2;
-		int gameOverY = menuY - 150;  // Increased padding above "GAME PAUSED"
+		int gameOverY = menuY - 150;  
 		outtextxy(gameOverX, gameOverY, "PAUZA");
 	}
 	else {
 		int gameOverWidth = textwidth("GAME PAUSED");
 		int gameOverX = (winWidth - gameOverWidth) / 2;
-		int gameOverY = menuY - 150;  // Increased padding above "GAME PAUSED"
+		int gameOverY = menuY - 150;  
 		outtextxy(gameOverX, gameOverY, "GAME PAUSED");
 	}
 
@@ -1056,12 +1039,12 @@ void drawPause(int r, int g, int b) {
 	for (int i = 0; i < PAUSE_ITEMS; i++) {
 		int textX, textY;
 		if (SplitMenuItems == 1) {
-			textX = menuX + (menuWidth - textwidth(PauseTextRO[i])) / 2; // Center text horizontally
+			textX = menuX + (menuWidth - textwidth(PauseTextRO[i])) / 2; 
 			textY = menuY + i * menuSpacing;
 			outtextxy(textX, textY, PauseTextRO[i]);
 		}
 		else {
-			textX = menuX + (menuWidth - textwidth(PauseTextEN[i])) / 2; // Center text horizontally
+			textX = menuX + (menuWidth - textwidth(PauseTextEN[i])) / 2; 
 			textY = menuY + i * menuSpacing;
 			outtextxy(textX, textY, PauseTextEN[i]);
 		}
@@ -1083,9 +1066,9 @@ void PauseMenu() {
 	int winWidth = getmaxx();
 	int winHeight = getmaxy();
 	int menuWidth = winWidth / 3;
-	int menuHeight = winHeight / 4; // Adjusted menu height
+	int menuHeight = winHeight / 4; 
 
-	// Calculate menu position
+	
 	int menuX = (winWidth - menuWidth) / 2;
 	int menuY = (winHeight - menuHeight) / 2;
 	int menuSpacing = menuHeight / (PAUSE_ITEMS + 1);
@@ -1104,14 +1087,14 @@ void PauseMenu() {
 	while (running) {
 		char key = getch();
 		if (key == 'w' || key == 72) { // UP
-			drawArrowPause(selectedOption, 126, 132, 246, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight); // Erase current arrow
+			drawArrowPause(selectedOption, 126, 132, 246, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight); 
 			selectedOption = (selectedOption - 1 + PAUSE_ITEMS) % PAUSE_ITEMS;
-			drawArrowPause(selectedOption, 255, 255, 255, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight); // Draw new arrow
+			drawArrowPause(selectedOption, 255, 255, 255, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight); 
 		}
 		if (key == 's' || key == 80) { // DOWN
-			drawArrowPause(selectedOption, 126, 132, 246, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight); // Erase current arrow
+			drawArrowPause(selectedOption, 126, 132, 246, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight); 
 			selectedOption = (selectedOption + 1) % PAUSE_ITEMS;
-			drawArrowPause(selectedOption, 255, 255, 255, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight); // Draw new arrow
+			drawArrowPause(selectedOption, 255, 255, 255, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight); 
 		}
 		if (key == 13) { // ENTER || SPACE
 			cleardevice();
@@ -1159,17 +1142,17 @@ void displayText(char* text, int screenWidth, int screenHeight, int fontSize, in
 }
 
 void drawButtonStats(int x, int y, int width, int height, char* text, int default_text_color, int button_color, bool isHovered) {
-	int finalColor = isHovered ? RED : button_color;  // Highlight hovered button
+	int finalColor = isHovered ? RED : button_color;  
 	int textColor = isHovered ? YELLOW : default_text_color;
 
 	setfillstyle(SOLID_FILL, finalColor);
 	bar(x, y, x + width, y + height);
 
-	// Draw border
+	
 	setcolor(WHITE);
 	rectangle(x, y, x + width, y + height);
 
-	// Draw text
+	
 	setbkcolor(finalColor);
 	setcolor(textColor);
 		settextstyle(EUROPEAN_FONT, HORIZ_DIR, height/110);
@@ -1180,11 +1163,10 @@ void drawButtonStats(int x, int y, int width, int height, char* text, int defaul
 	setcolor(WHITE);
 	line(x + 1.40 * width, y - 1.25 * height, x + 1.40 * width, y + 2 * height);
 
-	// Reset background color
+	
 	setbkcolor(button_color);
 }
 
-// Function to Detect Which Button the Mouse is Hovering Over
 int detectMouseHoverStats(int mouseX, int mouseY, int screenWidth, int screenHeight) {
 	int buttonWidth = screenWidth / 4;
 	int buttonHeight = screenHeight / 10;
@@ -1193,14 +1175,14 @@ int detectMouseHoverStats(int mouseX, int mouseY, int screenWidth, int screenHei
 
 	for (int i = 0; i < BUTTON_MENU_ITEMS; i++) {
 		int x = marginX;
-		int y = marginY + i * (buttonHeight + screenHeight / 20);  // Vertical spacing as 5% of screen height
+		int y = marginY + i * (buttonHeight + screenHeight / 20);  
 
-		// Check if the mouse is over this button
+		
 		if (mouseX >= x && mouseX <= x + buttonWidth && mouseY >= y && mouseY <= y + buttonHeight) {
 			return i;
 		}
 	}
-	return -1;  // No button is being hovered over
+	return -1;  
 }
 
 // Draw Menu
@@ -1292,26 +1274,25 @@ void StatsMenu() {
 		setbkcolor(BLACK);
 		cleardevice();
 		settextstyle(DEFAULT_FONT, HORIZ_DIR, 1);
-		// Get mouse position
+		
 		int mouseX = mousex();
 		int mouseY = mousey();
 
 
 
-		// Detect hover
+		
 		hoveredButton = detectMouseHoverStats(mouseX, mouseY, screenWidth, screenHeight);
 
-		// Draw the menu
+		
 		drawStatsMenu(screenWidth, screenHeight, selected);
 
-		// Check for mouse click
+		
 		if (ismouseclick(WM_LBUTTONDOWN)) {
 			clearmouseclick(WM_LBUTTONDOWN);
 
 			if (hoveredButton != -1) {
 				clickedButton = hoveredButton;
 
-				// Perform action based on the clicked button
 				cleardevice();
 				setvisualpage(page);
 				settextstyle(DEFAULT_FONT, HORIZ_DIR, 7);
@@ -1332,10 +1313,8 @@ void StatsMenu() {
 		}
 
 		page = 1 - page;
-		delay(50);  // Reduce CPU usage
+		delay(50);  
 	}
-
-	//closegraph();
 }
 
 void drawStatsMenuCustom(int screenWidth, int screenHeight, int selected) {
@@ -1393,10 +1372,6 @@ void drawStatsMenuCustom(int screenWidth, int screenHeight, int selected) {
 			drawButtonStats(x, y, buttonWidth, buttonHeight, statsTextRO[i], WHITE, BLACK, isHovered);
 		else
 			drawButtonStats(x, y, buttonWidth, buttonHeight, statsTextEN[i], WHITE, BLACK, isHovered);
-		//if (SplitMenuItems == 1)
-			//drawButton(x, y, buttonWidth, buttonHeight, menuTextRO[i], WHITE, BLACK, isHovered);
-		//else
-		  //  drawButton(x, y, buttonWidth, buttonHeight, menuTextEN[i], WHITE, BLACK, isHovered);
 
 	}
 }
@@ -1435,26 +1410,26 @@ void StatsMenuCustom() {
 		setbkcolor(BLACK);
 		cleardevice();
 		settextstyle(DEFAULT_FONT, HORIZ_DIR, 1);
-		// Get mouse position
+
 		int mouseX = mousex();
 		int mouseY = mousey();
 
 
 
-		// Detect hover
+
 		hoveredButton = detectMouseHoverStats(mouseX, mouseY, screenWidth, screenHeight);
 
-		// Draw the menu
+
 		drawStatsMenuCustom(screenWidth, screenHeight, selected);
 
-		// Check for mouse click
+
 		if (ismouseclick(WM_LBUTTONDOWN)) {
 			clearmouseclick(WM_LBUTTONDOWN);
 
 			if (hoveredButton != -1) {
 				clickedButton = hoveredButton;
 
-				// Perform action based on the clicked button
+
 				cleardevice();
 				setvisualpage(page);
 				settextstyle(DEFAULT_FONT, HORIZ_DIR, 7);
@@ -1475,20 +1450,18 @@ void StatsMenuCustom() {
 		}
 
 		page = 1 - page;
-		delay(50);  // Reduce CPU usage
+		delay(50);
 	}
-
-	//closegraph();
 }
 
 void drawArrowStats(int option, int r, int g, int b, int menuX, int menuY, int menuSpacing, int winWidth, int winHeight, int TextHeight) {
 	setcolor(RGB(r, g, b));
 
-	// Scale the arrow dimensions relative to the window size
-	int arrowWidth = winWidth / 40;  // Scalable width (proportional to window width)
-	int arrowHeight = winHeight / 30; // Scalable height (proportional to window height)
+	
+	int arrowWidth = winWidth / 40;  
+	int arrowHeight = winHeight / 30; 
 
-	// Arrow's horizontal position (offset slightly to the left of the text)
+	
 	int x = menuX - arrowWidth - 10;
 	int textHeight;
 
@@ -1498,7 +1471,7 @@ void drawArrowStats(int option, int r, int g, int b, int menuX, int menuY, int m
 		textHeight = textheight(PauseTextEN[option]);
 	int y = menuY + (option * menuSpacing) + (menuSpacing / 2) - (textHeight / 2) + 4 * TextHeight;
 
-	// Define the arrow points
+	
 	int points[8] = { x, y, x + arrowWidth, y + arrowHeight / 2, x, y + arrowHeight, x, y };
 	drawpoly(4, points);
 	setfillstyle(SOLID_FILL, RGB(r, g, b));
@@ -1509,17 +1482,16 @@ void drawLevelClear(int r, int g, int b) {
 	int winWidth = getmaxx();
 	int winHeight = getmaxy();
 
-	int fontSize = winHeight / 40; // Dynamically calculate font size
-	if (fontSize > 15) fontSize = 15;  // Set a max font size
+	int fontSize = winHeight / 40; 
+	if (fontSize > 15) fontSize = 15;  
 	settextstyle(DEFAULT_FONT, HORIZ_DIR, fontSize);
 	int menuWidth = winWidth / 3;
-	int menuHeight = winHeight / 4; // Adjusted menu height for better centering
+	int menuHeight = winHeight / 4; 
 
-	// Center the menu horizontally and vertically
 	int menuX = (winWidth - menuWidth) / 2;
 	int menuY = (winHeight - menuHeight) / 2;
 
-	int menuSpacing = menuHeight / (PAUSE_ITEMS + 1); // Adjusted spacing for centering
+	int menuSpacing = menuHeight / (PAUSE_ITEMS + 1); 
 
 	setcolor(RGB(r, g, b));
 	settextstyle(EUROPEAN_FONT, HORIZ_DIR, fontSize + 4);
@@ -1528,13 +1500,13 @@ void drawLevelClear(int r, int g, int b) {
 	if (SplitMenuItems == 1) {
 		gameOverWidth = textwidth("NIVEL TERMINAT");
 		int gameOverX = (winWidth - gameOverWidth) / 2;
-		int gameOverY = menuY - 150;  // Increased padding above "GAME PAUSED"
+		int gameOverY = menuY - 150;  
 		outtextxy(gameOverX, gameOverY, "NIVEL TERMINAT");
 	}
 	else {
 		gameOverWidth = textwidth("LEVEL CLEARED");
 		int gameOverX = (winWidth - gameOverWidth) / 2;
-		int gameOverY = menuY - 150;  // Increased padding above "GAME PAUSED"
+		int gameOverY = menuY - 150;  
 		outtextxy(gameOverX, gameOverY, "LEVEL CLEARED");
 	}
 
@@ -1577,17 +1549,17 @@ void drawLevelClear(int r, int g, int b) {
 	settextstyle(EUROPEAN_FONT, HORIZ_DIR, fontSize + 4);
 
 
-	// Draw menu options
+	
 	settextstyle(EUROPEAN_FONT, HORIZ_DIR, fontSize + 0.75);
 	for (int i = 0; i < GAMEOVER_ITEMS; i++) {
 		int textX, textY;
 		if (SplitMenuItems == 1) {
-			textX = menuX + (menuWidth - textwidth(levelclearedTextRO[i])) / 2; // Center text horizontally
+			textX = menuX + (menuWidth - textwidth(levelclearedTextRO[i])) / 2;
 			textY = menuY + i * menuSpacing + 4 * textHeight;
 			outtextxy(textX, textY, levelclearedTextRO[i]);
 		}
 		else {
-			textX = menuX + (menuWidth - textwidth(levelclearedTextEN[i])) / 2; // Center text horizontally
+			textX = menuX + (menuWidth - textwidth(levelclearedTextEN[i])) / 2;
 			textY = menuY + i * menuSpacing + 4 * textHeight;
 			outtextxy(textX, textY, levelclearedTextEN[i]);
 		}
@@ -1620,7 +1592,7 @@ void LevelCLearMenu() {
 			levelstats[i].time = (int)time_spent;
 		}
 	}
-	for (int i = 0;i < CUSTOM_LEVEL_ITEMS;i++) {
+	for (int i = 0;i < CUSTOM_LEVEL_ITEMS -1;i++) {
 		char str[50];
 		strcpy(str, customstats[i].disname);
 		strcat(str, ".txt");
@@ -1641,13 +1613,13 @@ void LevelCLearMenu() {
 	int winWidth = getmaxx();
 	int winHeight = getmaxy();
 	int menuWidth = winWidth / 3;
-	int menuHeight = winHeight / 4; // Adjusted menu height
+	int menuHeight = winHeight / 4; 
 
-	// Calculate menu position
+
 	int menuX = (winWidth - menuWidth) / 2;
 	int menuY = (winHeight - menuHeight) / 2;
 	int menuSpacing = menuHeight / (GAMEOVER_ITEMS + 1);
-	// ma_sound_stop(&BackGroundMusic);
+	
 
 	while (kbhit()) {
 		getch(); // Consume all available keypresses
@@ -1714,11 +1686,11 @@ void drawButtonControls(int x, int y, int width, int height, char* text, int def
 	setfillstyle(SOLID_FILL, finalColor);
 	bar(x, y, x + width, y + height);
 
-	// Draw the border
+	
 	setcolor(WHITE);
 	rectangle(x, y, x + width, y + height);
 
-	// Draw the button text
+	
 	setbkcolor(finalColor);
 	setcolor(textColor);
 	settextstyle(EUROPEAN_FONT, HORIZ_DIR, 4);
@@ -1738,12 +1710,12 @@ int detectMouseHoverControls(int mouseX, int mouseY, int screenWidth, int screen
 		int x = marginX;
 		int y = marginY + i * (buttonHeight + screenHeight / 20);
 
-		// Check if the mouse is over this button
+		
 		if (mouseX >= x && mouseX <= x + buttonWidth && mouseY >= y && mouseY <= y + buttonHeight) {
 			return i;
 		}
 	}
-	return -1;  // No button is hovered over
+	return -1;
 }
 
 void drawButtonsMenuCustom(int screenWidth, int screenHeight) {
@@ -1766,7 +1738,7 @@ void drawButtonsMenuCustom(int screenWidth, int screenHeight) {
 }
 
 void ControlMenu() {
-	// Get screen dimensions
+	
 	int screenWidth = GetSystemMetrics(SM_CXSCREEN);
 	int screenHeight = GetSystemMetrics(SM_CYSCREEN);
 
@@ -1799,7 +1771,6 @@ void ControlMenu() {
 			if (hoveredButton != -1) {
 				clickedButton = hoveredButton;
 
-				// Handle button clicks here
 				if (clickedButton == 0) {
 					MainMenu();
 					break;
@@ -1813,7 +1784,7 @@ void ControlMenu() {
 }
 
 void CustomControlMenu() {
-	// Get screen dimensions
+	
 	int screenWidth = GetSystemMetrics(SM_CXSCREEN);
 	int screenHeight = GetSystemMetrics(SM_CYSCREEN);
 
@@ -1846,7 +1817,7 @@ void CustomControlMenu() {
 			if (hoveredButton != -1) {
 				clickedButton = hoveredButton;
 
-				// Handle button clicks here
+				
 				if (clickedButton == 0) {
 					CustomMenu();
 					break;
@@ -1956,10 +1927,10 @@ void Credits() {
 	if (SplitMenuItems == 1)
 		creditCount = sizeof(creditsRO) / sizeof(creditsRO[0]); // Total number of credits
 	else
-		creditCount = sizeof(creditsEN) / sizeof(creditsEN[0]); // Total number of credits
+		creditCount = sizeof(creditsEN) / sizeof(creditsEN[0]);
 
-	// Dynamically scale font size and scrolling speed
-	float fontScale = screenWidth / 480.0; // Base font size on default width
+	
+	float fontScale = screenWidth / 480.0;
 	int fontSize = max(1, static_cast<int>(fontScale * 2));
 	int lineHeight = textheight("A") * fontSize + 5;
 	int scrollSpeed = max(1, static_cast<int>(2 * fontScale));
@@ -1973,26 +1944,26 @@ void Credits() {
 	ma_sound_seek_to_pcm_frame(&MenuMusic, 0);
 	delay(1000);
 
-	// Main loop for the credits animation
+	
 	while (ok == 1) {
 		cleardevice();
 		if (!ma_sound_is_playing(&CreditMusic)) ma_sound_start(&CreditMusic);
 		if (SplitMenuItems == 1) {
-			// Draw the credits
+			
 			for (int i = 0; i < creditCount; i++) {
 				int yOffset = yPos + i * lineHeight;
 				if (yOffset >= 0 && yOffset < screenHeight) {
 					int textWidth = textwidth(creditsRO[i].text);
-					int xPos = (screenWidth - textWidth) / 2; // Center text horizontally
+					int xPos = (screenWidth - textWidth) / 2; 
 					drawTextCredits(xPos, yOffset, creditsRO[i].text, fontSize);
 					
 				}
 			}
 
-			// Update position
+			
 			yPos -= scrollSpeed;
 
-			// Reset to loop credits
+			
 			if (yPos + creditCount * lineHeight < 0) {
 				yPos = screenHeight;
 			}
@@ -2000,20 +1971,20 @@ void Credits() {
 			delay(30);
 		}
 		else {
-			// Draw the credits
+			
 			for (int i = 0; i < creditCount; i++) {
 				int yOffset = yPos + i * lineHeight;
 				if (yOffset >= 0 && yOffset < screenHeight) {
 					int textWidth = textwidth(creditsEN[i].text);
-					int xPos = (screenWidth - textWidth) / 2; // Center text horizontally
+					int xPos = (screenWidth - textWidth) / 2;
 						drawTextCredits(xPos, yOffset, creditsEN[i].text, fontSize);
 				}
 			}
 
-			// Update position
+			
 			yPos -= scrollSpeed;
 
-			// Reset to loop credits
+			
 			if (yPos + creditCount * lineHeight < 0) {
 				yPos = screenHeight;
 			}
@@ -2032,7 +2003,7 @@ void Credits() {
 }
 
 void drawSettingsButton(int x, int y, int width, int height, char* text, int default_text_color, int button_color, bool isHovered) {
-	int finalColor = isHovered ? RED : button_color;  // Highlight hovered button
+	int finalColor = isHovered ? RED : button_color;
 	int textColor = isHovered ? YELLOW : default_text_color;
 
 	setfillstyle(SOLID_FILL, finalColor);
@@ -2058,11 +2029,10 @@ void drawSettingsButton(int x, int y, int width, int height, char* text, int def
 			outtextxy(textX, textY, text);
 	}
 
-	// Reset background color
 	setbkcolor(button_color);
 }
 
-// Function to Detect Which Button the Mouse is Hovering Over
+
 int detectSettingsMouseHover(int mouseX, int mouseY, int screenWidth, int screenHeight) {
 	int buttonWidth = screenWidth / 4;
 	int buttonHeight = screenHeight / 10;
@@ -2071,14 +2041,14 @@ int detectSettingsMouseHover(int mouseX, int mouseY, int screenWidth, int screen
 
 	for (int i = 0; i < SETTINGS_ITEMS; i++) {
 		int x = marginX;
-		int y = marginY + i * (buttonHeight + screenHeight / 20);  // Vertical spacing as 5% of screen height
+		int y = marginY + i * (buttonHeight + screenHeight / 20);  
 
-		// Check if the mouse is over this button
+		
 		if (mouseX >= x && mouseX <= x + buttonWidth && mouseY >= y && mouseY <= y + buttonHeight) {
 			return i;
 		}
 	}
-	return -1;  // No button is being hovered over
+	return -1;  
 }
 
 // Draw Menu
@@ -2093,7 +2063,7 @@ void drawSettingsMenu(int screenWidth, int screenHeight) {
 
 	for (int i = 0; i < SETTINGS_ITEMS; i++) {
 		int x = marginX;
-		int y = marginY + i * (buttonHeight + screenHeight / 20);  // Vertical spacing as 5% of screen height
+		int y = marginY + i * (buttonHeight + screenHeight / 20); 
 
 		bool isHovered = (i == hoveredButton);
 		if (SplitMenuItems == 1)
@@ -2101,9 +2071,9 @@ void drawSettingsMenu(int screenWidth, int screenHeight) {
 		else
 			drawSettingsButton(x, y, buttonWidth, buttonHeight, settingsTextEN[i], WHITE, BLACK, isHovered);
 	}
-	int imageWidth = screenWidth / 3;  // Image takes 1/3 of the screen width
-	int imageX = (screenWidth - imageWidth) / 2;  // Center horizontally
-	int imageY = marginY - (x / 3 * 612) / x - screenHeight / 20;  // Place above the first button with padding
+	int imageWidth = screenWidth / 3;  
+	int imageX = (screenWidth - imageWidth) / 2; 
+	int imageY = marginY - (x / 3 * 612) / x - screenHeight / 20; 
 
 
 }
@@ -2129,24 +2099,24 @@ void SettingsMenu() {
 		setbkcolor(BLACK);
 		cleardevice();
 		settextstyle(DEFAULT_FONT, HORIZ_DIR, 1);
-		// Get mouse position
+		
 		int mouseX = mousex();
 		int mouseY = mousey();
 
-		// Detect hover
+		
 		hoveredButton = detectSettingsMouseHover(mouseX, mouseY, screenWidth, screenHeight);
 
-		// Draw the menu
+		
 		drawSettingsMenu(screenWidth, screenHeight);
 
-		// Check for mouse click
+		
 		if (ismouseclick(WM_LBUTTONDOWN)) {
 			clearmouseclick(WM_LBUTTONDOWN);
 
 			if (hoveredButton != -1) {
 				clickedButton = hoveredButton;
 
-				// Perform action based on the clicked button
+				
 				cleardevice();
 				setvisualpage(page);
 				settextstyle(DEFAULT_FONT, HORIZ_DIR, 7);
@@ -2177,9 +2147,9 @@ void SettingsMenu() {
 		}
 
 		page = 1 - page;
-		delay(50);  // Reduce CPU usage
+		delay(10);
 	}
 
-	//closegraph();
+	
 	exit(0);
 }
