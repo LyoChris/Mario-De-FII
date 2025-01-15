@@ -19,6 +19,8 @@ using namespace std;
 #define MAX1 30
 #define MAX2 1000
 
+
+extern ma_engine engine;
 extern LevelStats levelstats[9], customstats[9];
 extern ma_sound JumpEffect, CoinEffect, ColideEffect, GombaDeadEffect, DeathEffect, BackGroundMusic, StageClear, PauseEffect, StarTheme, MenuMusic, MapEditorMusic, CreditMusic;
 extern clock_t start;
@@ -35,6 +37,9 @@ extern int time1, okesc, n, SplitMenuItems, coinono, gdead, pdead, score1;
 extern string direct, levelselect, cht;
 int textH, menustate = 0;
 extern double time_spent;
+float volume = 1.0f;     // Volume (0.0 to 1.0)
+bool isMuted = false;    // Mute toggle
+
 //extern int lifes = 3, safeimario, safejmario, mover = 0, coinono = 0, invincibilityframes = 0, ok = 0, hoverm = 0, play = 0, gdead = 0;
 
 void MainMenu();
@@ -53,9 +58,9 @@ const int GAME_CONTROLS_ITEMS = 1;
 char* gamecontrolsTextRO[GAME_CONTROLS_ITEMS] = { "INAPOI" };
 char* gamecontrolsTextEN[GAME_CONTROLS_ITEMS] = { "BACK" };
 
-const int MENU_ITEMS = 5;
-char* menuTextEN[MENU_ITEMS] = { "START", "CUSTOM LEVELS", "CONTROLS", "CREDITS", "EXIT" };
-char* menuTextRO[MENU_ITEMS] = { "START", "NIVELE CUSTOM", "CONTROALE", "CREDITE", "EXIT" };
+const int MENU_ITEMS = 6;
+char* menuTextEN[MENU_ITEMS] = { "START", "CUSTOM LEVELS", "CONTROLS", "SETTINGS", "CREDITS", "EXIT" };
+char* menuTextRO[MENU_ITEMS] = { "START", "NIVELE CUSTOM", "CONTROALE", "SETARI", "CREDITE", "EXIT" };
 
 const int GAMEOVER_ITEMS = 3;
 char* gameOverTextEN[GAMEOVER_ITEMS] = { "RESTART", "LEVELS", "MAIN MENU" };
@@ -83,6 +88,10 @@ char* levelclearedTextRO[BUTTON_MENU_ITEMS] = { "REINCEPE", "NIVELE", "MENIU PRI
 const int BUTTON_STATS_ITEMS = 3;
 char* statsTextEN[BUTTON_MENU_ITEMS] = { "PLAY", "MAIN MENU", "BACK" };
 char* statsTextRO[BUTTON_MENU_ITEMS] = { "JOACA", "MENIU PRINCIPAL", "INAPOI" };
+
+const int SETTINGS_ITEMS = 4;
+char* settingsTextEN[SETTINGS_ITEMS] = { "INCREASE VOLUME", "DECREASE VOLUME", "MUTE SOUND", "BACK" };
+char* settingsTextRO[SETTINGS_ITEMS] = { "CRESTE VOLUMUL", "SCADE VOLUMUL", "OPRESTE SUNETUL", "INAPOI" };
 
 // Global variable
 int selectedOption = 0;
@@ -187,7 +196,7 @@ void drawButton(int x, int y, int width, int height, char* text, int default_tex
 	// Draw text
 	setbkcolor(finalColor);
 	setcolor(textColor);
-	settextstyle(EUROPEAN_FONT, HORIZ_DIR, 4);
+	settextstyle(EUROPEAN_FONT, HORIZ_DIR, height /150);
 	int textX = x + (width - textwidth(text)) / 2;
 	int textY = y + (height - textheight(text)) / 2;
 	outtextxy(textX, textY, text);
@@ -201,7 +210,7 @@ int detectMouseHover(int mouseX, int mouseY, int screenWidth, int screenHeight) 
 	int buttonWidth = screenWidth / 4;
 	int buttonHeight = screenHeight / 10;
 	int marginX = screenWidth / 9;
-	int marginY = screenHeight / 5.5;
+	int marginY = screenHeight / 9;
 
 	for (int i = 0; i < MENU_ITEMS; i++) {
 		int x = marginX;
@@ -220,7 +229,7 @@ void drawMenu(int screenWidth, int screenHeight) {
 	int buttonWidth = screenWidth / 4;
 	int buttonHeight = screenHeight / 10;
 	int marginX = screenWidth / 9;
-	int marginY = screenHeight / 5.5;
+	int marginY = screenHeight / 9;
 
 	putimage(0, 0, mario_main_screen, COPY_PUT);
 
@@ -298,9 +307,12 @@ void MainMenu() {
 					ControlMenu();
 					break;
 				case 3:
+					SettingsMenu();
+					break;
+				case 4:
 					Credits();
 					return;
-				case 4:
+				case 5:
 					saveStats(levelstats);
 					saveData(customLevelText, CUSTOM_LEVEL_ITEMS, customstats);
 					running = false;
@@ -588,11 +600,9 @@ void drawCustomLevelsMenu(int screenWidth, int screenHeight) {
 	int cellHeight = screenHeight / 6; // Button height
 	int marginX = (screenWidth - (3 * cellWidth)) / 4; // Horizontal margin
 	int marginY = (screenHeight - (3 * cellHeight)) / 4; // Vertical margin
-	cout << CUSTOM_LEVEL_ITEMS;
 	for (int i = 0; i < CUSTOM_LEVEL_ITEMS; i++) {
 		int column = i % 3; // Column index
 		int row = i / 3;    // Row index
-		cout << customLevelText[i] << endl;
 		int x = marginX + column * (cellWidth + marginX);
 		int y = marginY + row * (cellHeight + marginY);
 
@@ -1162,7 +1172,7 @@ void drawButtonStats(int x, int y, int width, int height, char* text, int defaul
 	// Draw text
 	setbkcolor(finalColor);
 	setcolor(textColor);
-	settextstyle(EUROPEAN_FONT, HORIZ_DIR, height / 110);
+		settextstyle(EUROPEAN_FONT, HORIZ_DIR, height/110);
 	int textX = x + (width - textwidth(text)) / 2;
 	int textY = y + (height - textheight(text)) / 2;
 	outtextxy(textX, textY, text);
@@ -1236,9 +1246,10 @@ void drawStatsMenu(int screenWidth, int screenHeight, int selected) {
 		displayText(scoreCounter, 1.35 * screenWidth, 2 * marginY + 13.0 * textHeight, fontsize + 0.75, WHITE);
 	}
 
+
 	for (int i = 0; i < BUTTON_MENU_ITEMS; i++) {
 		int x = marginX;
-		int y = marginY + i * (buttonHeight + screenHeight / 20);  // Vertical spacing as 5% of screen height
+		int y = marginY + i * (buttonHeight + screenHeight / 20);
 
 		bool isHovered = (i == hoveredButton);
 
@@ -1246,10 +1257,6 @@ void drawStatsMenu(int screenWidth, int screenHeight, int selected) {
 			drawButtonStats(x, y, buttonWidth, buttonHeight, statsTextRO[i], WHITE, BLACK, isHovered);
 		else
 			drawButtonStats(x, y, buttonWidth, buttonHeight, statsTextEN[i], WHITE, BLACK, isHovered);
-		//if (SplitMenuItems == 1)
-			//drawButton(x, y, buttonWidth, buttonHeight, menuTextRO[i], WHITE, BLACK, isHovered);
-		//else
-		  //  drawButton(x, y, buttonWidth, buttonHeight, menuTextEN[i], WHITE, BLACK, isHovered);
 
 	}
 }
@@ -1271,16 +1278,12 @@ void StatsMenu() {
 	strcpy(charArray, cht.c_str());
 
 	for (int i = 0;i < 9;i++) {
-		cout << strcmp(charArray, levelstats[i].name) << " ";
 		if (strcmp(charArray, levelstats[i].name) == 0)
 		{
-			cout << " " << levelstats[i].name;
-			cout << " " << levelstats[i].disname;
 			selected = i;
 			break;
 		}
 	}
-	cout << '\n';
 
 	while (running) {
 		if (!ma_sound_is_playing(&MenuMusic)) ma_sound_start(&MenuMusic);
@@ -1420,13 +1423,10 @@ void StatsMenuCustom() {
 		strcat(str, ".txt");
 		if (strcmp(charArray, str) == 0)
 		{
-			cout << " " << customstats[i].name;
-			cout << " " << customstats[i].disname;
 			selected = i;
 			break;
 		}
 	}
-	cout << '\n';
 
 	while (running) {
 		if (!ma_sound_is_playing(&MenuMusic)) ma_sound_start(&MenuMusic);
@@ -1624,9 +1624,7 @@ void LevelCLearMenu() {
 		char str[50];
 		strcpy(str, customstats[i].disname);
 		strcat(str, ".txt");
-		cout << str << '\n';
 		if (strcmp(str, charArray) == 0) {
-			cout << i;
 			if (customstats[i].score < score1) {
 				customstats[i].score = score1;
 			}
@@ -1662,8 +1660,6 @@ void LevelCLearMenu() {
 	bool running = true;
 	while (running) {
 		char key = getch();
-		cout << (int)key << '\n';
-		cout << selectedOption << '\n';
 		if (key == 'w' || key == 72) { // UP
 			drawArrowStats(selectedOption, 126, 132, 246, menuX + winWidth / 22, menuY - winHeight / 80, menuSpacing, winWidth, winHeight, textH); // Erase current arrow
 			selectedOption = (selectedOption - 1 + GAMEOVER_ITEMS) % GAMEOVER_ITEMS;
@@ -2033,4 +2029,157 @@ void Credits() {
 	ma_sound_stop(&CreditMusic);
 	ma_sound_seek_to_pcm_frame(&CreditMusic, 0);
 	MainMenu();
+}
+
+void drawSettingsButton(int x, int y, int width, int height, char* text, int default_text_color, int button_color, bool isHovered) {
+	int finalColor = isHovered ? RED : button_color;  // Highlight hovered button
+	int textColor = isHovered ? YELLOW : default_text_color;
+
+	setfillstyle(SOLID_FILL, finalColor);
+	bar(x - width / 5, y, x + width + width / 5, y + height);
+
+	// Draw border
+	setcolor(WHITE);
+	rectangle(x - width/5, y, x + width + width/5, y + height);
+
+	// Draw text
+	setbkcolor(finalColor);
+	setcolor(textColor);
+		settextstyle(EUROPEAN_FONT, HORIZ_DIR, height / 110);
+	int textX = x + (width - textwidth(text)) / 2;
+	int textY = y + (height - textheight(text)) / 2;
+	if (strcmp(text, "OPRESTE SUNETUL") == 0 && isMuted == TRUE) {
+		outtextxy(textX, textY, "PORNESTE SUNETUL");
+	}
+	else {
+		if (strcmp(text, "MUTE SOUND") == 0 && isMuted == TRUE)
+			outtextxy(textX, textY, "UNMUTE SOUND");
+		else
+			outtextxy(textX, textY, text);
+	}
+
+	// Reset background color
+	setbkcolor(button_color);
+}
+
+// Function to Detect Which Button the Mouse is Hovering Over
+int detectSettingsMouseHover(int mouseX, int mouseY, int screenWidth, int screenHeight) {
+	int buttonWidth = screenWidth / 4;
+	int buttonHeight = screenHeight / 10;
+	int marginX = screenWidth / 2.5;
+	int marginY = screenHeight / 4;
+
+	for (int i = 0; i < SETTINGS_ITEMS; i++) {
+		int x = marginX;
+		int y = marginY + i * (buttonHeight + screenHeight / 20);  // Vertical spacing as 5% of screen height
+
+		// Check if the mouse is over this button
+		if (mouseX >= x && mouseX <= x + buttonWidth && mouseY >= y && mouseY <= y + buttonHeight) {
+			return i;
+		}
+	}
+	return -1;  // No button is being hovered over
+}
+
+// Draw Menu
+void drawSettingsMenu(int screenWidth, int screenHeight) {
+	int buttonWidth = screenWidth / 4;
+	int buttonHeight = screenHeight / 10;
+	int marginX = screenWidth / 2.5;
+	int marginY = screenHeight / 4;
+
+
+	settextjustify(LEFT_TEXT, TOP_TEXT);
+
+	for (int i = 0; i < SETTINGS_ITEMS; i++) {
+		int x = marginX;
+		int y = marginY + i * (buttonHeight + screenHeight / 20);  // Vertical spacing as 5% of screen height
+
+		bool isHovered = (i == hoveredButton);
+		if (SplitMenuItems == 1)
+			drawSettingsButton(x, y, buttonWidth, buttonHeight, settingsTextRO[i], WHITE, BLACK, isHovered);
+		else
+			drawSettingsButton(x, y, buttonWidth, buttonHeight, settingsTextEN[i], WHITE, BLACK, isHovered);
+	}
+	int imageWidth = screenWidth / 3;  // Image takes 1/3 of the screen width
+	int imageX = (screenWidth - imageWidth) / 2;  // Center horizontally
+	int imageY = marginY - (x / 3 * 612) / x - screenHeight / 20;  // Place above the first button with padding
+
+
+}
+
+void SettingsMenu() {
+	ma_sound_stop(&MapEditorMusic);
+	ma_sound_seek_to_pcm_frame(&MapEditorMusic, 0);
+	ma_sound_stop(&StarTheme);
+	ma_sound_seek_to_pcm_frame(&StarTheme, 0);
+	ma_sound_stop(&BackGroundMusic);
+	ma_sound_seek_to_pcm_frame(&BackGroundMusic, 0);
+
+	menustate = 0;
+	int screenWidth = x;
+	int screenHeight = y;
+	bool running = true;
+	int page = 0;
+
+	while (running) {
+		if (!ma_sound_is_playing(&MenuMusic)) ma_sound_start(&MenuMusic);
+		setactivepage(page);
+		setvisualpage(1 - page);
+		setbkcolor(BLACK);
+		cleardevice();
+		settextstyle(DEFAULT_FONT, HORIZ_DIR, 1);
+		// Get mouse position
+		int mouseX = mousex();
+		int mouseY = mousey();
+
+		// Detect hover
+		hoveredButton = detectSettingsMouseHover(mouseX, mouseY, screenWidth, screenHeight);
+
+		// Draw the menu
+		drawSettingsMenu(screenWidth, screenHeight);
+
+		// Check for mouse click
+		if (ismouseclick(WM_LBUTTONDOWN)) {
+			clearmouseclick(WM_LBUTTONDOWN);
+
+			if (hoveredButton != -1) {
+				clickedButton = hoveredButton;
+
+				// Perform action based on the clicked button
+				cleardevice();
+				setvisualpage(page);
+				settextstyle(DEFAULT_FONT, HORIZ_DIR, 7);
+				switch (clickedButton) {
+				case 0:
+					if (!isMuted) {
+						volume += 0.1f;
+						if (volume > 1.0f) volume = 1.0f;
+						ma_engine_set_volume(&engine, volume);
+						break;
+					}
+				case 1:
+					if (!isMuted) {
+						volume -= 0.1f;
+						if (volume < 0.0f) volume = 0.0f;
+						ma_engine_set_volume(&engine, volume);
+						break;
+					}
+				case 2:
+					isMuted = !isMuted;
+					ma_engine_set_volume(&engine, isMuted ? 0.0f : volume);
+					break;
+				case 3:
+					MainMenu();
+					break;
+				}
+			}
+		}
+
+		page = 1 - page;
+		delay(50);  // Reduce CPU usage
+	}
+
+	//closegraph();
+	exit(0);
 }

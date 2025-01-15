@@ -42,7 +42,7 @@ extern colectible coins[100], life[100], starpow[100], fflower[100];
 extern firebll fireb[100];
 pozitii spawn[100];
 float wh, ncf, nci = 0, nc1, imario, jmario;
-int  x, y, nl = 20, nc, harta[30][1000], mv2, map, mappart, spawncount = 1, vizc[100], vize[100], buffersize, flagpolej = -2, flagpolei = -1, okmap = 1, flagpole;
+int  x, y, nl = 20, nc, harta[30][1000], mv2, map, mappart, spawncount = 1, flagpolej = -2, flagpolei = -1, okmap = 1, flagpole;
 extern goompa gompav[100];
 extern int n, coino, lifo, p, staro, firo;
 
@@ -54,7 +54,6 @@ void MapReaderandSetter() {
     wh = (float)y / (float)nl;
     nc1 = (float)x / wh;
     ncf = nc1;
-    cout << "Dimensiuni ecran: " << x << " " << y << '\n';
     AssetLoader();
     AssetLoaderMap();
     initwindow(x, y, "", -3, -3);
@@ -69,8 +68,6 @@ void MapLoader() {
         }
     }
     f.close();
-    cout << "Dimensiuni harta: " << nl << " " << nc << '\n';
-    cout << "Dimensiuni tile: " << wh << " " << nc1 << '\n';
     levelselect = cht;
     //initwindow(x, y, "", -3, -3);
     setvisualpage(1);
@@ -78,7 +75,6 @@ void MapLoader() {
     cleardevice();
     setbkcolor(RGB(126, 132, 246));
     cleardevice();
-    cout << "COINO " << coino << '\n';
     for (int i = 0; i < nl;i += 1) {
         for (int j = nci;j < ncf; j += 1) {
             if (harta[i][j] == 1)
@@ -89,7 +85,6 @@ void MapLoader() {
                 putimage(j * wh, i * wh, mario_vine_top, COPY_PUT);
             if (harta[i][j] == 9) {
                 putimage(j * wh, i * wh, mario_idle_right, COPY_PUT);
-                cout << "Mario coord init: " << i << " " << j << '\n';
                 imario = i, jmario = j;
                 harta[i][j] = 0;
             }
@@ -101,7 +96,6 @@ void MapLoader() {
                 coins[coino].mapart = (int)(nci - nc1);
                 coins[coino].colected = 0;
                 harta[i][j] = 0;
-                cout << coins[coino].icolec << " " << coins[coino].jcolec << " " << coins[coino].mapart << '\n';
             }
             if (harta[i][j] == 16) {
                 putimage(j * wh, i * wh, fire_flower, COPY_PUT);
@@ -177,23 +171,19 @@ void MapLoader() {
                     gompav[n].igompa = i;
                     gompav[n].jgompa = j;
                     harta[i][j] = 0;
-                    cout << "Map Tester:" << n << " " << gompav[n].mapart << " " << gompav[n].igompa << " " << gompav[n].jgompa << '\n';
 					putimage(j * wh, i * wh, goomba_walking_1, COPY_PUT);
                     harta[i][j] == 0;
             }
         }
 		putimage(0, 0, skyblock, COPY_PUT);
     }
-    cout << "COINO " << coino<<'\n';
 	setvisualpage(0);
 }
 
 void MapLoaderNextRight() {
     nci = nci + nc1;
     ncf = ncf + nc1;
-	cout << ncf << '\n';
 	if (ncf > nc) ncf = nc;
-	cout <<"DIMEN MADS: "<< nci << " " << ncf << '\n';
     okmap = 1;
     setactivepage(1);
     cleardevice();
@@ -222,7 +212,6 @@ void MapLoaderNextRight() {
                 gompav[n].mapart = (int)(nci - nc1);
                 gompav[n].igompa = i;
                 gompav[n].jgompa = j;
-                cout << "Map Tester:" << n << " " << gompav[n].mapart << " " << gompav[n].igompa << " " << gompav[n].jgompa << '\n';
                 putimage((j - nci) * wh, i * wh, goomba_walking_1, COPY_PUT);
                 harta[i][j] = 0;
             }
@@ -402,6 +391,10 @@ void MapLoaderPrevLeft() {
                 if (okmap == 0)
                     break;
             }
+        }
+        if (okmap != 0) {
+            imario = 0;
+            jmario = ncf - nci - 2;
         }
         /*
         imario = spawn[(int)(nci / nc1)].ifinal;

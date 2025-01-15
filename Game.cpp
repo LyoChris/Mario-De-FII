@@ -34,7 +34,7 @@ clock_t start, initpause;
 double MarioInterval = MARIO_TIME;
 double enemyInterval = ENEMY_TIME;
 double FrameInterval = FRAME_TIME;
-double fireBallinterval = ENEMY_TIME / 1.75;
+double fireBallinterval = ENEMY_TIME / 1.5;
 
 void MarioGame() {
     MapReseter();

@@ -1198,7 +1198,7 @@ void MarioMovement() {
         okmov = 0;
     }
 
-    if (fpow != 0 && (GetAsyncKeyState(0x43)) && shoot > 8 && (int)imario - imario == 0) {
+    if (fpow != 0 && (GetAsyncKeyState(0x43) < 0) && shoot > 8 && (int)imario - imario == 0) {
         shoot = 0;
         int put = 0;
         int okput = 1;
@@ -1215,7 +1215,7 @@ void MarioMovement() {
             (harta[(int)imario][(int)jmario] == 8 || harta[(int)imario][(int)jmario + 1] == 8 || harta[(int)imario][(int)jmario - 1] == 8) ||
             (harta[(int)imario][(int)jmario] == 10 || harta[(int)imario][(int)jmario + 1] == 10 || harta[(int)imario][(int)jmario - 1] == 10))) okput = 0;
         if (okput == 1) {
-            for (int i = 0;i < 6;i++) {
+            for (int i = 0;i < 8;i++) {
                 if (fireb[i].exist == 0) {
                     fireb[i].exist = 1;
                     if (direct == "right" || direct == "up") {
@@ -1234,24 +1234,24 @@ void MarioMovement() {
                     put = 1;
                 }
                 if (put == 0) {
-                    fireb[5].exist = 1;
+                    fireb[7].exist = 1;
                     if (direct == "right" || direct == "up") {
-                        fireb[5].fbdirection = 0;
-                        fireb[5].ifireb = imario;
-                        fireb[5].jfireb = jmario + 1;
+                        fireb[7].fbdirection = 0;
+                        fireb[7].ifireb = imario;
+                        fireb[7].jfireb = jmario + 1;
                     }
                     else {
                         if (direct == "left" || direct == "dowm") {
-                            fireb[5].fbdirection = 1;
-                            fireb[5].ifireb = imario;
-                            fireb[5].jfireb = jmario - 1;
+                            fireb[7].fbdirection = 1;
+                            fireb[7].ifireb = imario;
+                            fireb[7].jfireb = jmario - 1;
 
                         }
                     }
                     ma_sound_stop(&FireBallEffect);
                     ma_sound_seek_to_pcm_frame(&FireBallEffect, 0);
                     ma_sound_start(&FireBallEffect);
-                    fireb[5].mapart = (int)(nci - nc1);
+                    fireb[7].mapart = (int)(nci - nc1);
                 }
             }
                 

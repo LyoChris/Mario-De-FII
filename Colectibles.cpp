@@ -20,7 +20,6 @@ extern void* skyblock, * mario_coin, * one_up, * mario_star, * mario_vine, * mar
 void fireballstateput(int a) {
 	switch (fireb[a].fbstage) {
 	case 1:
-		std::cout << "AMP PSU";
 		putimage((fireb[a].jfireb - nci) * wh, fireb[a].ifireb * wh, fireball_1, COPY_PUT); break;
 	case 2:
 		putimage((fireb[a].jfireb - nci) * wh, fireb[a].ifireb * wh, fireball_2, COPY_PUT); break;
@@ -39,7 +38,6 @@ void fireballstateread(int a) {
 void fireballmov(int a) {
 	if (fireb[a].fbstage == 1) fireb[a].fbstage = 2;
 	else fireb[a].fbstage = 1;
-	std::cout << "FIREBALL: " << fireb[a].jfireb << " " << fireb[a].ifireb << '\n';
 	if (fireb[a].fbdirection == 1) {
 		putimage((fireb[a].jfireb - nci) * wh, fireb[a].ifireb * wh, skyblock, COPY_PUT);
 		if (fireb[a].jfireb - (int)fireb[a].jfireb != 0) {
@@ -284,13 +282,13 @@ void fireballmov(int a) {
 }
 
 void fireballsmov() {
-	for (int i = 0;i < 9;i++) {
+	for (int i = 0;i < 8;i++) {
 		if (fireb[i].exist == 1) {
-			fireballmov(i);
+			
 			for (int j = 1;j <= n;j++) {
 				if (gompav[j].mapart == (int)(nci - nc1) && gompav[j].igompa == fireb[i].ifireb && gompav[j].dead == 0) {
 					if (CheckBlock(fireb[i].ifireb * wh, fireb[i].jfireb * wh, wh, gompav[j].igompa * wh, gompav[j].jgompa * wh)) {
-						std::cout << "PATRU";
+						
 						fireb[i].exist = 0;
 						gompav[j].dead = 1;
 						gdead++;
@@ -370,7 +368,6 @@ void fireballsmov() {
 			for (int j = 1;j <= p;j++) {
 				if (piranav[j].mapart == (int)(nci - nc1) && piranav[j].ipirana == fireb[i].ifireb && piranav[j].dead == 0 && piranav[j].ipinit != piranav[j].ipirana) {
 					if (CheckBlock(fireb[i].ifireb * wh, fireb[i].jfireb * wh, wh, piranav[j].ipirana * wh, piranav[j].jpirana * wh)) {
-						std::cout << "CINCI";
 						fireb[i].exist = 0;
 						piranav[j].dead = 1;
 						ma_sound_stop(&GombaDeadEffect);
@@ -441,6 +438,7 @@ void fireballsmov() {
 					}
 				}
 			}
+			fireballmov(i);
 		}
 	}
 }

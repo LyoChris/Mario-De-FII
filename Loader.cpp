@@ -363,13 +363,13 @@ void AssetLoader() {
     setbkcolor(RGB(126, 132, 246));
     preloadImage2("fireball_2.gif", wh, wh, fireball_2);
     cleardevice();
-    setbkcolor(RGB(0, 0, 0));
+    setbkcolor(RGB(126, 132, 246));
     preloadImage("pxfuel.jpg", x-3, y-3, mario_main_screen);
     cleardevice();
-    setbkcolor(RGB(0, 0, 0));
+    setbkcolor(RGB(126, 132, 246));
     preloadImage("pxfuel_custom.jpg", x - 3, y - 3, mario_custom_screen);
     cleardevice();
-    setbkcolor(RGB(0, 0, 0));
+    setbkcolor(RGB(126, 132, 246));
     preloadImage("MarioLevelsMenu.jpg", x-3, y-3, mario_levels_menu);
     cleardevice();
     setbkcolor(RGB(126, 132, 246));
@@ -379,7 +379,7 @@ void AssetLoader() {
     preloadImage4("mario_vine.gif", "mario_climbing_up_1.gif", wh, wh, mario_vine_idle_up);
     cleardevice();
     setbkcolor(RGB(126, 132, 246));
-    preloadImage4("mario_vine.gif", "Mario_climbing_down_1.gif", wh, wh, Mmario_vine_idle_down);
+    preloadImage4("mario_vine.gif", "Mmario_climbing_down_1.gif", wh, wh, Mmario_vine_idle_down);
     cleardevice();
     setbkcolor(RGB(126, 132, 246));
     preloadImage4("mario_vine.gif", "Mmario_climbing_up_1.gif", wh, wh, Mmario_vine_idle_up);
@@ -391,10 +391,10 @@ void AssetLoader() {
     preloadImage4("mario_vine.gif", "Fmario_climbing_up_1.gif", wh, wh, Fmario_vine_idle_up);
     cleardevice();
     setbkcolor(RGB(126, 132, 246));
-    preloadImage4("mario_vine.gif", "FMario_climbing_down_1.gif", wh, wh, FMmario_vine_idle_down);
+    preloadImage4("mario_vine.gif", "MFario_climbing_down_1.gif", wh, wh, FMmario_vine_idle_down);
     cleardevice();
     setbkcolor(RGB(126, 132, 246));
-    preloadImage4("mario_vine.gif", "FMmario_climbing_up_1.gif", wh, wh, FMmario_vine_idle_up);
+    preloadImage4("mario_vine.gif", "MFmario_climbing_up_1.gif", wh, wh, FMmario_vine_idle_up);
 	closegraph();
 }
 
@@ -582,7 +582,6 @@ void loadData(char* strArray[], int& intValue, LevelStats LvlSts[]) {
 		infile >> LvlSts[i].coins >> LvlSts[i].enemies >> LvlSts[i].time >> LvlSts[i].score;
 		infile.ignore();
 
-		std::cout << LvlSts[i].name << " " << LvlSts[i].disname << " " << LvlSts[i].coins << " " << LvlSts[i].enemies << " " << LvlSts[i].time << '\n';
     }
 
     infile.close();
@@ -617,9 +616,6 @@ void loadStats(LevelStats LvlSts[]) {
         infile >> LvlSts[i].coins >> LvlSts[i].enemies >> LvlSts[i].time >> LvlSts[i].score;
         infile.ignore();
 
-    }
-    for (int i = 0; i < 9; i++) {
-        std::cout << LvlSts[i].name << " " << LvlSts[i].disname << " " << LvlSts[i].coins << " " << LvlSts[i].enemies << " " << LvlSts[i].time << " " << LvlSts[i].score << '\n';
     }
 
     infile.close();

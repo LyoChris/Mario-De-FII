@@ -164,7 +164,6 @@ void MapPaneler() {
 	// Draw the matrix
 	for (int i = 0; i < nl; i += 1) {
 		for (int j = (int)ncimap; j < ncfmap; j += 1) {
-			cout << i << " " << j << endl;
 			PutMovingImage(i, j);
 			lastColumnX = j - ncimap; // Keep updating to get the last column index
 		}
@@ -270,7 +269,6 @@ void InitialDrawing() { // Add a parameter for enabling split menu items
 	// Draw the matrix
 	for (int i = 0; i < nl; i += 1) {
 		for (int j = (int)ncimap; j < ncfmap; j += 1) {
-			cout << i << " " << j << endl;
 			PutMovingImage(i, j);
 			lastColumnX = j;
 		}
@@ -472,9 +470,6 @@ void saveMap() {
 		}
 		CUSTOM_LEVEL_ITEMS++;
 	}
-	for (int i = 0;i < CUSTOM_LEVEL_ITEMS;i++) {
-		cout << customLevelText[i] << '\n';
-	}
 	strcat(filename, ".txt"); // Append file extension
 
 	// Save the grid to the file
@@ -611,16 +606,12 @@ void MapEditorLevels() {
 	ncfmap = nc1;
 	memset(hartaloader, 0, sizeof(hartaloader));
 	InitialDrawing();
-	cout << nc1 << endl;
-	cout << ncimap << " " << ncfmap << endl;
-	cout << mapi << " " << mapj << endl;
 
 	while (true) {
 		if (!ma_sound_is_playing(&MapEditorMusic)) ma_sound_start(&MapEditorMusic);
 		PutMovingImage(mapi, mapj);
 		PutMapEditor(mapi, mapj, bkselect);
 		SelectorImage(iselec);
-		cout << mapi << mapj << '\n';
 		char t = getch();
 		if (!ma_sound_is_playing(&MapEditorMusic)) ma_sound_start(&MapEditorMusic);
 		if (t == 'm') {
@@ -668,7 +659,6 @@ void MapEditorLevels() {
 			}
 		}
 		if (edit == 1) {
-			cout << "Mapa este selectata pentru editare" << '\n';
 			PutMovingImage(mapi, mapj);
 			PutMapEditor(mapi, mapj, bkselect);
 			if ((t == 'w' || t == 72) && mapi> 0) {
@@ -689,7 +679,6 @@ void MapEditorLevels() {
 			if ((t == 's' || t == 80) && mapi < nl-1) {
 				PutMovingImage(mapi, mapj);
 				mapi++;
-				cout << "Mapi: " << mapi << '\n';
 				PutMapEditor(mapi, mapj, bkselect);
 			}
 			if ((int)t == 32) {
@@ -756,7 +745,6 @@ void MapEditorLevels() {
 				ncfmap =ncfmap - nc1;
 				mapi = 0;
 				mapj = ncimap + 1;
-				cout << ncimap << " " << ncfmap << '\n';
 				cleardevice();
 				MapPaneler();
 			}
@@ -766,14 +754,12 @@ void MapEditorLevels() {
 				ncfmap = ncfmap + nc1;
 				mapi = 0;
 				mapj = ncimap+1;
-				cout << ncimap << " " << ncfmap << '\n';
 				cleardevice();
 				MapPaneler();
 			}
 			if(ncfmap>ncmax) ncmax = (int)ncfmap;
 		}
 		if (edit == 0) {
-			cout << "Selectie blocks" << '\n';
 			if ((t == 'a' || t== 75) && iselec > 0) {
 				SelectorImageMono(iselec);
 				iselec--;
@@ -786,7 +772,6 @@ void MapEditorLevels() {
 			}
 			if ((int)t == 32) {
 				bkselect = selecpoz[iselec];
-				std::cout << "POZITIE " << selecpoz[iselec] << '\n';
 				if (SplitMenuItems == 0) {
 					ma_sound_start(&mapediEN);
 				}
